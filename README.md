@@ -13,6 +13,7 @@ Pass_Press/
 ├── passpress-hardware/     # PCB schematics (KiCad), BOM Excel sheet, datasheets, libraries
 ├── passpress-firmware/     # Embedded C/C++ firmware (STM32F042), USB HID, Bootloader, GUI
 ├── passpress_mobile_ble/   # Android BLE virtual keyboard app & companion software
+├── passpress-huawei-watch/ # Huawei wearable watch companion application
 └── README.md               # Root project index (this file)
 ```
 
@@ -33,6 +34,9 @@ Pass_Press/
    - Native Android Virtual BLE Keyboard app (`android/passpress_ble_keyboard`).
    - Setup guide ([ANDROID_SETUP.md](file:///e:/Personal/Pass_Press/passpress_mobile_ble/ANDROID_SETUP.md)).
    - Legacy Web Bluetooth and Python testing tools (`legacy/`).
+
+4. ⌚ **[Huawei Watch App (`passpress-huawei-watch`)](file:///e:/Personal/Pass_Press/passpress-huawei-watch/README.md)**:
+   - Huawei smartwatch companion app for HarmonyOS / LiteOS / Huawei Wear Engine.
 
 ---
 
