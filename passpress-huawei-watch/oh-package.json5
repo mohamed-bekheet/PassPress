@@ -1,0 +1,10 @@
+{
+  "modelVersion": "6.1.1",
+  "name": "passpress-huawei-watch",
+  "version": "1.0.0",
+  "description": "PassPress Huawei Watch App",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {}
+}

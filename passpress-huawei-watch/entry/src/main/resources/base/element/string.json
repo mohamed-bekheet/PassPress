@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "PassPress Huawei Watch Fit 3 Wearable Entry Module"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "PassPress Smartwatch Virtual Keyboard UI"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "PassPress"
+    },
+    {
+      "name": "app_name",
+      "value": "PassPress"
+    }
+  ]
+}
