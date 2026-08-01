@@ -25,10 +25,14 @@ passpress_mobile_ble/
 ## Component Overview
 
 ### 1. Android BLE Virtual Keyboard (`android/passpress_ble_keyboard`)
-The primary Android companion app allowing your smartphone to communicate with the PassPress hardware over Bluetooth LE.
+The primary Android companion app allowing your smartphone to communicate with the target PC over Bluetooth LE.
 - **Key Features**:
-  - Wireless credential transmission & BLE keypress emulation.
-  - Native Android UI with Gradle build setup.
+  - **BLE Keyboard Emulation**: Wirelessly type saved passwords into Target PCs (`💻 Connect PC`).
+  - **Biometric Security & Encryption**: Encrypted storage using AES-256 GCM + Android Biometric Auth.
+  - **Per-Slot Device Trusting**: Secure verification for untrusted PCs.
+  - **Encrypted Backup & Restore**: Master-password encrypted export/import.
+  - **Clean Process Shutdown**: Dedicated `🛑 Shut Down & Exit App` option in Settings (`⚙️`) to disconnect BLE and terminate background services.
+  - **Home Screen Widgets**: Quick-send password widgets and quick-settings tiles.
 
 ### 2. Android Controller App (`android/Kontroller`)
 Auxiliary mobile UI layout and controller module for hardware interactions.

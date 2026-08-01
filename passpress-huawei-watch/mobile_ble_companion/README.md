@@ -1,34 +1,22 @@
-# PassPress Mobile Application (`passpress_mobile_ble`)
+# PassPress Watch Companion Application (`PassPress Watch Test`)
 
-Welcome to the **PassPress Mobile Application** component. This directory contains Android native applications and companion software for connecting to and configuring the **PassPress** hardware device over Bluetooth Low Energy (BLE).
-
----
-
-## Directory Structure
-
-```
-passpress_mobile_ble/
-├── android/
-│   ├── passpress_ble_keyboard/    # Main Native Android Virtual BLE Keyboard App
-│   └── Kontroller/                # Controller application prototype
-├── legacy/                        # Web Bluetooth & Python BLE receiver scripts
-│   ├── app.js                     # Web Bluetooth interface script
-│   ├── index.html                 # Web UI prototype
-│   ├── receiver.py                # Python BLE listener script
-│   └── ble_keyboard_receiver.py   # Python BLE keyboard packet receiver
-├── ANDROID_SETUP.md               # Detailed Android SDK & JDK build environment guide
-└── README.md                      # This documentation file
-```
+Welcome to the **PassPress Watch Companion Application**. This is the isolated Android companion app specifically designed for testing and integrating with the **Huawei Smartwatch App** (`com.passpress.watchtest`).
 
 ---
 
 ## Component Overview
 
-### 1. Android BLE Virtual Keyboard (`android/passpress_ble_keyboard`)
-The primary Android companion app allowing your smartphone to communicate with the PassPress hardware over Bluetooth LE.
+### Android BLE Virtual Keyboard (`android/passpress_ble_keyboard`)
+- **App Name**: `PassPress Watch Test`
+- **Application ID**: `com.passpress.watchtest`
+- **Output APK**: `PassPress_WATCH.apk`
+- **Version**: `1.0.1-dev`
 - **Key Features**:
-  - Wireless credential transmission & BLE keypress emulation.
-  - Native Android UI with Gradle build setup.
+  - **Isolated Test App**: Installed side-by-side with original PassPress BLE app.
+  - **Custom Watch Icon**: Modern flat dark vector icon with keyboard and security lock visuals.
+  - **BLE Keyboard Emulation**: Wirelessly type saved passwords into Target PCs (`💻 Connect PC`).
+  - **Biometric Security & Encryption**: Encrypted storage using AES-256 GCM + Android Biometric Auth.
+  - **Clean Process Shutdown**: Dedicated `🛑 Shut Down & Exit App` option in Settings (`⚙️`) to disconnect BLE and terminate background services.
 
 ### 2. Android Controller App (`android/Kontroller`)
 Auxiliary mobile UI layout and controller module for hardware interactions.
