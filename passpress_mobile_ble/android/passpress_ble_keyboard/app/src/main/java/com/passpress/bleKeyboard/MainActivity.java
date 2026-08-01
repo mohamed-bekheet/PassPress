@@ -379,6 +379,16 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    private void shutDownApp() {
+        HidKeyboardService svc = HidKeyboardService.getInstance();
+        if (svc != null) {
+            svc.disconnectDevice();
+            stopService(new Intent(this, HidKeyboardService.class));
+        }
+        finishAffinity();
+        System.exit(0);
+    }
+
     // ─── Header ──────────────────────────────────────────────────────────────
     private LinearLayout createHeaderLayout() {
         LinearLayout header = new LinearLayout(this);
@@ -433,9 +443,16 @@ public class MainActivity extends AppCompatActivity {
         TextView infoIcon = new TextView(this);
         infoIcon.setText("ℹ️");
         infoIcon.setTextSize(22);
-        infoIcon.setPadding(0, 0, 0, 0);
+        infoIcon.setPadding(0, 0, dp(10), 0);
         infoIcon.setOnClickListener(v -> showHelpDialog());
         titleRow.addView(infoIcon);
+
+        TextView quitIcon = new TextView(this);
+        quitIcon.setText("❌");
+        quitIcon.setTextSize(22);
+        quitIcon.setPadding(0, 0, 0, 0);
+        quitIcon.setOnClickListener(v -> shutDownApp());
+        titleRow.addView(quitIcon);
 
         header.addView(titleRow);
 
