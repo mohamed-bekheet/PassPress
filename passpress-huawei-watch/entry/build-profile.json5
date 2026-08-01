@@ -9,11 +9,7 @@
   },
   "targets": [
     {
-      "name": "default",
-      "applyToProducts": [
-        "default"
-      ],
-      "signingMode": "debug"
+      "name": "default"
     }
   ]
 }
