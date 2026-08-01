@@ -15,8 +15,8 @@
       "ENABLE_CPP_FUNCTION_LEVEL_INCREMENTAL": false
     },
     "CONFIG_PROPERTIES": {},
-    "TOTAL_TIME": 360226400,
-    "BUILD_ID": "202608012306315330",
+    "TOTAL_TIME": 114211900,
+    "BUILD_ID": "202608012313472570",
     "ERROR_MESSAGE": [
       {
         "CODE": "00304056",
@@ -24,7 +24,7 @@
         "SOLUTIONS": [
           "Check if build-profile.json5 exists at: E:\\Personal\\Pass_Press\\passpress-huawei-watch\\entry\\build-profile.json5"
         ],
-        "TIMESTAMP": "1785618391840"
+        "TIMESTAMP": "1785618827324"
       },
       {
         "CODE": "00304056",

@@ -1,0 +1,19 @@
+{
+  "apiType": "faMode",
+  "buildOption": {
+    "externalNativeOptions": {
+      "path": "",
+      "arguments": "",
+      "cppFlags": ""
+    }
+  },
+  "targets": [
+    {
+      "name": "default",
+      "applyToProducts": [
+        "default"
+      ],
+      "signingMode": "debug"
+    }
+  ]
+}

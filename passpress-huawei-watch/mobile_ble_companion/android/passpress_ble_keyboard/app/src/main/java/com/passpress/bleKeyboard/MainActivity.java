@@ -448,16 +448,9 @@ public class MainActivity extends AppCompatActivity {
         TextView infoIcon = new TextView(this);
         infoIcon.setText("ℹ️");
         infoIcon.setTextSize(22);
-        infoIcon.setPadding(0, 0, dp(10), 0);
+        infoIcon.setPadding(0, 0, 0, 0);
         infoIcon.setOnClickListener(v -> showHelpDialog());
         titleRow.addView(infoIcon);
-
-        TextView quitIcon = new TextView(this);
-        quitIcon.setText("❌");
-        quitIcon.setTextSize(22);
-        quitIcon.setPadding(0, 0, 0, 0);
-        quitIcon.setOnClickListener(v -> shutDownApp());
-        titleRow.addView(quitIcon);
 
         header.addView(titleRow);
 
@@ -491,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
         btnRow.setOrientation(LinearLayout.HORIZONTAL);
         btnRow.setGravity(Gravity.CENTER_VERTICAL);
 
-        Button connectButton = createStyledButton("📱 Connect PC", COLOR_PRIMARY, COLOR_PRIMARY_DARK);
+        Button connectButton = createStyledButton("💻 Connect PC", COLOR_PRIMARY, COLOR_PRIMARY_DARK);
         LinearLayout.LayoutParams connectParams = new LinearLayout.LayoutParams(0, dp(44), 1f);
         connectParams.setMargins(0, 0, dp(8), 0);
         connectButton.setLayoutParams(connectParams);
@@ -1474,6 +1467,21 @@ public class MainActivity extends AppCompatActivity {
             showImportDialog();
         });
         layout.addView(importBtn);
+
+        // Spacer 3
+        View spacer3 = new View(this);
+        spacer3.setLayoutParams(new LinearLayout.LayoutParams(1, dp(20)));
+        layout.addView(spacer3);
+
+        // Shut Down & Exit Button
+        android.widget.Button shutDownBtn = new android.widget.Button(this);
+        shutDownBtn.setText("🛑 Shut Down & Exit App");
+        shutDownBtn.setBackgroundColor(Color.parseColor("#EF4444"));
+        shutDownBtn.setTextColor(Color.WHITE);
+        shutDownBtn.setOnClickListener(v -> {
+            shutDownApp();
+        });
+        layout.addView(shutDownBtn);
 
         builder.setView(layout);
         builder.setPositiveButton("Close", null);
