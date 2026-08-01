@@ -1,0 +1,11 @@
+default_parameters:
+  manufacturer: TDK
+  library_name: Inductor_SMD
+
+series_MLZ:
+  default_parameters:
+    3d:
+      type: 2 # best effort, these parts are more like chip resistors
+    tags:
+      - MLZ
+  csv: tdk_mlz.csv

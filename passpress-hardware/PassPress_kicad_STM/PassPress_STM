@@ -1,0 +1,40 @@
+Reference	Qty	Value	DNP	Exclude from BOM	Exclude from Board	Footprint	Datasheet	MNF PART NUMBER
+C1	1	10uF	DNP		Excluded from board	Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder	~	C19702
+C2	1	0.1uF	DNP		Excluded from board	Capacitor_SMD:C_0402_1005Metric	~	C1525
+C3,C4,C20	3	4.7uF				Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C307423
+C5,C6,C15	3	0.1uF				Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C60474
+C7,C24	2	10n				Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder	~	C1589
+C11	1	1uF				Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C107372
+C13	1	22uF				Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder	~	C159801
+C23	1	4.7uF	DNP		Excluded from board	Capacitor_SMD:C_0402_1005Metric	~	C23733
+D1	1	Leiditech PESD3V3L1BA				Diode_SMD:D_SOD-323_HandSoldering	https://assets.nexperia.com/documents/data-sheet/PESDXL1BA_SER.pdf	C5210989
+D2	1	LED-R				LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C3646923
+D3	1	LED-G				LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C3646922
+D7	1	PRTR5V0U2F,115				PESD3V3L5UF115	https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2F_PRTR5V0U2K.pdf	C2937001
+FB1	1	FerriteBead				Capacitor_SMD:C_0201_0603Metric	~	C525479
+H1	1	MountingHole		Excluded from BOM		MountingHole:MountingHole_2.7mm	~	
+IC1	1	MCP73831T-2ACI_MC	DNP		Excluded from board	SON50P300X200X100-9N-D	http://ww1.microchip.com/downloads/en/DeviceDoc/20001984g.pdf	C411870
+IC2	1	XC6220B331ER-G				XC6220B331ER-G:XC6220B331ER-G	https://www.digikey.ph/en/products/detail/torex-semiconductor-ltd/XC6220B331ER-G/10166030?msockid=39f1ec84d77b6f4428b7f904d6676eed	C3013657
+J1	1	USB_C_GT-USB-8012A				GT-USB-8012A USB-C:USB_C_GT-USB-8012A	https://www.usb.org/sites/default/files/documents/usb_type-c.zip	C2982483
+R2,R7,R8,R9,R10,R11,R12,R13	8	5.1K				Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C18164337
+R3,R4	2	10K				Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C509700
+R5	1	10K	DNP			Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C509700
+R6,R16	2	220R				Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C18164338
+R18	1	10K	DNP		Excluded from board	Resistor_SMD:R_0402_1005Metric	~	C60490
+TP1	1	RST				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP2	1	RST-G				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP5	1	3.3V				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP6	1	TestPoint				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP7	1	BOOT-G				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP8	1	BOOT				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP11	1	TOUCH_PAD_1				TOUCH_PADs:TOUCH_PAD_1	~	
+TP12	1	TOUCH_PAD_1				TOUCH_PADs:TOUCH_PAD_2	~	
+TP13	1	TOUCH_PAD_1				TOUCH_PADs:TOUCH_PAD_3	~	
+TP14	1	TOUCH_PAD_1				TOUCH_PADs:TOUCH_PAD_4	~	
+TP15	1	TOUCH_PAD_1				TOUCH_PADs:TOUCH_PAD_5	~	
+TP16	1	TOUCH_PAD_1				TOUCH_PADs:TOUCH_PAD_6	~	
+TP17,TP18	2	TestPoint	DNP		Excluded from board	TestPoint:TestPoint_Pad_D1.5mm	~	
+TP19	1	SWDIO				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP20	1	SWCLK				TestPoint:TestPoint_Pad_D1.0mm	~	
+TP21	1	GND				TestPoint:TestPoint_Pad_D1.0mm	~	
+U1	1	STM32F042G6U6TR				Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.15x2.15mm_ThermalVias	https://www.st.com/resource/en/datasheet/stm32f042g6.pdf	C2971720

@@ -1,0 +1,7 @@
+(footprint "test"
+	(version 20241229)
+	(generator "kicad-footprint-generator")
+	(layer "F.Cu")
+	(attr smd)
+	(embedded_fonts no)
+)

@@ -1,0 +1,12 @@
+STM32_Programmer_CLI.exe -c port=USB1 -w "build\Release\STM_WS.elf" -v
+STM32_Programmer_CLI.exe -c port=USB1 -w "build\Release\STM_WS.elf" -v -rst
+STM32_Programmer_CLI.exe -c port=USB1 -ob RDP=0x00
+
+Before connecting over USB1 bootloader, BOOT0 must be HIGH during reset so the STM32 enters system memory boot mode.
+For normal firmware boot and SWD debugging, keep BOOT0 LOW.
+
+Examples:
+-c port=SWD freq=4000 → connect via ST-LINK SWD at 4 MHz
+-c port=USB1 → connect via USB DFU bootloader
+-c port=COM3 br=115200 → connect via UART bootloader
+-w ... -v -rst = write, verify, then reset.

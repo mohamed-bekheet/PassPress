@@ -1,0 +1,37 @@
+(footprint "test_sort_pad_numbers"
+	(version 20241229)
+	(generator "kicad-footprint-generator")
+	(layer "F.Cu")
+	(attr smd)
+	(pad "" smd rect
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu")
+	)
+	(pad "1" smd rect
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu")
+	)
+	(pad "2" smd rect
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu")
+	)
+	(pad "a1" smd rect
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu")
+	)
+	(pad "a2" smd rect
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu")
+	)
+	(pad "a10" smd rect
+		(at 0 0)
+		(size 1 1)
+		(layers "F.Cu")
+	)
+	(embedded_fonts no)
+)

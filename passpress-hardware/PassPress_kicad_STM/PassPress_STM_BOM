@@ -1,0 +1,26 @@
+Reference	Qty	Value	DNP	Exclude from BOM	Exclude from Board	Footprint	Datasheet	LCSC#
+C1	1	10uF	DNP		Excluded from board	Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder	~	C19702
+C2	1	0.1uF	DNP		Excluded from board	Capacitor_SMD:C_0402_1005Metric	~	C1525
+"C3,C4,C20"	3	4.7uF				Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C307423
+C5	1	0.1uF	DNP		Excluded from board	Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C60474
+"C6,C15"	2	0.1uF				Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C60474
+"C7,C8"	2	10n				Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C53084509
+C11	1	1uF	DNP		Excluded from board	Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C107372
+C13	1	22uF				Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder	~	C415703
+C23	1	4.7uF	DNP		Excluded from board	Capacitor_SMD:C_0402_1005Metric	~	C23733
+D2	1	"PESD5V0V1BL,315"				Diode_SMD:D_SOD-882D	https://assets.nexperia.com/documents/data-sheet/PESD5V0S1UL.pdf	C128808
+D4	1	LED-G				LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C3646922
+D5	1	LED-R				LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C3646923
+D7	1	"PRTR5V0U2F,115"				PESD3V3L5UF115	https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2F_PRTR5V0U2K.pdf	C2937001
+FB1	1	FerriteBead	DNP		Excluded from board	Capacitor_SMD:C_0201_0603Metric	~	C525479
+IC1	1	MCP73831T-2ACI_MC	DNP		Excluded from board	SON50P300X200X100-9N-D	http://ww1.microchip.com/downloads/en/DeviceDoc/20001984g.pdf	C411870
+IC2	1	XC6220B331ER-G				XC6220B331ER-G:XC6220B331ER-G	https://www.digikey.ph/en/products/detail/torex-semiconductor-ltd/XC6220B331ER-G/10166030?msockid=39f1ec84d77b6f4428b7f904d6676eed	C3013657
+J1	1	U261-241N-4BS60				XKB_U261-241N-4BS60:XKB_U261-241N-4BS60_USB_C	https://www.lcsc.com/datasheet/C42418805.pdf	C319150
+"R1,R14"	2	220R				Resistor_SMD:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder	~	C2909336
+"R2,R7"	2	5.1K				Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C18164337
+R3	1	10K				Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder	~	C509700
+R4	1	10K				Resistor_SMD:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder	~	C2906861
+R5	1	10K	DNP			Resistor_SMD:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder	~	C2906861
+"R6,R8,R9,R10,R11,R12"	6	5.1K				Resistor_SMD:R_0402_1005Metric_Pad0.72x0.64mm_HandSolder	~	C2906874
+R18	1	10K	DNP		Excluded from board	Resistor_SMD:R_0402_1005Metric	~	C60490
+U1	1	STM32F042G6U6TR				Package_DFN_QFN:QFN-28_4x4mm_P0.5mm	https://www.st.com/resource/en/datasheet/stm32f042g6.pdf	C2971720

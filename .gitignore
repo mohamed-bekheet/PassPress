@@ -1,0 +1,42 @@
+# General & OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*.xlsx
+*.tmp
+*.log
+
+# IDE & Editor files
+.vscode/
+.idea/
+.history/
+*.swp
+*.code-workspace
+
+# Python / Virtual Environments
+.venv/
+__pycache__/
+*.pyc
+
+# Hardware / KiCad build & temp files
+*-backups/
+fp-info-cache
+*.kicad_prl
+
+# Firmware / C C++ Build Outputs
+passpress-firmware/STM_WS/build/
+passpress-firmware/STM_WS/.dist/
+build/
+*.o
+*.elf
+*.bin
+*.hex
+
+# Android & Gradle Build Artifacts
+.gradle/
+**/build/
+**/app/build/
+*.apk
+*.aar
+*.zip
+local.properties

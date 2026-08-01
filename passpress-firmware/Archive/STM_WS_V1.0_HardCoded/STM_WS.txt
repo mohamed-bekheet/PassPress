@@ -1,0 +1,66 @@
+Configuration	STM_WS
+STM32CubeMX 	6.16.1
+Date	02/22/2026
+MCU	STM32F042G6Ux
+
+
+
+PERIPHERALS	MODES	FUNCTIONS	PINS
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+6	PA0	GPIO_Output	
+7	PA1*	TSC_G1_IO2	
+8	PA2	GPIO_Output	
+9	PA3*	TSC_G1_IO4	
+10	PA4*	TSC_G2_IO1	
+11	PA5*	TSC_G2_IO2	
+12	PA6*	TSC_G2_IO3	
+13	PA7*	TSC_G2_IO4	
+14	PB0	GPIO_Output	
+15	PB1	GPIO_Output	
+PERIPHERALS	MODES	FUNCTIONS	PINS
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+6	PA0	GPIO_Output	
+7	PA1*	TSC_G1_IO2	
+8	PA2	GPIO_Output	
+9	PA3*	TSC_G1_IO4	
+10	PA4*	TSC_G2_IO1	
+11	PA5*	TSC_G2_IO2	
+12	PA6*	TSC_G2_IO3	
+13	PA7*	TSC_G2_IO4	
+14	PB0	GPIO_Output	
+15	PB1	GPIO_Output	
+
+
+
+SOFTWARE PROJECT
+
+Project Settings : 
+Project Name : STM_WS
+Project Folder : E:\Personal\Pass_Press\SW\STM_WS
+Toolchain / IDE : EWARM V8.32
+Firmware Package Name and Version : STM32Cube FW_F0 V1.11.6
+
+
+Code Generation Settings : 
+STM32Cube MCU packages and embedded software packs : Copy all used libraries into the project folder
+Generate peripheral initialization as a pair of '.c/.h' files per peripheral : No
+Backup previously generated files when re-generating : No
+Delete previously generated files when not re-generated : Yes
+Set all free pins as analog (to optimize the power consumption) : No
+
+
+Toolchains Settings : 
+Compiler Optimizations : 
+
+
+
+
+

@@ -1,0 +1,225 @@
+
+SMD-1x1.00mm_Vertical_Right:
+  orientation: vertical
+  mount: SMD
+  row_count: 1
+  pin_pitch: 1.00
+  pin1start_right: True
+  num_pos:
+    range: [2, 40]
+  body:
+      width: 1.5
+      height: 2.25
+      overlength: 0.5
+      offset: 0.0
+  pins:
+      width: 0.3
+      thickness: 0.1
+      drill: None
+      length: 2.9
+      offset: 0.0
+  pads:
+      length: 1.95
+      width: 0.50
+      lp_width: 3.9
+  datasheet: https://gct.co/files/drawings/bc070.pdf
+
+SMD-1x1.00mm_Vertical_Left:
+  inherit: SMD-1x1.00mm_Vertical_Right
+  pin1start_right: False
+
+SMD-1x1.27mm_Vertical_Right:
+  orientation: vertical
+  mount: SMD
+  row_count: 1
+  pin_pitch: 1.27
+  pin1start_right: True
+  num_pos:
+    range: [2, 40]
+  body:
+      width: 1.8
+      height: 4.6
+      overlength: 0.35
+      offset: 0.0
+  pins:
+      width: 0.42
+      thickness: 0.15
+      drill: None
+      length: 3.5
+      offset: 0.0
+  pads:
+      length: 1.8
+      width: 0.65
+      lp_width: 4.5
+  datasheet: https://gct.co/pdfjs/web/viewer.html?file=/Files/Drawings/BD075.pdf&t=1511594726925
+
+SMD-1x1.27mm_Vertical_Left:
+  inherit: SMD-1x1.27mm_Vertical_Right
+  pin1start_right: False
+
+SMD-1x2.00mm_Vertical_Right:
+  orientation: vertical
+  mount: SMD
+  row_count: 1
+  pin_pitch: 2.00
+  pin1start_right: True
+  num_pos:
+    range: [2, 40]
+  body:
+      width: 2.5
+      height: 4.3
+      overlength: 0.6
+      offset: 0.0
+  pins:
+      min: 2
+      max: 40
+      width: 0.5
+      thickness: 0.2
+      drill: None
+      length: 4.2
+      offset: 0.0
+  pads:
+      length: 2.0
+      width: 0.9
+      lp_width: 5.2
+  datasheet: https://www.jayconsystems.com/fileuploader/download/download/?d=1&file=custom%2Fupload%2FFile-1375728122.pdf
+
+SMD-1x2.00mm_Vertical_Left:
+  inherit: SMD-1x2.00mm_Vertical_Right
+  pin1start_right: False
+
+SMD-1x2.54mm_Vertical_Right:
+  orientation: vertical
+  mount: SMD
+  row_count: 1
+  pin_pitch: 2.54
+  pin1start_right: True
+  num_pos:
+    range: [2, 40]
+  body:
+      width: 2.54
+      height: 7.1
+      overlength: 0.2
+      offset: 0.0
+  pins:
+      min: 2
+      max: 40
+      width: 0.6
+      thickness: 0.2
+      drill: None
+      length: 4.54
+      offset: 0.0
+  pads:
+      length: 1.9
+      width: 1.0
+      lp_width: 5.2
+  datasheet: https://cdn.harwin.com/pdfs/M20-786.pdf
+
+SMD-1x2.54mm_Vertical_Left:
+  inherit: SMD-1x2.54mm_Vertical_Right
+  pin1start_right: False
+
+
+#
+# SMD 2-row vertical
+#
+
+SMD-2x1.00mm_Vertical:
+  orientation: vertical
+  mount: SMD
+  row_count: 2
+  pin_pitch: 1.00
+  pin1start_right: True
+  num_pos:
+    range: [2, 40]
+  body:
+      width: 2.5
+      height: 2.25
+      overlength: 0.5
+      offset: 0.0
+  pins:
+      width: 0.3
+      thickness: 0.1
+      drill: None
+      length: 3.9
+      offset: 0.0
+  pads:
+      length: 1.85
+      width: 0.50
+      lp_width: 4.9
+  datasheet: https://gct.co/files/drawings/bc085.pdf
+
+SMD-2x1.27mm_Vertical:
+  orientation: vertical
+  mount: SMD
+  row_count: 2
+  pin_pitch: 1.27
+  pin1start_right: True
+  num_pos:
+    range: [1, 40]
+  body:
+      width: 2.54
+      height: 4.6
+      overlength: 0.0
+      offset: 0.0
+  pins:
+      width: 0.4
+      thickness: 0.15
+      drill: None
+      length: 5.11
+      offset: 0.0
+  pads:
+      length: 2.1
+      width: 0.75
+      lp_width: 5.7
+  datasheet: from Kicad 4.0.7!
+
+SMD-2x2.00mm_Vertical:
+  orientation: vertical
+  mount: SMD
+  row_count: 2
+  pin_pitch: 2.00
+  pin1start_right: True
+  num_pos:
+    range: [1, 40]
+  body:
+      width: 4.0
+      height: 4.5
+      overlength: 0.0
+      offset: 0.0
+  pins:
+      width: 0.5
+      thickness: 0.2
+      drill: None
+      length: 6.0
+      offset: 0.0
+  pads:
+      length: 2.75
+      width: 1.0
+      lp_width: 9.0
+  datasheet: from Kicad 4.0.7
+
+SMD-2x2.54mm_Vertical:
+  orientation: vertical
+  mount: SMD
+  row_count: 2
+  pin_pitch: 2.54
+  pin1start_right: True
+  num_pos:
+    range: [1, 40]
+  body:
+      width: 5.08
+      height: 7.0
+      overlength: 0.0
+      offset: 0.0
+  pins:
+      width: 0.64
+      thickness: 0.2
+      drill: None
+      length: 7.84
+      offset: 0.0
+  pads:
+      length: 3.0
+      width: 1.0
+      lp_width: 8.04
+  datasheet: from Kicad 4.0.7

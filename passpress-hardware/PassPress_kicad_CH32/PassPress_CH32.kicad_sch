@@ -1,0 +1,310 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "a935fd81-ac30-4b4a-8eed-98c9cf4ce065")
+	(paper "A4")
+	(lib_symbols)
+	(text "USB Port\n"
+		(exclude_from_sim no)
+		(at 216.154 65.786 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+		)
+		(uuid "41152a97-38e4-4274-9e01-da318b051dc9")
+	)
+	(text "Power Stage\n"
+		(exclude_from_sim no)
+		(at 171.196 39.624 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+		)
+		(uuid "4bf0ae53-c4fc-458d-a059-15a4c24e6cdf")
+	)
+	(text "MCU\n"
+		(exclude_from_sim no)
+		(at 126.492 65.532 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+		)
+		(uuid "61927334-0c7b-4eb4-a510-6c1ad997acc1")
+	)
+	(wire
+		(pts
+			(xy 234.95 64.77) (xy 242.57 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0344084a-4c69-43bf-b3d0-bbd440be58cc")
+	)
+	(wire
+		(pts
+			(xy 242.57 83.82) (xy 160.02 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2817f0d1-6a02-49cb-8132-d20f36dc743a")
+	)
+	(wire
+		(pts
+			(xy 234.95 60.96) (xy 250.19 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c3881de-f237-42ca-9f0c-0cc77b56855f")
+	)
+	(wire
+		(pts
+			(xy 242.57 64.77) (xy 242.57 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6365c43e-81d5-4c3b-9716-c188918cfffd")
+	)
+	(wire
+		(pts
+			(xy 160.02 83.82) (xy 160.02 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cfcd151-4c8f-4d1b-b2e0-72a9e2be7b2e")
+	)
+	(wire
+		(pts
+			(xy 250.19 60.96) (xy 250.19 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "883a44ff-4246-4ac9-8685-ed3804fc5de0")
+	)
+	(wire
+		(pts
+			(xy 148.59 90.17) (xy 148.59 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ad2ef476-ad8c-4c08-8441-7f1d93c4b21b")
+	)
+	(wire
+		(pts
+			(xy 160.02 62.23) (xy 139.7 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae202e63-d8fb-4c14-9825-2709c959683d")
+	)
+	(wire
+		(pts
+			(xy 250.19 90.17) (xy 148.59 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c30ef0eb-0d80-4f08-a941-1d8fd228ae13")
+	)
+	(wire
+		(pts
+			(xy 148.59 64.77) (xy 139.7 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e97c9975-374e-4874-8bcf-3318a2e308c1")
+	)
+	(sheet
+		(at 201.93 58.42)
+		(size 33.02 16.51)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "0772e6ec-d05e-4b66-bbc5-51355a8b62fb")
+		(property "Sheetname" "USB-C"
+			(at 201.93 57.7084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "usb.kicad_sch"
+			(at 201.93 75.5146 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_D-" bidirectional
+			(at 234.95 60.96 0)
+			(uuid "2f52f21c-9b69-40bc-910a-2db7e18c587b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_D+" bidirectional
+			(at 234.95 64.77 0)
+			(uuid "d4d3858e-145a-4576-ada2-6142de7d10ff")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "PassPress_CH32"
+				(path "/a935fd81-ac30-4b4a-8eed-98c9cf4ce065"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 113.03 58.42)
+		(size 26.67 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "54e0d1a3-bed2-4ddd-8931-84eb98480967")
+		(property "Sheetname" "MCU"
+			(at 113.03 57.7084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "mcu.kicad_sch"
+			(at 113.03 74.2446 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_D+" bidirectional
+			(at 139.7 62.23 0)
+			(uuid "7cfad26c-3bfa-4c42-b323-1ac3fdd32936")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "USB_D-" bidirectional
+			(at 139.7 64.77 0)
+			(uuid "d8ae9fc1-378b-4182-97f1-a8f698d193ec")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "PassPress_CH32"
+				(path "/a935fd81-ac30-4b4a-8eed-98c9cf4ce065"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 151.13 33.02)
+		(size 41.91 16.51)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "b2f9aad6-58d4-48f1-9e48-681e8da0a79c")
+		(property "Sheetname" "Power"
+			(at 151.13 32.3084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 151.13 50.1146 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "PassPress_CH32"
+				(path "/a935fd81-ac30-4b4a-8eed-98c9cf4ce065"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

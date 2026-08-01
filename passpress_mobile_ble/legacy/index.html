@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>PassPress BLE Sender</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="card">
+        <h1>PassPress BLE Sender</h1>
+        <p class="subtitle">
+          Enter a password once and send it to a nearby BLE device that can turn it into keyboard input.
+        </p>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter password" autocomplete="off" />
+
+        <div class="button-row">
+          <button id="connectBtn">Connect BLE device</button>
+          <button id="sendBtn" class="primary">Send password</button>
+        </div>
+
+        <div id="status" class="status">Status: waiting for connection.</div>
+
+        <details class="info-box">
+          <summary>How it works</summary>
+          <p>
+            This prototype uses the Web Bluetooth API and sends your password to a BLE peripheral over the
+            Nordic UART service. A compatible receiver can then translate that stream into keyboard input.
+          </p>
+        </details>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,2097 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>E:\Personal\Pass_Press\HW\PassPress_kicad_CH32\PassPress_CH32.kicad_sch</source>
+    <date>2026-01-25T15:07:53+0100</date>
+    <tool>Eeschema 9.0.2</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>PassPress_CH32.kicad_sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="2" name="/USB-C/" tstamps="/0772e6ec-d05e-4b66-bbc5-51355a8b62fb/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>usb.kicad_sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="3" name="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>power.kicad_sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="4" name="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>mcu.kicad_sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="C1">
+      <value>10uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C19702</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C15525</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C19702"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C15525"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="USB-C"/>
+      <property name="Sheetfile" value="usb.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/USB-C/" tstamps="/0772e6ec-d05e-4b66-bbc5-51355a8b62fb/"/>
+      <tstamps>863f2161-2961-48e5-9206-0a731b88f93f</tstamps>
+    </comp>
+    <comp ref="C2">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C1525</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C1525</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C1525"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C1525"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="USB-C"/>
+      <property name="Sheetfile" value="usb.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/USB-C/" tstamps="/0772e6ec-d05e-4b66-bbc5-51355a8b62fb/"/>
+      <tstamps>e6d5170c-f842-4273-a2b9-951d8baf48e9</tstamps>
+    </comp>
+    <comp ref="D7">
+      <value>PRTR5V0U2F,115</value>
+      <footprint>PESD3V3L5UF115</footprint>
+      <datasheet>https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2F_PRTR5V0U2K.pdf</datasheet>
+      <description>PRTR5V0U2F; PRTR5V0U2K - Ultra low capacitance double rail-to-rail ESD protection</description>
+      <fields>
+        <field name="Height">0.5</field>
+        <field name="Manufacturer_Name">Nexperia</field>
+        <field name="Manufacturer_Part_Number">PRTR5V0U2F,115</field>
+        <field name="Mouser Part Number">771-PRTR5V0U2F-T/R</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Nexperia/PRTR5V0U2F115?qs=LOCUfHb8d9uDeQFPTHx5Dg%3D%3D</field>
+        <field name="Arrow Part Number">PRTR5V0U2F,115</field>
+        <field name="Arrow Price/Stock">https://www.arrow.com/en/products/prtr5v0u2f115/nexperia?utm_currency=USD&amp;region=europe</field>
+        <field name="MNF PART NUMBER">C2937001</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">PESD3V3L5UF115</field>
+        <field name="Datasheet">https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2F_PRTR5V0U2K.pdf</field>
+        <field name="Description">PRTR5V0U2F; PRTR5V0U2K - Ultra low capacitance double rail-to-rail ESD protection</field>
+      </fields>
+      <libsource lib="PRTR5V0U2F_115" part="PRTR5V0U2F,115" description="PRTR5V0U2F; PRTR5V0U2K - Ultra low capacitance double rail-to-rail ESD protection"/>
+      <property name="Height" value="0.5"/>
+      <property name="Manufacturer_Name" value="Nexperia"/>
+      <property name="Manufacturer_Part_Number" value="PRTR5V0U2F,115"/>
+      <property name="Mouser Part Number" value="771-PRTR5V0U2F-T/R"/>
+      <property name="Mouser Price/Stock" value="https://www.mouser.co.uk/ProductDetail/Nexperia/PRTR5V0U2F115?qs=LOCUfHb8d9uDeQFPTHx5Dg%3D%3D"/>
+      <property name="Arrow Part Number" value="PRTR5V0U2F,115"/>
+      <property name="Arrow Price/Stock" value="https://www.arrow.com/en/products/prtr5v0u2f115/nexperia?utm_currency=USD&amp;region=europe"/>
+      <property name="MNF PART NUMBER" value="C2937001"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="USB-C"/>
+      <property name="Sheetfile" value="usb.kicad_sch"/>
+      <sheetpath names="/USB-C/" tstamps="/0772e6ec-d05e-4b66-bbc5-51355a8b62fb/"/>
+      <tstamps>ed1d2c9a-d8c5-4146-95b0-dcc95ee0e6a4</tstamps>
+    </comp>
+    <comp ref="J1">
+      <value>U261-241N-4BS60</value>
+      <footprint>XKB_U261-241N-4BS60:XKB_U261-241N-4BS60</footprint>
+      <datasheet>https://www.usb.org/sites/default/files/documents/usb_type-c.zip</datasheet>
+      <description>USB Full-Featured Type-C Receptacle connector</description>
+      <fields>
+        <field name="MNF PART NUMBER"/>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">XKB_U261-241N-4BS60:XKB_U261-241N-4BS60</field>
+        <field name="Datasheet">https://www.usb.org/sites/default/files/documents/usb_type-c.zip</field>
+        <field name="Description">USB Full-Featured Type-C Receptacle connector</field>
+      </fields>
+      <libsource lib="GT-USB-8012A" part="USB_C_Receptacle" description="USB Full-Featured Type-C Receptacle connector"/>
+      <property name="MNF PART NUMBER" value=""/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="USB-C"/>
+      <property name="Sheetfile" value="usb.kicad_sch"/>
+      <property name="ki_keywords" value="usb universal serial bus type-C full-featured"/>
+      <property name="ki_fp_filters" value="USB*C*Receptacle*"/>
+      <sheetpath names="/USB-C/" tstamps="/0772e6ec-d05e-4b66-bbc5-51355a8b62fb/"/>
+      <tstamps>4f727aff-1e27-49f6-901b-b64ed2b90bfc</tstamps>
+    </comp>
+    <comp ref="R2">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="USB-C"/>
+      <property name="Sheetfile" value="usb.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/USB-C/" tstamps="/0772e6ec-d05e-4b66-bbc5-51355a8b62fb/"/>
+      <tstamps>7d9ff0ca-253d-454a-94e1-a82aa06b5772</tstamps>
+    </comp>
+    <comp ref="R7">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="USB-C"/>
+      <property name="Sheetfile" value="usb.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/USB-C/" tstamps="/0772e6ec-d05e-4b66-bbc5-51355a8b62fb/"/>
+      <tstamps>b7a5dfe0-3648-4b50-8e00-ac27876f343c</tstamps>
+    </comp>
+    <comp ref="C3">
+      <value>4.7uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C307423</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C15525</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C307423"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C15525"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>5a58e9b0-7006-4759-8974-ff7939382719</tstamps>
+    </comp>
+    <comp ref="C13">
+      <value>22uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C159801</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C159801</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C159801"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C159801"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>71cf2f92-2a31-4916-9cf2-21dd8f170852</tstamps>
+    </comp>
+    <comp ref="C20">
+      <value>4.7uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C307423</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C15525</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C307423"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C15525"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>d8d81cad-2696-41dc-bfaa-f578f2d2d607</tstamps>
+    </comp>
+    <comp ref="C23">
+      <value>4.7uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C23733</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C15525</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C23733"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C15525"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>19777041-6a40-4c16-94a2-031a6d231c92</tstamps>
+    </comp>
+    <comp ref="D1">
+      <value>Leiditech PESD3V3L1BA</value>
+      <footprint>Diode_SMD:D_SOD-323_HandSoldering</footprint>
+      <datasheet>https://assets.nexperia.com/documents/data-sheet/PESDXL1BA_SER.pdf</datasheet>
+      <description>7VC 16VC Clamp ESD DIODE SOD-323</description>
+      <fields>
+        <field name="Height">1.1</field>
+        <field name="Manufacturer_Name">Nexperia</field>
+        <field name="Manufacturer_Part_Number">PESD3V3L1BAF</field>
+        <field name="Mouser Part Number">771-PESD3V3L1BAF</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BAF?qs=45Avz0nZxhvUIhmT7d7ykw%3D%3D</field>
+        <field name="Arrow Part Number">PESD3V3L1BAF</field>
+        <field name="Arrow Price/Stock">https://www.arrow.com/en/products/pesd3v3l1baf/nexperia?utm_currency=USD&amp;region=nac</field>
+        <field name="MNF PART NUMBER">C5210989</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Diode_SMD:D_SOD-323_HandSoldering</field>
+        <field name="Datasheet">https://assets.nexperia.com/documents/data-sheet/PESDXL1BA_SER.pdf</field>
+        <field name="Description">7VC 16VC Clamp ESD DIODE SOD-323</field>
+      </fields>
+      <libsource lib="PESD3V3L1BAF" part="PESD3V3L1BAF" description="PESD3V3L1BA - Low capacitance bidirectional ESD protection diode in SOD323"/>
+      <property name="Height" value="1.1"/>
+      <property name="Manufacturer_Name" value="Nexperia"/>
+      <property name="Manufacturer_Part_Number" value="PESD3V3L1BAF"/>
+      <property name="Mouser Part Number" value="771-PESD3V3L1BAF"/>
+      <property name="Mouser Price/Stock" value="https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BAF?qs=45Avz0nZxhvUIhmT7d7ykw%3D%3D"/>
+      <property name="Arrow Part Number" value="PESD3V3L1BAF"/>
+      <property name="Arrow Price/Stock" value="https://www.arrow.com/en/products/pesd3v3l1baf/nexperia?utm_currency=USD&amp;region=nac"/>
+      <property name="MNF PART NUMBER" value="C5210989"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>4a7508d2-f44f-4ca3-ae06-787b697ebaff</tstamps>
+    </comp>
+    <comp ref="IC1">
+      <value>MCP73831T-2ACI_MC</value>
+      <footprint>SON50P300X200X100-9N-D</footprint>
+      <datasheet>http://ww1.microchip.com/downloads/en/DeviceDoc/20001984g.pdf</datasheet>
+      <description>MICROCHIP - MCP73831T-2ACI/MC - BATTERY CHARGER, LI-ION/POL, 0.5A, DFN-8</description>
+      <fields>
+        <field name="Height">1</field>
+        <field name="Manufacturer_Name">Microchip</field>
+        <field name="Manufacturer_Part_Number">MCP73831T-2ACI/MC</field>
+        <field name="Mouser Part Number">579-MCP73831T-2ACIMC</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Microchip-Technology/MCP73831T-2ACI-MC?qs=yUQqVecv4quJ3ICqm%2FGZxw%3D%3D</field>
+        <field name="Arrow Part Number">MCP73831T-2ACI/MC</field>
+        <field name="Arrow Price/Stock">https://www.arrow.com/en/products/mcp73831t-2acimc/microchip-technology?utm_currency=USD&amp;region=nac</field>
+        <field name="MNF PART NUMBER">C411870</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">SON50P300X200X100-9N-D</field>
+        <field name="Datasheet">http://ww1.microchip.com/downloads/en/DeviceDoc/20001984g.pdf</field>
+        <field name="Description">MICROCHIP - MCP73831T-2ACI/MC - BATTERY CHARGER, LI-ION/POL, 0.5A, DFN-8</field>
+      </fields>
+      <libsource lib="MCP73831T-2ACI_MC" part="MCP73831T-2ACI_MC" description="MICROCHIP - MCP73831T-2ACI/MC - BATTERY CHARGER, LI-ION/POL, 0.5A, DFN-8"/>
+      <property name="Height" value="1"/>
+      <property name="Manufacturer_Name" value="Microchip"/>
+      <property name="Manufacturer_Part_Number" value="MCP73831T-2ACI/MC"/>
+      <property name="Mouser Part Number" value="579-MCP73831T-2ACIMC"/>
+      <property name="Mouser Price/Stock" value="https://www.mouser.co.uk/ProductDetail/Microchip-Technology/MCP73831T-2ACI-MC?qs=yUQqVecv4quJ3ICqm%2FGZxw%3D%3D"/>
+      <property name="Arrow Part Number" value="MCP73831T-2ACI/MC"/>
+      <property name="Arrow Price/Stock" value="https://www.arrow.com/en/products/mcp73831t-2acimc/microchip-technology?utm_currency=USD&amp;region=nac"/>
+      <property name="MNF PART NUMBER" value="C411870"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>3af17034-c3a2-48a9-963d-495646da942a</tstamps>
+    </comp>
+    <comp ref="IC2">
+      <value>XC6220B331ER-G</value>
+      <footprint>XC6220B331ER-G:XC6220B331ER-G</footprint>
+      <datasheet>https://www.digikey.ph/en/products/detail/torex-semiconductor-ltd/XC6220B331ER-G/10166030?msockid=39f1ec84d77b6f4428b7f904d6676eed</datasheet>
+      <description>Linear Voltage Regulator IC Positive Fixed 1 Output 1A 6-USPC (1.8x2)</description>
+      <fields>
+        <field name="Height">1</field>
+        <field name="Manufacturer_Name">Torex</field>
+        <field name="Manufacturer_Part_Number">XC6220B331ER-G</field>
+        <field name="Mouser Part Number">865-XC6220B331ER-G</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Torex-Semiconductor/XC6220B331ER-G?qs=AsjdqWjXhJ%252BJj%252BEWI7nHIg%3D%3D</field>
+        <field name="Arrow Part Number"/>
+        <field name="Arrow Price/Stock"/>
+        <field name="MNF PART NUMBER">C3013657</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">XC6220B331ER-G:XC6220B331ER-G</field>
+        <field name="Datasheet">https://www.digikey.ph/en/products/detail/torex-semiconductor-ltd/XC6220B331ER-G/10166030?msockid=39f1ec84d77b6f4428b7f904d6676eed</field>
+        <field name="Description">Linear Voltage Regulator IC Positive Fixed 1 Output 1A 6-USPC (1.8x2)</field>
+      </fields>
+      <libsource lib="XC6220B331ER-G" part="XC6220B331ER-G" description="Linear Voltage Regulator IC Positive Fixed 1 Output 1A 6-USPC (1.8x2)"/>
+      <property name="Height" value="1"/>
+      <property name="Manufacturer_Name" value="Torex"/>
+      <property name="Manufacturer_Part_Number" value="XC6220B331ER-G"/>
+      <property name="Mouser Part Number" value="865-XC6220B331ER-G"/>
+      <property name="Mouser Price/Stock" value="https://www.mouser.co.uk/ProductDetail/Torex-Semiconductor/XC6220B331ER-G?qs=AsjdqWjXhJ%252BJj%252BEWI7nHIg%3D%3D"/>
+      <property name="Arrow Part Number" value=""/>
+      <property name="Arrow Price/Stock" value=""/>
+      <property name="MNF PART NUMBER" value="C3013657"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>d60f3a13-1e73-47ac-a9c8-d86ed725d0ab</tstamps>
+    </comp>
+    <comp ref="R18">
+      <value>10K</value>
+      <footprint>Resistor_SMD:R_0402_1005Metric</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C60490</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C60490</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0402_1005Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C60490"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C60490"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>4c2036bc-0a69-4ff8-aed3-54cd03f435ea</tstamps>
+    </comp>
+    <comp ref="TP17">
+      <value>TestPoint</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>ea9a77c9-4017-4bf5-9495-6e5118dd51ca</tstamps>
+    </comp>
+    <comp ref="TP18">
+      <value>TestPoint</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>22c54ffd-d259-4511-bf5c-d90a7d7cd7d0</tstamps>
+    </comp>
+    <comp ref="U1">
+      <value>RT9193-33GB</value>
+      <footprint>SOT-23-5_RIT</footprint>
+      <datasheet>RT9193-33GB</datasheet>
+      <fields>
+        <field name="Footprint">SOT-23-5_RIT</field>
+        <field name="Datasheet">RT9193-33GB</field>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="2026-01-24_22-03-55" part="RT9193-33GB" description=""/>
+      <property name="Sheetname" value="Power"/>
+      <property name="Sheetfile" value="power.kicad_sch"/>
+      <property name="exclude_from_board"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="RT9193-33GB"/>
+      <property name="ki_fp_filters" value="SOT-23-5_RIT SOT-23-5_RIT-M SOT-23-5_RIT-L"/>
+      <sheetpath names="/Power/" tstamps="/b2f9aad6-58d4-48f1-9e48-681e8da0a79c/"/>
+      <tstamps>78a5a2e3-fb5e-4f32-a59a-6babb4781b0d</tstamps>
+    </comp>
+    <comp ref="C4">
+      <value>4.7uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C307423</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C15525</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C307423"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C15525"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>e75249f0-b854-41c9-b223-fc66418847a5</tstamps>
+    </comp>
+    <comp ref="C5">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C60474</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C60474</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C60474"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C60474"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>c548de29-6c7a-4dcc-907b-b8dc742d280c</tstamps>
+    </comp>
+    <comp ref="C6">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C60474</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C60474</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C60474"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C60474"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>1c9e4382-d7bd-4625-96e2-0de2b520a976</tstamps>
+    </comp>
+    <comp ref="C7">
+      <value>10n</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>Unpolarized capacitor</description>
+      <fields>
+        <field name="MNF PART NUMBER">C1589</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Unpolarized capacitor</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C1589"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>0e797a02-97c1-4534-9ba3-43d7a4a7ad85</tstamps>
+    </comp>
+    <comp ref="C11">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</footprint>
+      <description>Unpolarized capacitor</description>
+      <fields>
+        <field name="MNF PART NUMBER">C107372</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Unpolarized capacitor</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C107372"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>e418d67b-1b97-48da-856c-2d8b8a1a6df6</tstamps>
+    </comp>
+    <comp ref="C15">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C60474</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C60474</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C60474"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C60474"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>14565c71-97c2-48bc-bacf-c680aeca5836</tstamps>
+    </comp>
+    <comp ref="C24">
+      <value>10n</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</footprint>
+      <description>Unpolarized capacitor</description>
+      <fields>
+        <field name="MNF PART NUMBER">C1589</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Unpolarized capacitor</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="MNF PART NUMBER" value="C1589"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <property name="ki_fp_filters" value="C_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>fac0b29e-89dd-453c-972f-f3c29ad86c67</tstamps>
+    </comp>
+    <comp ref="D2">
+      <value>LED-R</value>
+      <footprint>LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <description>Red LED Indication - Discrete 0201</description>
+      <fields>
+        <field name="Sim.Pins">1=K 2=A</field>
+        <field name="MNF PART NUMBER">C3646923</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Red LED Indication - Discrete 0201</field>
+      </fields>
+      <libsource lib="Device" part="LED" description="Light emitting diode"/>
+      <property name="Sim.Pins" value="1=K 2=A"/>
+      <property name="MNF PART NUMBER" value="C3646923"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="LED diode"/>
+      <property name="ki_fp_filters" value="LED* LED_SMD:* LED_THT:*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>47dba46a-1cd7-40dc-a8fe-322a5b5ef223</tstamps>
+    </comp>
+    <comp ref="D3">
+      <value>LED-G</value>
+      <footprint>LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <description>Light emitting diode</description>
+      <fields>
+        <field name="Sim.Pins">1=K 2=A</field>
+        <field name="MNF PART NUMBER">C3646922</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">LED_SMD:LED_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description">Light emitting diode</field>
+      </fields>
+      <libsource lib="Device" part="LED" description="Light emitting diode"/>
+      <property name="Sim.Pins" value="1=K 2=A"/>
+      <property name="MNF PART NUMBER" value="C3646922"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="LED diode"/>
+      <property name="ki_fp_filters" value="LED* LED_SMD:* LED_THT:*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>8fad2494-b840-43b6-b182-defa58c6b955</tstamps>
+    </comp>
+    <comp ref="FB1">
+      <value>FerriteBead</value>
+      <footprint>Capacitor_SMD:C_0201_0603Metric</footprint>
+      <description>Ferrite bead</description>
+      <fields>
+        <field name="MNF PART NUMBER">C525479</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Capacitor_SMD:C_0201_0603Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description">Ferrite bead</field>
+      </fields>
+      <libsource lib="Device" part="FerriteBead" description="Ferrite bead"/>
+      <property name="MNF PART NUMBER" value="C525479"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="L ferrite bead inductor filter"/>
+      <property name="ki_fp_filters" value="Inductor_* L_* *Ferrite*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>65a834f8-8e9f-4d97-a44a-ac0b45b5dc13</tstamps>
+    </comp>
+    <comp ref="R3">
+      <value>10K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C509700</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C509700</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C509700"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C509700"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>c7e0eb4b-755a-462c-97df-d7332fed64a2</tstamps>
+    </comp>
+    <comp ref="R4">
+      <value>10K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C509700</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C509700</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C509700"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C509700"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>2de1984d-80fb-4c09-a0f6-c9540270752f</tstamps>
+    </comp>
+    <comp ref="R5">
+      <value>10K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C509700</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C25744</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C509700"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C25744"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="dnp"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>8fc55e5a-5d83-4900-99ee-0b1c037e7247</tstamps>
+    </comp>
+    <comp ref="R6">
+      <value>220R</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164338</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164338</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164338"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164338"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>dea67fbd-b601-468e-ba3f-a18c668fc68c</tstamps>
+    </comp>
+    <comp ref="R8">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>aea38715-4111-443c-bad9-be538003efc8</tstamps>
+    </comp>
+    <comp ref="R9">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>44dfff15-1785-4dc8-beda-5f8d704822e9</tstamps>
+    </comp>
+    <comp ref="R10">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>80b05c20-5324-46b6-8e1e-759f33d96cff</tstamps>
+    </comp>
+    <comp ref="R11">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>e7df6608-fb88-469e-b7e2-511b2a0145ce</tstamps>
+    </comp>
+    <comp ref="R12">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>a1bbfd39-a16d-4a79-95df-fa6b447fc249</tstamps>
+    </comp>
+    <comp ref="R13">
+      <value>5.1K</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164337</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164337</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164337"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164337"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>bba2ae34-7333-444e-a0a7-8b84bbf7c2aa</tstamps>
+    </comp>
+    <comp ref="R16">
+      <value>220R</value>
+      <footprint>Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</footprint>
+      <fields>
+        <field name="MNF PART NUMBER">C18164338</field>
+        <field name="Sim.Device"/>
+        <field name="Sim.Pins"/>
+        <field name="PARTNO"/>
+        <field name="LCSC">C18164338</field>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="MNF PART NUMBER" value="C18164338"/>
+      <property name="Sim.Device" value=""/>
+      <property name="Sim.Pins" value=""/>
+      <property name="PARTNO" value=""/>
+      <property name="LCSC" value="C18164338"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <property name="ki_fp_filters" value="R_*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>000b6058-6ff9-42ab-9a19-4a679451fe71</tstamps>
+    </comp>
+    <comp ref="TP1">
+      <value>RST</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>702acaff-016b-4f35-9c5e-8c523cca8be5</tstamps>
+    </comp>
+    <comp ref="TP2">
+      <value>RST-G</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>73416992-1126-4fc9-8803-3d4205339563</tstamps>
+    </comp>
+    <comp ref="TP5">
+      <value>3.3V</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>ff682586-fb3e-4476-ae38-71ff2f57e249</tstamps>
+    </comp>
+    <comp ref="TP6">
+      <value>TestPoint</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>250079c8-88e2-4513-9424-cb8ebcf3d1c8</tstamps>
+    </comp>
+    <comp ref="TP7">
+      <value>BOOT-G</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>f33a1d04-b206-436e-8929-0105509caea4</tstamps>
+    </comp>
+    <comp ref="TP8">
+      <value>BOOT</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>0d86049f-8e12-41a5-8991-6de14001f036</tstamps>
+    </comp>
+    <comp ref="TP11">
+      <value>TOUCH_PAD_1</value>
+      <footprint>TOUCH_PADs:TOUCH_PAD_1</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TOUCH_PADs:TOUCH_PAD_1</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="" part="TOUCH_PAD_1_1" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>eebfc76c-3b86-4a01-9198-6dd107f2103e</tstamps>
+    </comp>
+    <comp ref="TP12">
+      <value>TOUCH_PAD_1</value>
+      <footprint>TOUCH_PADs:TOUCH_PAD_2</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TOUCH_PADs:TOUCH_PAD_2</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="TOUCH_PAD" part="TOUCH_PAD_1" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>dddea048-dc9c-4905-ac2d-7d1bfb67888d</tstamps>
+    </comp>
+    <comp ref="TP13">
+      <value>TOUCH_PAD_1</value>
+      <footprint>TOUCH_PADs:TOUCH_PAD_3</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TOUCH_PADs:TOUCH_PAD_3</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="TOUCH_PAD" part="TOUCH_PAD_1" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>b2caa6e1-b93d-411c-8c5c-6f3ee49661c9</tstamps>
+    </comp>
+    <comp ref="TP14">
+      <value>TOUCH_PAD_1</value>
+      <footprint>TOUCH_PADs:TOUCH_PAD_4</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TOUCH_PADs:TOUCH_PAD_4</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="TOUCH_PAD" part="TOUCH_PAD_1" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>d64be447-9961-49e8-aba3-f7555039b94d</tstamps>
+    </comp>
+    <comp ref="TP15">
+      <value>TOUCH_PAD_1</value>
+      <footprint>TOUCH_PADs:TOUCH_PAD_5</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TOUCH_PADs:TOUCH_PAD_5</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="TOUCH_PAD" part="TOUCH_PAD_1" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>768980f0-1286-43ee-b441-50fd7b4113d5</tstamps>
+    </comp>
+    <comp ref="TP16">
+      <value>TOUCH_PAD_1</value>
+      <footprint>TOUCH_PADs:TOUCH_PAD_6</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TOUCH_PADs:TOUCH_PAD_6</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="TOUCH_PAD" part="TOUCH_PAD_1" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>44200716-3438-4c6b-95a6-00a1dbd0a53a</tstamps>
+    </comp>
+    <comp ref="TP19">
+      <value>SWDIO</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>7949b6e9-7d14-4e89-8286-6dc3410a0396</tstamps>
+    </comp>
+    <comp ref="TP20">
+      <value>SWCLK</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>5048bb1e-eb25-4f7e-813f-95d459540aa5</tstamps>
+    </comp>
+    <comp ref="TP21">
+      <value>GND</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.0mm</footprint>
+      <description>test point</description>
+      <fields>
+        <field name="jlpcb desc"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.0mm</field>
+        <field name="Datasheet"/>
+        <field name="Description">test point</field>
+      </fields>
+      <libsource lib="Connector" part="TestPoint" description="test point"/>
+      <property name="jlpcb desc" value=""/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="test point tp"/>
+      <property name="ki_fp_filters" value="Pin* Test*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>a573381d-be53-4ce9-adaa-080ec8d4be81</tstamps>
+    </comp>
+    <comp ref="U2">
+      <value>CH32X035G8U6</value>
+      <footprint>Package_DFN_QFN:WQFN-28-1EP_4x4mm_P0.4mm_EP2.7x2.7mm_ThermalVias</footprint>
+      <datasheet>https://www.wch-ic.com/downloads/CH32X035DS0_PDF.html</datasheet>
+      <description>48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28</description>
+      <fields>
+        <field name="Footprint">Package_DFN_QFN:WQFN-28-1EP_4x4mm_P0.4mm_EP2.7x2.7mm_ThermalVias</field>
+        <field name="Datasheet">https://www.wch-ic.com/downloads/CH32X035DS0_PDF.html</field>
+        <field name="Description">48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28</field>
+      </fields>
+      <libsource lib="MCU_WCH_CH32X0" part="CH32X035G8U6" description="48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28"/>
+      <property name="Sheetname" value="MCU"/>
+      <property name="Sheetfile" value="mcu.kicad_sch"/>
+      <property name="ki_keywords" value="microcontroller WCH Type-C"/>
+      <property name="ki_fp_filters" value="*QFN*4x4mm*P0.4mm*EP2.7x2.7*"/>
+      <sheetpath names="/MCU/" tstamps="/54e0d1a3-bed2-4ddd-8931-84eb98480967/"/>
+      <tstamps>7be8f442-18b4-437d-b04b-0f6cf52b1adc</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="" part="TOUCH_PAD_1_1">
+      <description>test point</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Pin*</fp>
+        <fp>Test*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">TP11</field>
+        <field name="Value">TOUCH_PAD_1</field>
+        <field name="Footprint">TOUCH_PADs:TOUCH_PAD_1</field>
+        <field name="Datasheet">~</field>
+        <field name="Description">test point</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="2026-01-24_22-03-55" part="RT9193-33GB">
+      <docs>RT9193-33GB</docs>
+      <footprints>
+        <fp>SOT-23-5_RIT</fp>
+        <fp>SOT-23-5_RIT-M</fp>
+        <fp>SOT-23-5_RIT-L</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">RT9193-33GB</field>
+        <field name="Footprint">SOT-23-5_RIT</field>
+        <field name="Datasheet">RT9193-33GB</field>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="VIN" type="power_in"/>
+        <pin num="2" name="GND" type="power_out"/>
+        <pin num="3" name="EN" type="unspecified"/>
+        <pin num="4" name="BP" type="unspecified"/>
+        <pin num="5" name="VOUT" type="output"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector" part="TestPoint">
+      <description>test point</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Pin*</fp>
+        <fp>Test*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">TP</field>
+        <field name="Value">TestPoint</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">~</field>
+        <field name="Description">test point</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C">
+      <description>Unpolarized capacitor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">~</field>
+        <field name="Description">Unpolarized capacitor</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="FerriteBead">
+      <description>Ferrite bead</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Inductor_*</fp>
+        <fp>L_*</fp>
+        <fp>*Ferrite*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">FB</field>
+        <field name="Value">FerriteBead</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">~</field>
+        <field name="Description">Ferrite bead</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="LED">
+      <description>Light emitting diode</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>LED*</fp>
+        <fp>LED_SMD:*</fp>
+        <fp>LED_THT:*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">~</field>
+        <field name="Description">Light emitting diode</field>
+        <field name="Sim.Pins">1=K 2=A</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R">
+      <description>Resistor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">~</field>
+        <field name="Description">Resistor</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="GT-USB-8012A" part="USB_C_Receptacle">
+      <description>USB Full-Featured Type-C Receptacle connector</description>
+      <docs>https://www.usb.org/sites/default/files/documents/usb_type-c.zip</docs>
+      <footprints>
+        <fp>USB*C*Receptacle*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">USB_C_Receptacle</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">https://www.usb.org/sites/default/files/documents/usb_type-c.zip</field>
+        <field name="Description">USB Full-Featured Type-C Receptacle connector</field>
+      </fields>
+      <pins>
+        <pin num="A1" name="GND" type="passive"/>
+        <pin num="A2" name="TX1+" type="bidirectional"/>
+        <pin num="A3" name="TX1-" type="bidirectional"/>
+        <pin num="A4" name="VBUS" type="passive"/>
+        <pin num="A5" name="CC1" type="bidirectional"/>
+        <pin num="A6" name="D+" type="bidirectional"/>
+        <pin num="A7" name="D-" type="bidirectional"/>
+        <pin num="A8" name="SBU1" type="bidirectional"/>
+        <pin num="A9" name="VBUS" type="passive"/>
+        <pin num="A10" name="RX2-" type="bidirectional"/>
+        <pin num="A11" name="RX2+" type="bidirectional"/>
+        <pin num="A12" name="GND" type="passive"/>
+        <pin num="B1" name="GND" type="passive"/>
+        <pin num="B2" name="TX2+" type="bidirectional"/>
+        <pin num="B3" name="TX2-" type="bidirectional"/>
+        <pin num="B4" name="VBUS" type="passive"/>
+        <pin num="B5" name="CC2" type="bidirectional"/>
+        <pin num="B6" name="D+" type="bidirectional"/>
+        <pin num="B7" name="D-" type="bidirectional"/>
+        <pin num="B8" name="SBU2" type="bidirectional"/>
+        <pin num="B9" name="VBUS" type="passive"/>
+        <pin num="B10" name="RX1-" type="bidirectional"/>
+        <pin num="B11" name="RX1+" type="bidirectional"/>
+        <pin num="B12" name="GND" type="passive"/>
+        <pin num="S1" name="SHIELD" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="MCP73831T-2ACI_MC" part="MCP73831T-2ACI_MC">
+      <description>MICROCHIP - MCP73831T-2ACI/MC - BATTERY CHARGER, LI-ION/POL, 0.5A, DFN-8</description>
+      <docs>http://ww1.microchip.com/downloads/en/DeviceDoc/20001984g.pdf</docs>
+      <fields>
+        <field name="Reference">IC</field>
+        <field name="Value">MCP73831T-2ACI_MC</field>
+        <field name="Footprint">SON50P300X200X100-9N-D</field>
+        <field name="Datasheet">http://ww1.microchip.com/downloads/en/DeviceDoc/20001984g.pdf</field>
+        <field name="Description">MICROCHIP - MCP73831T-2ACI/MC - BATTERY CHARGER, LI-ION/POL, 0.5A, DFN-8</field>
+        <field name="Height">1</field>
+        <field name="Manufacturer_Name">Microchip</field>
+        <field name="Manufacturer_Part_Number">MCP73831T-2ACI/MC</field>
+        <field name="Mouser Part Number">579-MCP73831T-2ACIMC</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Microchip-Technology/MCP73831T-2ACI-MC?qs=yUQqVecv4quJ3ICqm%2FGZxw%3D%3D</field>
+        <field name="Arrow Part Number">MCP73831T-2ACI/MC</field>
+        <field name="Arrow Price/Stock">https://www.arrow.com/en/products/mcp73831t-2acimc/microchip-technology?utm_currency=USD&amp;region=nac</field>
+      </fields>
+      <pins>
+        <pin num="1" name="VDD_1" type="passive"/>
+        <pin num="2" name="VDD_2" type="passive"/>
+        <pin num="3" name="VBAT_1" type="passive"/>
+        <pin num="4" name="VBAT_2" type="passive"/>
+        <pin num="5" name="STAT" type="passive"/>
+        <pin num="6" name="VSS" type="passive"/>
+        <pin num="7" name="NC" type="no_connect"/>
+        <pin num="8" name="PROG" type="passive"/>
+        <pin num="9" name="GND" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="MCU_WCH_CH32X0" part="CH32X035G8U6">
+      <description>48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28</description>
+      <docs>https://www.wch-ic.com/downloads/CH32X035DS0_PDF.html</docs>
+      <footprints>
+        <fp>*QFN*4x4mm*P0.4mm*EP2.7x2.7*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">CH32X035G8U6</field>
+        <field name="Footprint">Package_DFN_QFN:WQFN-28-1EP_4x4mm_P0.4mm_EP2.7x2.7mm</field>
+        <field name="Datasheet">https://www.wch-ic.com/downloads/CH32X035DS0_PDF.html</field>
+        <field name="Description">48MHz RISC-V MCU with USB PD phy (Sink, Source, DRP), USB 2.0 Full speed phy (Host, Device), 20KB RAM, 62KB Flash, WQFN-28</field>
+      </fields>
+      <pins>
+        <pin num="1" name="PC15/CC2" type="bidirectional"/>
+        <pin num="2" name="VDD" type="power_in"/>
+        <pin num="3" name="PC0" type="bidirectional"/>
+        <pin num="4" name="PC3" type="bidirectional"/>
+        <pin num="5" name="PA0" type="bidirectional"/>
+        <pin num="6" name="PA1" type="bidirectional"/>
+        <pin num="7" name="PA2" type="bidirectional"/>
+        <pin num="8" name="PA3" type="bidirectional"/>
+        <pin num="9" name="PA4" type="bidirectional"/>
+        <pin num="10" name="PA5" type="bidirectional"/>
+        <pin num="11" name="PA6" type="bidirectional"/>
+        <pin num="12" name="PA7" type="bidirectional"/>
+        <pin num="13" name="PB0" type="bidirectional"/>
+        <pin num="14" name="PB3" type="bidirectional"/>
+        <pin num="15" name="PB4" type="bidirectional"/>
+        <pin num="16" name="PB1/PB5" type="bidirectional"/>
+        <pin num="17" name="PB6" type="bidirectional"/>
+        <pin num="18" name="PB7" type="bidirectional"/>
+        <pin num="19" name="PB8" type="bidirectional"/>
+        <pin num="20" name="PB9" type="bidirectional"/>
+        <pin num="21" name="PB10" type="bidirectional"/>
+        <pin num="22" name="PB11" type="bidirectional"/>
+        <pin num="23" name="PB12" type="bidirectional"/>
+        <pin num="24" name="PC19/DCK" type="bidirectional"/>
+        <pin num="25" name="PC18/DIO" type="bidirectional"/>
+        <pin num="26" name="PC11/PC16/UDM" type="bidirectional"/>
+        <pin num="27" name="PC10/PC17/UDP" type="bidirectional"/>
+        <pin num="28" name="PC14/CC1" type="bidirectional"/>
+        <pin num="29" name="GND" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Mechanical" part="MountingHole">
+      <description>Mounting Hole without connection</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>MountingHole*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">H</field>
+        <field name="Value">MountingHole</field>
+        <field name="Footprint"/>
+        <field name="Datasheet">~</field>
+        <field name="Description">Mounting Hole without connection</field>
+      </fields>
+    </libpart>
+    <libpart lib="PESD3V3L1BAF" part="PESD3V3L1BAF">
+      <description>PESD3V3L1BA - Low capacitance bidirectional ESD protection diode in SOD323</description>
+      <docs>https://assets.nexperia.com/documents/data-sheet/PESDXL1BA_SER.pdf</docs>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">PESD3V3L1BAF</field>
+        <field name="Footprint">SOD2512X110N</field>
+        <field name="Datasheet">https://assets.nexperia.com/documents/data-sheet/PESDXL1BA_SER.pdf</field>
+        <field name="Description">PESD3V3L1BA - Low capacitance bidirectional ESD protection diode in SOD323</field>
+        <field name="Height">1.1</field>
+        <field name="Manufacturer_Name">Nexperia</field>
+        <field name="Manufacturer_Part_Number">PESD3V3L1BAF</field>
+        <field name="Mouser Part Number">771-PESD3V3L1BAF</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Nexperia/PESD3V3L1BAF?qs=45Avz0nZxhvUIhmT7d7ykw%3D%3D</field>
+        <field name="Arrow Part Number">PESD3V3L1BAF</field>
+        <field name="Arrow Price/Stock">https://www.arrow.com/en/products/pesd3v3l1baf/nexperia?utm_currency=USD&amp;region=nac</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K1" type="passive"/>
+        <pin num="2" name="K2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="PRTR5V0U2F_115" part="PRTR5V0U2F,115">
+      <description>PRTR5V0U2F; PRTR5V0U2K - Ultra low capacitance double rail-to-rail ESD protection</description>
+      <docs>https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2F_PRTR5V0U2K.pdf</docs>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">PRTR5V0U2F,115</field>
+        <field name="Footprint">PESD3V3L5UF115</field>
+        <field name="Datasheet">https://assets.nexperia.com/documents/data-sheet/PRTR5V0U2F_PRTR5V0U2K.pdf</field>
+        <field name="Description">PRTR5V0U2F; PRTR5V0U2K - Ultra low capacitance double rail-to-rail ESD protection</field>
+        <field name="Height">0.5</field>
+        <field name="Manufacturer_Name">Nexperia</field>
+        <field name="Manufacturer_Part_Number">PRTR5V0U2F,115</field>
+        <field name="Mouser Part Number">771-PRTR5V0U2F-T/R</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Nexperia/PRTR5V0U2F115?qs=LOCUfHb8d9uDeQFPTHx5Dg%3D%3D</field>
+        <field name="Arrow Part Number">PRTR5V0U2F,115</field>
+        <field name="Arrow Price/Stock">https://www.arrow.com/en/products/prtr5v0u2f115/nexperia?utm_currency=USD&amp;region=europe</field>
+      </fields>
+      <pins>
+        <pin num="1" name="input/output_1_1" type="passive"/>
+        <pin num="2" name="ground" type="passive"/>
+        <pin num="3" name="input/output_2_1" type="passive"/>
+        <pin num="4" name="input/output_2_2" type="passive"/>
+        <pin num="5" name="supply_voltage" type="passive"/>
+        <pin num="6" name="input/output_1_2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="TOUCH_PAD" part="TOUCH_PAD_1">
+      <description>test point</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Pin*</fp>
+        <fp>Test*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">TP11</field>
+        <field name="Value">TOUCH_PAD_1</field>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D4.0mm</field>
+        <field name="Datasheet">~</field>
+        <field name="Description">test point</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="XC6220B331ER-G" part="XC6220B331ER-G">
+      <description>Linear Voltage Regulator IC Positive Fixed 1 Output 1A 6-USPC (1.8x2)</description>
+      <docs>https://www.digikey.ph/en/products/detail/torex-semiconductor-ltd/XC6220B331ER-G/10166030?msockid=39f1ec84d77b6f4428b7f904d6676eed</docs>
+      <fields>
+        <field name="Reference">IC</field>
+        <field name="Value">XC6220B331ER-G</field>
+        <field name="Footprint">XC6220B331ERG</field>
+        <field name="Datasheet">https://www.digikey.ph/en/products/detail/torex-semiconductor-ltd/XC6220B331ER-G/10166030?msockid=39f1ec84d77b6f4428b7f904d6676eed</field>
+        <field name="Description">Linear Voltage Regulator IC Positive Fixed 1 Output 1A 6-USPC (1.8x2)</field>
+        <field name="Height">1</field>
+        <field name="Manufacturer_Name">Torex</field>
+        <field name="Manufacturer_Part_Number">XC6220B331ER-G</field>
+        <field name="Mouser Part Number">865-XC6220B331ER-G</field>
+        <field name="Mouser Price/Stock">https://www.mouser.co.uk/ProductDetail/Torex-Semiconductor/XC6220B331ER-G?qs=AsjdqWjXhJ%252BJj%252BEWI7nHIg%3D%3D</field>
+        <field name="Arrow Part Number"/>
+        <field name="Arrow Price/Stock"/>
+      </fields>
+      <pins>
+        <pin num="1" name="VOUT_1" type="passive"/>
+        <pin num="2" name="VOUT_2" type="passive"/>
+        <pin num="3" name="CE" type="passive"/>
+        <pin num="4" name="VSS" type="passive"/>
+        <pin num="5" name="VIN_1" type="passive"/>
+        <pin num="6" name="VIN_2" type="passive"/>
+        <pin num="7" name="EP" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="2026-01-24_22-03-55">
+      <uri>E:/KiCAD_Lib/ul_RT9193-33GB/KiCADv6/2026-01-24_22-03-55.kicad_sym</uri>
+    </library>
+    <library logical="Connector">
+      <uri>C:\Program Files\KiCad\9.0\share\kicad\symbols\/Connector.kicad_sym</uri>
+    </library>
+    <library logical="Device">
+      <uri>C:\Program Files\KiCad\9.0\share\kicad\symbols\/Device.kicad_sym</uri>
+    </library>
+    <library logical="GT-USB-8012A">
+      <uri>E:/KiCAD_Lib/GT-USB-8012A/GT-USB-8012A.kicad_sym</uri>
+    </library>
+    <library logical="MCP73831T-2ACI_MC">
+      <uri>E:/KiCAD_Lib/LIB_MCP73831T-2ACI_MC/MCP73831T-2ACI_MC/KiCad/MCP73831T-2ACI_MC.kicad_sym</uri>
+    </library>
+    <library logical="MCU_WCH_CH32X0">
+      <uri>C:\Program Files\KiCad\9.0\share\kicad\symbols\/MCU_WCH_CH32X0.kicad_sym</uri>
+    </library>
+    <library logical="Mechanical">
+      <uri>C:\Program Files\KiCad\9.0\share\kicad\symbols\/Mechanical.kicad_sym</uri>
+    </library>
+    <library logical="PESD3V3L1BAF">
+      <uri>E:/KiCAD_Lib/LIB_PESD3V3L1BAF/PESD3V3L1BAF/KiCad/PESD3V3L1BAF.kicad_sym</uri>
+    </library>
+    <library logical="PRTR5V0U2F_115">
+      <uri>E:/KiCAD_Lib/LIB_PRTR5V0U2F,115/PRTR5V0U2F,115/KiCad/PRTR5V0U2F_115.kicad_sym</uri>
+    </library>
+    <library logical="TOUCH_PAD">
+      <uri>C:/Users/MBekheet/OneDrive - eJad/Documents/KiCad/9.0/symbols/TOUCH_PAD.kicad_sym</uri>
+    </library>
+    <library logical="XC6220B331ER-G">
+      <uri>E:/KiCAD_Lib/LIB_XC6220B331ER-G/XC6220B331ER-G/KiCad/XC6220B331ER-G.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="+3.3V" class="POWER_MAIN,Default">
+      <node ref="C11" pin="1" pintype="passive"/>
+      <node ref="C15" pin="1" pintype="passive"/>
+      <node ref="C20" pin="1" pintype="passive"/>
+      <node ref="C23" pin="1" pintype="passive"/>
+      <node ref="C4" pin="1" pintype="passive"/>
+      <node ref="C5" pin="1" pintype="passive"/>
+      <node ref="D1" pin="2" pinfunction="K2" pintype="passive"/>
+      <node ref="D7" pin="5" pinfunction="supply_voltage" pintype="passive"/>
+      <node ref="FB1" pin="1" pintype="passive"/>
+      <node ref="IC1" pin="3" pinfunction="VBAT_1" pintype="passive"/>
+      <node ref="IC1" pin="4" pinfunction="VBAT_2" pintype="passive"/>
+      <node ref="IC2" pin="1" pinfunction="VOUT_1" pintype="passive"/>
+      <node ref="IC2" pin="2" pinfunction="VOUT_2" pintype="passive"/>
+      <node ref="R3" pin="1" pintype="passive"/>
+      <node ref="R5" pin="1" pintype="passive"/>
+      <node ref="TP17" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="TP5" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="TP6" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="TP7" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U2" pin="2" pinfunction="VDD" pintype="power_in"/>
+    </net>
+    <net code="2" name="/MCU/BOOT0" class="Default">
+      <node ref="R4" pin="1" pintype="passive"/>
+      <node ref="R5" pin="2" pintype="passive"/>
+      <node ref="TP20" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="TP8" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U2" pin="24" pinfunction="PC19/DCK" pintype="bidirectional"/>
+    </net>
+    <net code="3" name="/MCU/D+" class="Default">
+      <node ref="D7" pin="4" pinfunction="input/output_2_2" pintype="passive"/>
+      <node ref="U2" pin="27" pinfunction="PC10/PC17/UDP" pintype="bidirectional"/>
+    </net>
+    <net code="4" name="/MCU/D-" class="Default">
+      <node ref="D7" pin="6" pinfunction="input/output_1_2" pintype="passive"/>
+      <node ref="U2" pin="26" pinfunction="PC11/PC16/UDM" pintype="bidirectional"/>
+    </net>
+    <net code="5" name="/MCU/LED1-B" class="Default">
+      <node ref="R16" pin="2" pintype="passive"/>
+      <node ref="U2" pin="16" pinfunction="PB1/PB5" pintype="bidirectional"/>
+      <node ref="U2" pin="3" pinfunction="PC0" pintype="bidirectional"/>
+    </net>
+    <net code="6" name="/MCU/LED2-G" class="Default">
+      <node ref="R6" pin="2" pintype="passive"/>
+    </net>
+    <net code="7" name="/MCU/P1" class="Default">
+      <node ref="R8" pin="1" pintype="passive"/>
+      <node ref="U2" pin="6" pinfunction="PA1" pintype="bidirectional"/>
+    </net>
+    <net code="8" name="/MCU/P2" class="Default">
+      <node ref="R9" pin="1" pintype="passive"/>
+      <node ref="U2" pin="7" pinfunction="PA2" pintype="bidirectional"/>
+    </net>
+    <net code="9" name="/MCU/P3" class="Default">
+      <node ref="R10" pin="1" pintype="passive"/>
+      <node ref="U2" pin="8" pinfunction="PA3" pintype="bidirectional"/>
+    </net>
+    <net code="10" name="/MCU/P4" class="Default">
+      <node ref="R11" pin="1" pintype="passive"/>
+      <node ref="U2" pin="9" pinfunction="PA4" pintype="bidirectional"/>
+    </net>
+    <net code="11" name="/MCU/P5" class="Default">
+      <node ref="R12" pin="1" pintype="passive"/>
+      <node ref="U2" pin="10" pinfunction="PA5" pintype="bidirectional"/>
+    </net>
+    <net code="12" name="/MCU/P6" class="Default">
+      <node ref="R13" pin="1" pintype="passive"/>
+      <node ref="U2" pin="11" pinfunction="PA6" pintype="bidirectional"/>
+    </net>
+    <net code="13" name="/MCU/PRESS1" class="Default">
+      <node ref="R8" pin="2" pintype="passive"/>
+      <node ref="TP11" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="14" name="/MCU/PRESS2" class="Default">
+      <node ref="R9" pin="2" pintype="passive"/>
+      <node ref="TP12" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="15" name="/MCU/PRESS3" class="Default">
+      <node ref="R10" pin="2" pintype="passive"/>
+      <node ref="TP13" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="16" name="/MCU/PRESS4" class="Default">
+      <node ref="R11" pin="2" pintype="passive"/>
+      <node ref="TP14" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="17" name="/MCU/PRESS5" class="Default">
+      <node ref="R12" pin="2" pintype="passive"/>
+      <node ref="TP15" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="18" name="/MCU/PRESS6" class="Default">
+      <node ref="R13" pin="2" pintype="passive"/>
+      <node ref="TP16" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="19" name="/MCU/RST" class="Default">
+      <node ref="C6" pin="1" pintype="passive"/>
+      <node ref="R3" pin="2" pintype="passive"/>
+      <node ref="TP1" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U2" pin="4" pinfunction="PC3" pintype="bidirectional"/>
+    </net>
+    <net code="20" name="/MCU/SWDIO" class="Default">
+      <node ref="TP19" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U2" pin="25" pinfunction="PC18/DIO" pintype="bidirectional"/>
+    </net>
+    <net code="21" name="/USB-C/ESD_USB_D+" class="USB,Default">
+      <node ref="D7" pin="3" pinfunction="input/output_2_1" pintype="passive"/>
+      <node ref="J1" pin="A7" pinfunction="D-" pintype="bidirectional"/>
+      <node ref="J1" pin="B7" pinfunction="D-" pintype="bidirectional"/>
+    </net>
+    <net code="22" name="/USB-C/ESD_USB_D-" class="USB,Default">
+      <node ref="D7" pin="1" pinfunction="input/output_1_1" pintype="passive"/>
+      <node ref="J1" pin="A6" pinfunction="D+" pintype="bidirectional"/>
+      <node ref="J1" pin="B6" pinfunction="D+" pintype="bidirectional"/>
+    </net>
+    <net code="23" name="5V" class="POWER_MAIN,Default">
+      <node ref="C1" pin="1" pintype="passive"/>
+      <node ref="C13" pin="1" pintype="passive"/>
+      <node ref="C2" pin="1" pintype="passive"/>
+      <node ref="C3" pin="1" pintype="passive"/>
+      <node ref="IC1" pin="1" pinfunction="VDD_1" pintype="passive"/>
+      <node ref="IC1" pin="2" pinfunction="VDD_2" pintype="passive"/>
+      <node ref="IC2" pin="3" pinfunction="CE" pintype="passive"/>
+      <node ref="IC2" pin="5" pinfunction="VIN_1" pintype="passive"/>
+      <node ref="IC2" pin="6" pinfunction="VIN_2" pintype="passive"/>
+      <node ref="J1" pin="A4" pinfunction="VBUS" pintype="passive"/>
+      <node ref="J1" pin="A9" pinfunction="VBUS" pintype="passive"/>
+      <node ref="J1" pin="B4" pinfunction="VBUS" pintype="passive"/>
+      <node ref="J1" pin="B9" pinfunction="VBUS" pintype="passive"/>
+    </net>
+    <net code="24" name="GND" class="Default">
+      <node ref="C1" pin="2" pintype="passive"/>
+      <node ref="C11" pin="2" pintype="passive"/>
+      <node ref="C13" pin="2" pintype="passive"/>
+      <node ref="C15" pin="2" pintype="passive"/>
+      <node ref="C2" pin="2" pintype="passive"/>
+      <node ref="C20" pin="2" pintype="passive"/>
+      <node ref="C23" pin="2" pintype="passive"/>
+      <node ref="C24" pin="2" pintype="passive"/>
+      <node ref="C3" pin="2" pintype="passive"/>
+      <node ref="C4" pin="2" pintype="passive"/>
+      <node ref="C5" pin="2" pintype="passive"/>
+      <node ref="C6" pin="2" pintype="passive"/>
+      <node ref="C7" pin="2" pintype="passive"/>
+      <node ref="D1" pin="1" pinfunction="K1" pintype="passive"/>
+      <node ref="D2" pin="1" pinfunction="K" pintype="passive"/>
+      <node ref="D3" pin="1" pinfunction="K" pintype="passive"/>
+      <node ref="D7" pin="2" pinfunction="ground" pintype="passive"/>
+      <node ref="IC1" pin="6" pinfunction="VSS" pintype="passive"/>
+      <node ref="IC1" pin="9" pinfunction="GND" pintype="passive"/>
+      <node ref="IC2" pin="4" pinfunction="VSS" pintype="passive"/>
+      <node ref="IC2" pin="7" pinfunction="EP" pintype="passive"/>
+      <node ref="J1" pin="A1" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="A12" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="B1" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="B12" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="S1" pinfunction="SHIELD" pintype="passive"/>
+      <node ref="R18" pin="2" pintype="passive"/>
+      <node ref="R2" pin="2" pintype="passive"/>
+      <node ref="R4" pin="2" pintype="passive"/>
+      <node ref="R7" pin="2" pintype="passive"/>
+      <node ref="TP18" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="TP2" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="TP21" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U2" pin="29" pinfunction="GND" pintype="power_in"/>
+    </net>
+    <net code="25" name="Net-(D2-A)" class="Default">
+      <node ref="D2" pin="2" pinfunction="A" pintype="passive"/>
+      <node ref="R6" pin="1" pintype="passive"/>
+    </net>
+    <net code="26" name="Net-(D3-A)" class="Default">
+      <node ref="D3" pin="2" pinfunction="A" pintype="passive"/>
+      <node ref="R16" pin="1" pintype="passive"/>
+    </net>
+    <net code="27" name="Net-(IC1-PROG)" class="Default">
+      <node ref="IC1" pin="8" pinfunction="PROG" pintype="passive"/>
+      <node ref="R18" pin="1" pintype="passive"/>
+    </net>
+    <net code="28" name="Net-(J1-CC1)" class="Default">
+      <node ref="J1" pin="A5" pinfunction="CC1" pintype="bidirectional"/>
+      <node ref="R2" pin="1" pintype="passive"/>
+    </net>
+    <net code="29" name="Net-(J1-CC2)" class="Default">
+      <node ref="J1" pin="B5" pinfunction="CC2" pintype="bidirectional"/>
+      <node ref="R7" pin="1" pintype="passive"/>
+    </net>
+    <net code="30" name="Net-(U2-PA0)" class="Default">
+      <node ref="C7" pin="1" pintype="passive"/>
+      <node ref="U2" pin="5" pinfunction="PA0" pintype="bidirectional"/>
+    </net>
+    <net code="31" name="unconnected-(C24-Pad1)" class="Default">
+      <node ref="C24" pin="1" pintype="passive"/>
+    </net>
+    <net code="32" name="unconnected-(FB1-Pad2)" class="Default">
+      <node ref="FB1" pin="2" pintype="passive"/>
+    </net>
+    <net code="33" name="unconnected-(IC1-NC-Pad7)" class="Default">
+      <node ref="IC1" pin="7" pinfunction="NC" pintype="no_connect"/>
+    </net>
+    <net code="34" name="unconnected-(IC1-STAT-Pad5)" class="Default">
+      <node ref="IC1" pin="5" pinfunction="STAT" pintype="passive+no_connect"/>
+    </net>
+    <net code="35" name="unconnected-(J1-RX1+-PadB11)" class="Default">
+      <node ref="J1" pin="B11" pinfunction="RX1+" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="36" name="unconnected-(J1-RX1--PadB10)" class="Default">
+      <node ref="J1" pin="B10" pinfunction="RX1-" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="37" name="unconnected-(J1-RX2+-PadA11)" class="Default">
+      <node ref="J1" pin="A11" pinfunction="RX2+" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="38" name="unconnected-(J1-RX2--PadA10)" class="Default">
+      <node ref="J1" pin="A10" pinfunction="RX2-" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="39" name="unconnected-(J1-SBU1-PadA8)" class="Default">
+      <node ref="J1" pin="A8" pinfunction="SBU1" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="40" name="unconnected-(J1-SBU2-PadB8)" class="Default">
+      <node ref="J1" pin="B8" pinfunction="SBU2" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="41" name="unconnected-(J1-TX1+-PadA2)" class="Default">
+      <node ref="J1" pin="A2" pinfunction="TX1+" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="42" name="unconnected-(J1-TX1--PadA3)" class="Default">
+      <node ref="J1" pin="A3" pinfunction="TX1-" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="43" name="unconnected-(J1-TX2+-PadB2)" class="Default">
+      <node ref="J1" pin="B2" pinfunction="TX2+" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="44" name="unconnected-(J1-TX2--PadB3)" class="Default">
+      <node ref="J1" pin="B3" pinfunction="TX2-" pintype="bidirectional+no_connect"/>
+    </net>
+    <net code="45" name="unconnected-(U1-BP-Pad4)" class="Default">
+      <node ref="U1" pin="4" pinfunction="BP" pintype="unspecified"/>
+    </net>
+    <net code="46" name="unconnected-(U1-EN-Pad3)" class="Default">
+      <node ref="U1" pin="3" pinfunction="EN" pintype="unspecified"/>
+    </net>
+    <net code="47" name="unconnected-(U1-GND-Pad2)" class="Default">
+      <node ref="U1" pin="2" pinfunction="GND" pintype="power_out"/>
+    </net>
+    <net code="48" name="unconnected-(U1-VIN-Pad1)" class="Default">
+      <node ref="U1" pin="1" pinfunction="VIN" pintype="power_in"/>
+    </net>
+    <net code="49" name="unconnected-(U1-VOUT-Pad5)" class="Default">
+      <node ref="U1" pin="5" pinfunction="VOUT" pintype="output"/>
+    </net>
+    <net code="50" name="unconnected-(U2-PA7-Pad12)" class="Default">
+      <node ref="U2" pin="12" pinfunction="PA7" pintype="bidirectional"/>
+    </net>
+    <net code="51" name="unconnected-(U2-PB0-Pad13)" class="Default">
+      <node ref="U2" pin="13" pinfunction="PB0" pintype="bidirectional"/>
+    </net>
+    <net code="52" name="unconnected-(U2-PB3-Pad14)" class="Default">
+      <node ref="U2" pin="14" pinfunction="PB3" pintype="bidirectional"/>
+    </net>
+    <net code="53" name="unconnected-(U2-PB4-Pad15)" class="Default">
+      <node ref="U2" pin="15" pinfunction="PB4" pintype="bidirectional"/>
+    </net>
+    <net code="54" name="unconnected-(U2-PB6-Pad17)" class="Default">
+      <node ref="U2" pin="17" pinfunction="PB6" pintype="bidirectional"/>
+    </net>
+    <net code="55" name="unconnected-(U2-PB7-Pad18)" class="Default">
+      <node ref="U2" pin="18" pinfunction="PB7" pintype="bidirectional"/>
+    </net>
+    <net code="56" name="unconnected-(U2-PB8-Pad19)" class="Default">
+      <node ref="U2" pin="19" pinfunction="PB8" pintype="bidirectional"/>
+    </net>
+    <net code="57" name="unconnected-(U2-PB9-Pad20)" class="Default">
+      <node ref="U2" pin="20" pinfunction="PB9" pintype="bidirectional"/>
+    </net>
+    <net code="58" name="unconnected-(U2-PB10-Pad21)" class="Default">
+      <node ref="U2" pin="21" pinfunction="PB10" pintype="bidirectional"/>
+    </net>
+    <net code="59" name="unconnected-(U2-PB11-Pad22)" class="Default">
+      <node ref="U2" pin="22" pinfunction="PB11" pintype="bidirectional"/>
+    </net>
+    <net code="60" name="unconnected-(U2-PB12-Pad23)" class="Default">
+      <node ref="U2" pin="23" pinfunction="PB12" pintype="bidirectional"/>
+    </net>
+    <net code="61" name="unconnected-(U2-PC14/CC1-Pad28)" class="Default">
+      <node ref="U2" pin="28" pinfunction="PC14/CC1" pintype="bidirectional"/>
+    </net>
+    <net code="62" name="unconnected-(U2-PC15/CC2-Pad1)" class="Default">
+      <node ref="U2" pin="1" pinfunction="PC15/CC2" pintype="bidirectional"/>
+    </net>
+  </nets>
+</export>
