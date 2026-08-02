@@ -1,0 +1,57 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storeFile": "E:/Personal/Pass_Press/passpress-huawei-watch/mobile_app/pass_press_huw_keystore.p12",
+          "storePassword": "0000002741219FEC6397B73F232E87EC339B1C67B0E7C879E65E344DF48FCBD31181BED080C3256547E3E25C3CA339CB20246CCB1F128E",
+          "keyAlias": "pass_press_huw_keystore",
+          "keyPassword": "00000027DE4E1A10B3603F9B265813C4A2A27248FF40EF1AFD270A99128640B7C7C66DB566CDC6190C9F2F2C09605BE6B5BD3167FB4122",
+          "signAlg": "SHA256withECDSA",
+          "profile": "E:/Personal/Pass_Press/passpress-huawei-watch/signing/pass_press_debug_profileDebug.p7b",
+          "certpath": "E:/Personal/Pass_Press/passpress-huawei-watch/signing/pass_press_huw.cer"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compileSdkVersion": 12,
+        "compatibleSdkVersion": 12,
+        "runtimeOS": "OpenHarmony",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": false
+          }
+        },
+        "targetSdkVersion": 12
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

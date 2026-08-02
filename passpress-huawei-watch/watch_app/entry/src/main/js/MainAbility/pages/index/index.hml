@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="header">
+        <text class="title">PassPress</text>
+    </div>
+    
+    <list class="slot-list">
+        <list-item type="item" for="{{slots}}" class="slot-item">
+            <div class="slot-content" onclick="sendBleCommand($item.command)">
+                <text class="slot-name">{{$item.name}}</text>
+            </div>
+        </list-item>
+    </list>
+</div>
