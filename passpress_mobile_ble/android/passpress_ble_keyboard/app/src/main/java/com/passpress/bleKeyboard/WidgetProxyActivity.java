@@ -65,8 +65,9 @@ public class WidgetProxyActivity extends AppCompatActivity {
     private void sendPasswordAndFinish(int slotIndex) {
         SecureStorage secureStorage = SecureStorage.getInstance(this);
         String pass = secureStorage.getPassword(slotIndex);
+        String suffix = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getString("suffix_" + slotIndex, "Enter");
         
-        if (pass == null || pass.isEmpty()) {
+        if ((pass == null || pass.isEmpty()) && "None".equals(suffix)) {
             Toast.makeText(this, "Slot is empty", Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -74,8 +75,7 @@ public class WidgetProxyActivity extends AppCompatActivity {
         
         HidKeyboardService svc = HidKeyboardService.getInstance();
         if (svc != null && svc.getConnectedDevice() != null) {
-            String suffix = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getString("suffix_" + slotIndex, "Enter");
-            String toSend = pass;
+            String toSend = pass != null ? pass : "";
             if ("Enter".equals(suffix)) toSend += "\n";
             else if ("Tab".equals(suffix)) toSend += "\t";
             
@@ -84,9 +84,16 @@ public class WidgetProxyActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Keyboard not connected!", Toast.LENGTH_SHORT).show();
             
-            String lastDevice = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getString("last_connected_device", null);
-            if (svc != null && lastDevice != null) {
-                svc.connectToDevice(lastDevice);
+            if (svc == null) {
+                Intent serviceIntent = new Intent(this, HidKeyboardService.class);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    startForegroundService(serviceIntent);
+                } else {
+                    startService(serviceIntent);
+                }
+                Toast.makeText(this, "Starting keyboard service... tap again later", Toast.LENGTH_LONG).show();
+            } else {
+                svc.autoConnect();
                 Toast.makeText(this, "Connecting... tap again later", Toast.LENGTH_LONG).show();
             }
         }

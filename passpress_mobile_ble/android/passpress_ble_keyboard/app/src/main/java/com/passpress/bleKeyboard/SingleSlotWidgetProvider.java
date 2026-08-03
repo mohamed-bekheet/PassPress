@@ -71,17 +71,17 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
     private void sendPasswordSeamlessly(Context context, int slotIndex) {
         SecureStorage secureStorage = SecureStorage.getInstance(context);
         String pass = secureStorage.getPassword(slotIndex);
+        String suffix = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE)
+                .getString("suffix_" + slotIndex, "Enter");
         
-        if (pass == null || pass.isEmpty()) {
+        if ((pass == null || pass.isEmpty()) && "None".equals(suffix)) {
             android.widget.Toast.makeText(context, "Slot is empty", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         
         HidKeyboardService svc = HidKeyboardService.getInstance();
         if (svc != null && svc.getConnectedDevice() != null) {
-            String suffix = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE)
-                    .getString("suffix_" + slotIndex, "Enter");
-            String toSend = pass;
+            String toSend = pass != null ? pass : "";
             if ("Enter".equals(suffix)) toSend += "\n";
             else if ("Tab".equals(suffix)) toSend += "\t";
             
@@ -90,10 +90,16 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
         } else {
             android.widget.Toast.makeText(context, "Keyboard not connected!", android.widget.Toast.LENGTH_SHORT).show();
             
-            String lastDevice = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE)
-                    .getString("last_connected_device", null);
-            if (svc != null && lastDevice != null) {
-                svc.connectToDevice(lastDevice);
+            if (svc == null) {
+                android.content.Intent serviceIntent = new android.content.Intent(context, HidKeyboardService.class);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    context.startForegroundService(serviceIntent);
+                } else {
+                    context.startService(serviceIntent);
+                }
+                android.widget.Toast.makeText(context, "Starting keyboard service... tap again later", android.widget.Toast.LENGTH_LONG).show();
+            } else {
+                svc.autoConnect();
                 android.widget.Toast.makeText(context, "Connecting... tap again later", android.widget.Toast.LENGTH_LONG).show();
             }
         }

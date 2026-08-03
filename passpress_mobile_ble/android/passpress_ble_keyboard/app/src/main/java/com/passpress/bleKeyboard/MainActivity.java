@@ -83,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
     private long lastPauseTime = 0;
     private String pendingPassword = "";
 
+    private FrameLayout tabContainer;
+    private View passwordsView;
+    private View keyboardView;
+    private View trackpadView;
+
     // --- Undo State ---
     private static class BackupState {
         int index;
@@ -249,29 +254,23 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout.addView(createHeaderLayout());
 
-        TextView subtitleText = new TextView(this);
-        subtitleText.setText("Tap Send to type your password via Bluetooth Keyboard");
-        subtitleText.setTextSize(13);
-        subtitleText.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
-        subtitleText.setPadding(dp(20), dp(12), dp(20), dp(8));
-        mainLayout.addView(subtitleText);
+        tabContainer = new FrameLayout(this);
+        passwordsView = createPasswordsView();
+        keyboardView = createKeyboardView();
+        trackpadView = createTrackpadView();
 
-        ScrollView scrollView = new ScrollView(this);
-        scrollView.setFillViewport(true);
-        scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        tabContainer.addView(passwordsView);
+        tabContainer.addView(keyboardView);
+        tabContainer.addView(trackpadView);
 
-        slotsContainer = new LinearLayout(this);
-        slotsContainer.setOrientation(LinearLayout.VERTICAL);
-        slotsContainer.setPadding(dp(16), dp(8), dp(16), dp(24));
+        passwordsView.setVisibility(View.VISIBLE);
+        keyboardView.setVisibility(View.GONE);
+        trackpadView.setVisibility(View.GONE);
 
-        refreshPasswordGrid();
-
-        scrollView.addView(slotsContainer, new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT));
-
-        mainLayout.addView(scrollView, new LinearLayout.LayoutParams(
+        mainLayout.addView(tabContainer, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+
+        mainLayout.addView(createBottomNav());
 
         setContentView(mainLayout);
         setupConnectionListener();
@@ -282,7 +281,450 @@ public class MainActivity extends AppCompatActivity {
             if (svc != null && svc.getConnectedDevice() == null) {
                 reconnectDevice();
             }
-        }, 800);
+        }, 500);
+    }
+
+    private View createPasswordsView() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        TextView subtitleText = new TextView(this);
+        subtitleText.setText("Tap Send to type your password via Bluetooth Keyboard");
+        subtitleText.setTextSize(13);
+        subtitleText.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        subtitleText.setPadding(dp(20), dp(12), dp(20), dp(8));
+        layout.addView(subtitleText);
+
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.setFillViewport(true);
+        scrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+
+        slotsContainer = new LinearLayout(this);
+        slotsContainer.setOrientation(LinearLayout.VERTICAL);
+        slotsContainer.setPadding(dp(16), dp(8), dp(16), dp(24));
+
+        refreshPasswordGrid();
+        scrollView.addView(slotsContainer, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
+
+        layout.addView(scrollView, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+
+        return layout;
+    }
+
+    private View createKeyboardView() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setBackgroundColor(Color.parseColor(COLOR_BG));
+        layout.setPadding(dp(16), dp(16), dp(16), dp(16));
+        
+        TextView label = new TextView(this);
+        label.setText("NATIVE KEYBOARD");
+        label.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        label.setTextSize(12);
+        label.setPadding(0, dp(24), 0, dp(8));
+
+        // Native Input Area
+        EditText inputField = new EditText(this);
+        inputField.setTextColor(Color.TRANSPARENT);
+        inputField.setCursorVisible(false);
+        inputField.setBackgroundColor(Color.TRANSPARENT);
+        
+        FrameLayout inputContainer = new FrameLayout(this);
+        GradientDrawable inputBg = new GradientDrawable();
+        inputBg.setColor(Color.parseColor(COLOR_SURFACE));
+        inputBg.setCornerRadius(dp(8));
+        inputBg.setStroke(dp(1), Color.parseColor(COLOR_SURFACE_ALT));
+        inputContainer.setBackground(inputBg);
+        
+        TextView placeholder = new TextView(this);
+        placeholder.setText("Tap to open mobile keyboard...");
+        placeholder.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        placeholder.setGravity(Gravity.CENTER);
+        
+        inputContainer.addView(placeholder, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, dp(40)));
+        inputContainer.addView(inputField, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, dp(40)));
+                
+        // Input logic (non-destructive to preserve IME long-press state)
+        String spaces = "                                                                                                    "; // 100 spaces
+        inputField.setText(spaces);
+        inputField.setSelection(spaces.length());
+        
+        inputField.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                HidKeyboardService svc = HidKeyboardService.getInstance();
+                if (svc == null || !svc.isServiceReady()) return;
+
+                if (before > count) { // Text deleted (Backspace)
+                    int deletes = before - count;
+                    for (int i = 0; i < deletes; i++) {
+                        svc.sendKeyDown((byte)0, (byte)0x2A);
+                        svc.sendKeyUp();
+                    }
+                } else if (count > before) { // Text added
+                    String typed = s.subSequence(start + before, start + count).toString();
+                    svc.sendKeySequence(typed);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {
+                // Only reset if we are running out of space to delete, or getting too large.
+                // Doing it too often interrupts the soft keyboard's long-press repeating timer.
+                if (s.length() < 10 || s.length() > 300) {
+                    inputField.post(() -> {
+                        inputField.removeTextChangedListener(this);
+                        inputField.setText(spaces);
+                        inputField.setSelection(spaces.length());
+                        inputField.addTextChangedListener(this);
+                    });
+                }
+            }
+        });
+        
+        // Enter key handling
+        inputField.setOnEditorActionListener((v, actionId, event) -> {
+            HidKeyboardService svc = HidKeyboardService.getInstance();
+            if (svc != null && svc.isServiceReady()) {
+                svc.sendKeyDown((byte)0, (byte)0x28); // ENTER
+                svc.sendKeyUp();
+            }
+            return true;
+        });
+
+        // Virtual Keyboard Layout
+        TextView keyboardLabel = new TextView(this);
+        keyboardLabel.setText("VIRTUAL KEYBOARD (Modifiers are tap-to-hold)");
+        keyboardLabel.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        keyboardLabel.setTextSize(12);
+        keyboardLabel.setPadding(0, 0, 0, dp(8)); // Top layout
+        layout.addView(keyboardLabel);
+
+        GridLayout grid = new GridLayout(this);
+        grid.setColumnCount(4);
+        
+        String[] keyNames = {
+            "Esc", "F1", "F2", "F3",
+            "F4", "F5", "F6", "F7",
+            "F8", "F9", "F10", "F11",
+            "F12", "Tab", "Del", "Bksp",
+            "Copy", "Paste", "Home", "End",
+            "Shift", "Ctrl", "Win", "Alt",
+            "Lang", "", "▲", "Enter",
+            "", "◀", "▼", "▶"
+        };
+
+        // 0=Special, 1=Modifier, 2=Macro, 3=Empty
+        int[] keyTypes = {
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            2, 2, 0, 0,
+            1, 1, 1, 1,
+            0, 3, 0, 0,
+            3, 0, 0, 0
+        };
+
+        byte[] modMasks = new byte[32];
+        modMasks[20] = 0x02; // Shift
+        modMasks[21] = 0x01; // Ctrl
+        modMasks[22] = 0x08; // Win
+        modMasks[23] = 0x04; // Alt
+
+        byte[] specialMods = new byte[32];
+        specialMods[24] = 0x08; // Lang (uses Win)
+
+        byte[] specialCodes = {
+            0x29, 0x3A, 0x3B, 0x3C,
+            0x3D, 0x3E, 0x3F, 0x40,
+            0x41, 0x42, 0x43, 0x44,
+            0x45, 0x2B, 0x4C, 0x2A,
+            0, 0, 0x4A, 0x4D,
+            0, 0, 0, 0,
+            0x2C, 0, 0x52, 0x28,
+            0, 0x50, 0x51, 0x4F
+        };
+
+        byte[] macroMods = new byte[32];
+        macroMods[16] = 0x01; // Copy (Ctrl)
+        macroMods[17] = 0x01; // Paste (Ctrl)
+        
+        byte[] macroCodes = new byte[32];
+        macroCodes[16] = 0x06; // C
+        macroCodes[17] = 0x19; // V
+
+        int margin = dp(2);
+        for (int i = 0; i < keyNames.length; i++) {
+            Button btn = createStyledButton(keyNames[i], COLOR_SURFACE_ALT, COLOR_SURFACE);
+            btn.setTextSize(12); // Slightly smaller text for dense grid
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = dp(46); // Minimized button height
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
+            params.setMargins(margin, margin, margin, margin);
+            btn.setLayoutParams(params);
+            
+            if (keyTypes[i] == 3) {
+                // Empty space
+                btn.setVisibility(View.INVISIBLE);
+            } else if (keyTypes[i] == 1) {
+                // Modifier
+                final byte mask = modMasks[i];
+                final boolean[] isToggled = {false};
+                
+                btn.setOnClickListener(v -> {
+                    isToggled[0] = !isToggled[0];
+                    if (isToggled[0]) {
+                        btn.setBackgroundColor(Color.parseColor(COLOR_PRIMARY));
+                    } else {
+                        GradientDrawable bg = new GradientDrawable();
+                        bg.setColor(Color.parseColor(COLOR_SURFACE));
+                        bg.setCornerRadius(dp(12));
+                        bg.setStroke(dp(1), Color.parseColor(COLOR_SURFACE_ALT));
+                        btn.setBackground(bg);
+                    }
+                    
+                    HidKeyboardService svc = HidKeyboardService.getInstance();
+                    if (svc != null && svc.isServiceReady()) {
+                        svc.setModifierState(mask, isToggled[0]);
+                    }
+                });
+            } else if (keyTypes[i] == 2) {
+                // Macro (Copy/Paste)
+                final byte mod = macroMods[i];
+                final byte code = macroCodes[i];
+                
+                btn.setOnTouchListener((v, event) -> {
+                    HidKeyboardService svc = HidKeyboardService.getInstance();
+                    if (svc == null || !svc.isServiceReady()) return false;
+                    
+                    if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                        btn.setBackgroundColor(Color.parseColor(COLOR_PRIMARY));
+                        svc.sendKeyDown(mod, code);
+                    } else if (event.getAction() == android.view.MotionEvent.ACTION_UP || event.getAction() == android.view.MotionEvent.ACTION_CANCEL) {
+                        GradientDrawable bg = new GradientDrawable();
+                        bg.setColor(Color.parseColor(COLOR_SURFACE));
+                        bg.setCornerRadius(dp(12));
+                        bg.setStroke(dp(1), Color.parseColor(COLOR_SURFACE_ALT));
+                        btn.setBackground(bg);
+                        svc.sendKeyUp();
+                    }
+                    return true;
+                });
+            } else {
+                // Special key
+                final byte mod = specialMods[i];
+                final byte code = specialCodes[i];
+                
+                btn.setOnTouchListener((v, event) -> {
+                    HidKeyboardService svc = HidKeyboardService.getInstance();
+                    if (svc == null || !svc.isServiceReady()) return false;
+                    
+                    if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                        btn.setBackgroundColor(Color.parseColor(COLOR_PRIMARY));
+                        svc.sendKeyDown(mod, code);
+                    } else if (event.getAction() == android.view.MotionEvent.ACTION_UP || event.getAction() == android.view.MotionEvent.ACTION_CANCEL) {
+                        GradientDrawable bg = new GradientDrawable();
+                        bg.setColor(Color.parseColor(COLOR_SURFACE));
+                        bg.setCornerRadius(dp(12));
+                        bg.setStroke(dp(1), Color.parseColor(COLOR_SURFACE_ALT));
+                        btn.setBackground(bg);
+                        svc.sendKeyUp();
+                    }
+                    return true;
+                });
+            }
+            grid.addView(btn);
+        }
+        
+        layout.addView(grid, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        // Add Native Input at the bottom
+        layout.addView(label);
+        layout.addView(inputContainer);
+
+        ScrollView scroller = new ScrollView(this);
+        scroller.setLayoutParams(new android.view.ViewGroup.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+        scroller.addView(layout);
+
+        return scroller;
+    }
+
+    private View createTrackpadView() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setBackgroundColor(Color.parseColor(COLOR_BG));
+        layout.setPadding(dp(16), dp(16), dp(16), dp(16));
+
+        // Trackpad area
+        FrameLayout trackpad = new FrameLayout(this);
+        LinearLayout.LayoutParams tpParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+        tpParams.bottomMargin = dp(16);
+        trackpad.setLayoutParams(tpParams);
+        
+        GradientDrawable tpBg = new GradientDrawable();
+        tpBg.setColor(Color.parseColor(COLOR_SURFACE));
+        tpBg.setCornerRadius(dp(16));
+        tpBg.setStroke(dp(1), Color.parseColor(COLOR_SURFACE_ALT));
+        trackpad.setBackground(tpBg);
+        
+        TextView instructions = new TextView(this);
+        instructions.setText("TRACKPAD\nDrag to move, tap to click");
+        instructions.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        instructions.setGravity(Gravity.CENTER);
+        trackpad.addView(instructions, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+
+        // Mouse buttons
+        LinearLayout buttonsLayout = new LinearLayout(this);
+        buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
+        buttonsLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dp(80)));
+
+        Button leftClick = createStyledButton("LEFT CLICK", COLOR_SURFACE_ALT, COLOR_SURFACE);
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+        btnParams.rightMargin = dp(8);
+        leftClick.setLayoutParams(btnParams);
+
+        Button rightClick = createStyledButton("RIGHT CLICK", COLOR_SURFACE_ALT, COLOR_SURFACE);
+        LinearLayout.LayoutParams btnParamsRight = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+        btnParamsRight.leftMargin = dp(8);
+        rightClick.setLayoutParams(btnParamsRight);
+
+        buttonsLayout.addView(leftClick);
+        buttonsLayout.addView(rightClick);
+
+        layout.addView(trackpad);
+        layout.addView(buttonsLayout);
+
+        // Touch handling
+        trackpad.setOnTouchListener(new View.OnTouchListener() {
+            private float lastX, lastY;
+            private long downTime;
+
+            @Override
+            public boolean onTouch(View v, android.view.MotionEvent event) {
+                switch (event.getAction()) {
+                    case android.view.MotionEvent.ACTION_DOWN:
+                        lastX = event.getX();
+                        lastY = event.getY();
+                        downTime = System.currentTimeMillis();
+                        return true;
+
+                    case android.view.MotionEvent.ACTION_MOVE:
+                        float dx = event.getX() - lastX;
+                        float dy = event.getY() - lastY;
+                        
+                        int sendDx = (int) (dx * 1.5f);
+                        int sendDy = (int) (dy * 1.5f);
+
+                        if (sendDx != 0 || sendDy != 0) {
+                            sendDx = Math.max(-127, Math.min(127, sendDx));
+                            sendDy = Math.max(-127, Math.min(127, sendDy));
+                            
+                            HidKeyboardService svc = HidKeyboardService.getInstance();
+                            if (svc != null && svc.isServiceReady()) {
+                                svc.sendMouseReport((byte)0, (byte)sendDx, (byte)sendDy, (byte)0);
+                            }
+                            
+                            lastX = event.getX();
+                            lastY = event.getY();
+                        }
+                        return true;
+
+                    case android.view.MotionEvent.ACTION_UP:
+                        if (System.currentTimeMillis() - downTime < 200) { // Tap to click
+                            HidKeyboardService svc = HidKeyboardService.getInstance();
+                            if (svc != null && svc.isServiceReady()) {
+                                svc.sendMouseReport((byte)1, (byte)0, (byte)0, (byte)0); // Left down
+                                svc.sendMouseReport((byte)0, (byte)0, (byte)0, (byte)0); // Release
+                            }
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        View.OnTouchListener btnListener = (v, event) -> {
+            byte btnMask = (v == leftClick) ? (byte)1 : (byte)2;
+            if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                HidKeyboardService svc = HidKeyboardService.getInstance();
+                if (svc != null && svc.isServiceReady()) {
+                    svc.sendMouseReport(btnMask, (byte)0, (byte)0, (byte)0);
+                }
+            } else if (event.getAction() == android.view.MotionEvent.ACTION_UP || event.getAction() == android.view.MotionEvent.ACTION_CANCEL) {
+                HidKeyboardService svc = HidKeyboardService.getInstance();
+                if (svc != null && svc.isServiceReady()) {
+                    svc.sendMouseReport((byte)0, (byte)0, (byte)0, (byte)0);
+                }
+            }
+            return false;
+        };
+
+        leftClick.setOnTouchListener(btnListener);
+        rightClick.setOnTouchListener(btnListener);
+
+        return layout;
+    }
+
+    private View createBottomNav() {
+        LinearLayout navBar = new LinearLayout(this);
+        navBar.setOrientation(LinearLayout.HORIZONTAL);
+        navBar.setBackgroundColor(Color.parseColor(COLOR_SURFACE));
+        navBar.setElevation(dp(16));
+        
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(0, dp(56), 1f);
+        
+        Button btnPasswords = new Button(this);
+        btnPasswords.setText("🔑");
+        btnPasswords.setTextSize(28);
+        btnPasswords.setBackgroundColor(Color.TRANSPARENT);
+        btnPasswords.setTextColor(Color.parseColor(COLOR_PRIMARY));
+        
+        Button btnKeyboard = new Button(this);
+        btnKeyboard.setText("⌨️");
+        btnKeyboard.setTextSize(28);
+        btnKeyboard.setBackgroundColor(Color.TRANSPARENT);
+        btnKeyboard.setTextColor(Color.WHITE);
+        
+        Button btnMouse = new Button(this);
+        btnMouse.setText("🖱️");
+        btnMouse.setTextSize(28);
+        btnMouse.setBackgroundColor(Color.TRANSPARENT);
+        btnMouse.setTextColor(Color.WHITE);
+        
+        navBar.addView(btnPasswords, btnParams);
+        navBar.addView(btnKeyboard, btnParams);
+        navBar.addView(btnMouse, btnParams);
+        
+        View.OnClickListener listener = v -> {
+            passwordsView.setVisibility(v == btnPasswords ? View.VISIBLE : View.GONE);
+            keyboardView.setVisibility(v == btnKeyboard ? View.VISIBLE : View.GONE);
+            trackpadView.setVisibility(v == btnMouse ? View.VISIBLE : View.GONE);
+            
+            btnPasswords.setTextColor(v == btnPasswords ? Color.parseColor(COLOR_PRIMARY) : Color.WHITE);
+            btnKeyboard.setTextColor(v == btnKeyboard ? Color.parseColor(COLOR_PRIMARY) : Color.WHITE);
+            btnMouse.setTextColor(v == btnMouse ? Color.parseColor(COLOR_PRIMARY) : Color.WHITE);
+        };
+        
+        btnPasswords.setOnClickListener(listener);
+        btnKeyboard.setOnClickListener(listener);
+        btnMouse.setOnClickListener(listener);
+        
+        return navBar;
     }
 
     private void refreshPasswordGrid() {
@@ -358,7 +800,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         
-        boolean autoLockEnabled = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getBoolean("auto_lock_enabled", true);
+        boolean autoLockEnabled = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getBoolean("auto_lock_enabled", false);
         if (autoLockEnabled && lastPauseTime > 0 && (System.currentTimeMillis() - lastPauseTime > 3 * 60 * 1000)) {
             isAuthenticated = false;
             showLockScreenUI();
@@ -970,7 +1412,8 @@ public class MainActivity extends AppCompatActivity {
     // ─── Send Password with Trust Check ──────────────────────────────────────
     private void attemptSendPassword(int index) {
         String password = secureStorage.getPassword(index);
-        if (password.isEmpty()) {
+        String suffix = prefs.getString("suffix_" + index, "Enter");
+        if (password.isEmpty() && "None".equals(suffix)) {
             Toast.makeText(this, "Slot " + (index + 1) + " is empty – tap ✏️ to edit", Toast.LENGTH_LONG).show();
             return;
         }
@@ -1370,6 +1813,23 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void addHelpSection(LinearLayout parent, String titleText, String contentText) {
+        TextView title = new TextView(this);
+        title.setText(titleText);
+        title.setTextSize(18);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(Color.parseColor(COLOR_ACCENT));
+        title.setPadding(0, dp(16), 0, dp(4));
+        parent.addView(title);
+        
+        TextView content = new TextView(this);
+        content.setText(contentText);
+        content.setTextSize(14);
+        content.setTextColor(Color.parseColor(COLOR_TEXT));
+        content.setLineSpacing(0, 1.2f);
+        parent.addView(content);
+    }
+
     private void showHelpDialog() {
         String versionName = "1.0.0";
         int versionCode = 1;
@@ -1379,16 +1839,58 @@ public class MainActivity extends AppCompatActivity {
             versionCode = pInfo.versionCode;
         } catch (Exception ignored) {}
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
-        builder.setTitle("PassPress  •  v" + versionName + " (" + versionCode + ")");
-        builder.setMessage("Welcome to PassPress v" + versionName + "!\n\n" +
-                "• Setup: Click 'Connect PC' to pair your computer via Bluetooth. PassPress will act as a standard Bluetooth Keyboard.\n" +
-                "• Usage: Tap a password slot to instantly send your saved password to your PC.\n" +
-                "• Widgets: Long-press your home screen to add PassPress widgets for one-tap password sending without opening the app.\n" +
-                "• Security: Passwords are encrypted on your device. Untrusted PCs require a fingerprint to send passwords.\n" +
-                "• Versioning: Current Release v" + versionName + " (Build " + versionCode + ").");
-        builder.setPositiveButton("Got it!", null);
-        builder.show();
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.setBackgroundColor(Color.parseColor(COLOR_BG));
+        
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(dp(24), dp(24), dp(24), dp(24));
+        
+        TextView title = new TextView(this);
+        title.setText("PassPress Help");
+        title.setTextSize(24);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(Color.WHITE);
+        title.setGravity(Gravity.CENTER);
+        layout.addView(title);
+        
+        addHelpSection(layout, "🔌 How to Connect", 
+            "1. Turn on Bluetooth on your PC/Mac.\n" +
+            "2. Tap 'Connect PC' in PassPress.\n" +
+            "3. On your PC, look for 'PassPress Keyboard' and pair it.\n" +
+            "*(Note: It is perfectly normal if Windows displays a 'Phone' icon. It will still function fully as a keyboard!)*");
+            
+        addHelpSection(layout, "🛠️ Troubleshooting",
+            "• Stuck on 'Connecting...'?\n" +
+            "  Go to your PC's Bluetooth settings, completely remove/unpair the device, and try connecting again.\n" +
+            "• Doesn't Type?\n" +
+            "  Ensure your text cursor is actively inside a password field on your PC before tapping Send.\n" +
+            "• Auto-Reconnect Failing?\n" +
+            "  The app attempts to reconnect automatically in the background. If it fails, simply tap the '⚡ Reconnect' button.");
+            
+        addHelpSection(layout, "📱 Usage & Widgets",
+            "• Tap any password slot to type it.\n" +
+            "• Long-press your phone's home screen to add PassPress Widgets for instant one-tap access without opening the app.");
+
+        addHelpSection(layout, "🔒 Security",
+            "• All passwords are encrypted directly on your device.\n" +
+            "• Untrusted PCs will always require your fingerprint authentication before sending a password.");
+            
+        TextView versionText = new TextView(this);
+        versionText.setText("Version " + versionName + " (Build " + versionCode + ")");
+        versionText.setTextSize(12);
+        versionText.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        versionText.setGravity(Gravity.CENTER);
+        versionText.setPadding(0, dp(24), 0, dp(8));
+        layout.addView(versionText);
+
+        scrollView.addView(layout);
+        builder.setView(scrollView);
+        
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showSettingsDialog() {
@@ -1409,6 +1911,10 @@ public class MainActivity extends AppCompatActivity {
         android.widget.SeekBar delaySeekBar = new android.widget.SeekBar(this);
         delaySeekBar.setMax(100);
         delaySeekBar.setProgress(currentDelay);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            delaySeekBar.setProgressTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+            delaySeekBar.setThumbTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
         delaySeekBar.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
@@ -1427,7 +1933,10 @@ public class MainActivity extends AppCompatActivity {
         android.widget.CheckBox autoLockCheck = new android.widget.CheckBox(this);
         autoLockCheck.setText("Enable 3-Minute Auto-Lock");
         autoLockCheck.setTextColor(Color.WHITE);
-        autoLockCheck.setChecked(prefs.getBoolean("auto_lock_enabled", true));
+        autoLockCheck.setChecked(prefs.getBoolean("auto_lock_enabled", false));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            autoLockCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
         autoLockCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("auto_lock_enabled", isChecked).apply();
         });
@@ -1439,14 +1948,23 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(spacer);
 
         // Export Button
-        android.widget.Button exportBtn = new android.widget.Button(this);
-        exportBtn.setText("📤 Export Backup");
-        exportBtn.setBackgroundColor(Color.parseColor("#334155"));
-        exportBtn.setTextColor(Color.WHITE);
-        exportBtn.setOnClickListener(v -> {
-            showExportDialog();
-        });
+        Button exportBtn = createStyledButton("📤 Export Backup", COLOR_SURFACE_ALT, COLOR_SURFACE);
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dp(48));
+        exportBtn.setLayoutParams(btnParams);
+        exportBtn.setOnClickListener(v -> showExportDialog());
         layout.addView(exportBtn);
+
+        // Spacer
+        View spacerHelp = new View(this);
+        spacerHelp.setLayoutParams(new LinearLayout.LayoutParams(1, dp(12)));
+        layout.addView(spacerHelp);
+
+        // Help Button
+        Button helpBtn = createStyledButton("ℹ️ Help & Troubleshooting", COLOR_PRIMARY, COLOR_PRIMARY_DARK);
+        helpBtn.setLayoutParams(btnParams);
+        helpBtn.setOnClickListener(v -> showHelpDialog());
+        layout.addView(helpBtn);
 
         // Spacer 2
         View spacer2 = new View(this);
@@ -1454,13 +1972,9 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(spacer2);
 
         // Import Button
-        android.widget.Button importBtn = new android.widget.Button(this);
-        importBtn.setText("📥 Import Backup");
-        importBtn.setBackgroundColor(Color.parseColor("#334155"));
-        importBtn.setTextColor(Color.WHITE);
-        importBtn.setOnClickListener(v -> {
-            showImportDialog();
-        });
+        Button importBtn = createStyledButton("📥 Import Backup", COLOR_SURFACE_ALT, COLOR_SURFACE);
+        importBtn.setLayoutParams(btnParams);
+        importBtn.setOnClickListener(v -> showImportDialog());
         layout.addView(importBtn);
 
         // Spacer 3
@@ -1469,13 +1983,10 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(spacer3);
 
         // Shut Down & Exit Button
-        android.widget.Button shutDownBtn = new android.widget.Button(this);
-        shutDownBtn.setText("🛑 Shut Down & Exit App");
-        shutDownBtn.setBackgroundColor(Color.parseColor("#EF4444"));
+        Button shutDownBtn = createStyledButton("🛑 Shut Down & Exit App", COLOR_WARNING, "#D97706");
+        shutDownBtn.setLayoutParams(btnParams);
         shutDownBtn.setTextColor(Color.WHITE);
-        shutDownBtn.setOnClickListener(v -> {
-            shutDownApp();
-        });
+        shutDownBtn.setOnClickListener(v -> shutDownApp());
         layout.addView(shutDownBtn);
 
         builder.setView(layout);

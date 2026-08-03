@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHidDevice;
 import android.bluetooth.BluetoothHidDeviceAppQosSettings;
@@ -24,6 +25,10 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @SuppressLint("MissingPermission")
@@ -59,11 +64,42 @@ public class HidKeyboardService extends Service {
         (byte)0x19, (byte)0x00,  //   Usage Minimum (0)
         (byte)0x29, (byte)0x65,  //   Usage Maximum (101)
         (byte)0x81, (byte)0x00,  //   Input (Data, Array) – Key array (6 keys)
+        (byte)0xC0,              // End Collection
+
+        // ─── Mouse Report (Report ID 2) ───
+        (byte)0x05, (byte)0x01,  // Usage Page (Generic Desktop)
+        (byte)0x09, (byte)0x02,  // Usage (Mouse)
+        (byte)0xA1, (byte)0x01,  // Collection (Application)
+        (byte)0x85, (byte)0x02,  //   Report ID (2)
+        (byte)0x09, (byte)0x01,  //   Usage (Pointer)
+        (byte)0xA1, (byte)0x00,  //   Collection (Physical)
+        (byte)0x05, (byte)0x09,  //     Usage Page (Buttons)
+        (byte)0x19, (byte)0x01,  //     Usage Minimum (1)
+        (byte)0x29, (byte)0x03,  //     Usage Maximum (3)
+        (byte)0x15, (byte)0x00,  //     Logical Minimum (0)
+        (byte)0x25, (byte)0x01,  //     Logical Maximum (1)
+        (byte)0x95, (byte)0x03,  //     Report Count (3)
+        (byte)0x75, (byte)0x01,  //     Report Size (1)
+        (byte)0x81, (byte)0x02,  //     Input (Data, Variable, Absolute)
+        (byte)0x95, (byte)0x01,  //     Report Count (1)
+        (byte)0x75, (byte)0x05,  //     Report Size (5) - Padding
+        (byte)0x81, (byte)0x03,  //     Input (Constant, Variable, Absolute)
+        (byte)0x05, (byte)0x01,  //     Usage Page (Generic Desktop)
+        (byte)0x09, (byte)0x30,  //     Usage (X)
+        (byte)0x09, (byte)0x31,  //     Usage (Y)
+        (byte)0x09, (byte)0x38,  //     Usage (Wheel)
+        (byte)0x15, (byte)0x81,  //     Logical Minimum (-127)
+        (byte)0x25, (byte)0x7F,  //     Logical Maximum (127)
+        (byte)0x75, (byte)0x08,  //     Report Size (8)
+        (byte)0x95, (byte)0x03,  //     Report Count (3)
+        (byte)0x81, (byte)0x06,  //     Input (Data, Variable, Relative)
+        (byte)0xC0,              //   End Collection
         (byte)0xC0               // End Collection
     };
 
     private static final String PREFS_NAME      = "passpress_prefs";
     private static final String LAST_DEVICE_KEY = "last_connected_device";
+    private static final String HISTORY_KEY     = "device_connection_history";
     private static final int REPORT_ID = 1;
 
     // ─── Instance fields ─────────────────────────────────────────────────────
@@ -74,10 +110,29 @@ public class HidKeyboardService extends Service {
     private static HidKeyboardService instance;
     private volatile boolean      isReady            = false;
     private volatile boolean      isRegistered       = false;
+    private String                originalAdapterName = null;
+
+    private LinkedList<String>    reconnectQueue     = new LinkedList<>();
+    private Runnable              reconnectTimeoutRunnable = null;
 
     private final LinkedBlockingQueue<String> sendQueue   = new LinkedBlockingQueue<>();
     private volatile boolean                  workerAlive = false;
     private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
+
+    private byte activeModifiers = 0;
+
+    public void setModifierState(byte modifierMask, boolean isActive) {
+        if (isActive) {
+            activeModifiers |= modifierMask;
+        } else {
+            activeModifiers &= ~modifierMask;
+        }
+        // Send a report to update the host immediately if we are connected
+        if (hidDevice != null && connectedDevice != null) {
+            byte[] report = {activeModifiers, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            hidDevice.sendReport(connectedDevice, REPORT_ID, report);
+        }
+    }
 
     // ─── Listener interface ──────────────────────────────────────────────────
     public interface ConnectionListener {
@@ -111,14 +166,7 @@ public class HidKeyboardService extends Service {
                 return START_STICKY;
             } else if ("ACTION_RECONNECT".equals(action)) {
                 Log.d(TAG, "Reconnect action received from notification");
-                String lastDevice = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                                        .getString(LAST_DEVICE_KEY, null);
-                if (lastDevice != null) {
-                    updateNotification("Reconnecting...");
-                    connectToDevice(lastDevice);
-                } else {
-                    updateNotification("No saved device to reconnect");
-                }
+                autoConnect();
                 return START_STICKY;
             }
         }
@@ -194,6 +242,49 @@ public class HidKeyboardService extends Service {
         Log.d(TAG, "connect() returned: " + result);
     }
 
+    public void autoConnect() {
+        if (connectedDevice != null) return;
+        reconnectQueue.clear();
+        if (reconnectTimeoutRunnable != null) {
+            mainHandler.removeCallbacks(reconnectTimeoutRunnable);
+            reconnectTimeoutRunnable = null;
+        }
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String historyStr = prefs.getString(HISTORY_KEY, "");
+        if (!historyStr.isEmpty()) {
+            for (String addr : historyStr.split(",")) {
+                if (!addr.isEmpty()) reconnectQueue.add(addr);
+            }
+        } else {
+            String lastAddr = prefs.getString(LAST_DEVICE_KEY, null);
+            if (lastAddr != null && !lastAddr.isEmpty()) reconnectQueue.add(lastAddr);
+        }
+
+        if (reconnectQueue.isEmpty()) {
+            updateNotification("No saved devices to reconnect");
+            return;
+        }
+        tryNextReconnect();
+    }
+
+    private void tryNextReconnect() {
+        if (reconnectQueue.isEmpty()) {
+            updateNotification("Reconnection exhausted");
+            return;
+        }
+
+        String mac = reconnectQueue.poll();
+        updateNotification("Trying to connect: " + mac);
+        connectToDevice(mac);
+
+        reconnectTimeoutRunnable = () -> {
+            Log.d(TAG, "Connection timeout for " + mac);
+            tryNextReconnect();
+        };
+        mainHandler.postDelayed(reconnectTimeoutRunnable, 6000);
+    }
+
     public void disconnectDevice() {
         if (hidDevice != null && connectedDevice != null) {
             Log.d(TAG, "Disconnecting from " + connectedDevice.getAddress());
@@ -220,6 +311,12 @@ public class HidKeyboardService extends Service {
 
         // Enable discoverability by setting adapter name
         Log.d(TAG, "Bluetooth adapter name: " + bluetoothAdapter.getName());
+        originalAdapterName = bluetoothAdapter.getName();
+        if (originalAdapterName != null && !originalAdapterName.equals("PassPress Keyboard")) {
+            try {
+                bluetoothAdapter.setName("PassPress Keyboard");
+            } catch (SecurityException ignored) {}
+        }
 
         boolean gotProxy = bluetoothAdapter.getProfileProxy(this, profileListener, BluetoothProfile.HID_DEVICE);
         if (!gotProxy) {
@@ -255,10 +352,10 @@ public class HidKeyboardService extends Service {
         }
 
         BluetoothHidDeviceAppSdpSettings sdp = new BluetoothHidDeviceAppSdpSettings(
-            "PassPress BLE",          // name
-            "BLE Keyboard",           // description
+            "PassPress Keyboard",     // name
+            "PassPress Secure Keyboard", // description
             "PassPress",              // provider
-            BluetoothHidDevice.SUBCLASS1_KEYBOARD, // subclass (0x40)
+            (byte) 0x40,              // subclass (0x40 is keyboard, some combos use 0x40 perfectly well)
             HID_REPORT_MAP            // descriptors
         );
 
@@ -305,20 +402,56 @@ public class HidKeyboardService extends Service {
         public void onConnectionStateChanged(BluetoothDevice device, int state) {
             Log.d(TAG, "onConnectionStateChanged: device=" + safeGetName(device) + " state=" + state);
             if (state == BluetoothProfile.STATE_CONNECTED) {
+                BluetoothClass btClass = device.getBluetoothClass();
+                if (btClass != null) {
+                    int major = btClass.getMajorDeviceClass();
+                    if (major == BluetoothClass.Device.Major.WEARABLE) {
+                        Log.d(TAG, "Rejecting connection from non-target device type (Wearable): " + safeGetName(device));
+                        if (hidDevice != null) {
+                            hidDevice.disconnect(device);
+                        }
+                        return;
+                    }
+                }
+                
                 Log.d(TAG, "✓ Device connected: " + safeGetName(device));
                 connectedDevice = device;
                 notifyConnectionStatusChanged(true, device);
                 updateNotification("Connected to: " + safeGetName(device));
 
-                // Save last connected device
+                if (reconnectTimeoutRunnable != null) {
+                    mainHandler.removeCallbacks(reconnectTimeoutRunnable);
+                    reconnectTimeoutRunnable = null;
+                }
+                reconnectQueue.clear();
+
                 SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                prefs.edit().putString(LAST_DEVICE_KEY, device.getAddress()).apply();
+                String addr = device.getAddress();
+                prefs.edit().putString(LAST_DEVICE_KEY, addr).apply();
+
+                String historyStr = prefs.getString(HISTORY_KEY, "");
+                List<String> history = new ArrayList<>(Arrays.asList(historyStr.split(",")));
+                history.remove(addr);
+                history.remove("");
+                history.add(0, addr);
+                while (history.size() > 5) {
+                    history.remove(history.size() - 1);
+                }
+                prefs.edit().putString(HISTORY_KEY, String.join(",", history)).apply();
 
             } else if (state == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.d(TAG, "Device disconnected: " + safeGetName(device));
                 connectedDevice = null;
                 notifyConnectionStatusChanged(false, null);
                 updateNotification("Disconnected – ready to reconnect");
+
+                if (!reconnectQueue.isEmpty()) {
+                    if (reconnectTimeoutRunnable != null) {
+                        mainHandler.removeCallbacks(reconnectTimeoutRunnable);
+                        reconnectTimeoutRunnable = null;
+                    }
+                    tryNextReconnect();
+                }
             }
         }
 
@@ -378,7 +511,8 @@ public class HidKeyboardService extends Service {
 
         for (char c : text.toCharArray()) {
             byte keycode  = getHidKeycode(c);
-            byte modifier = getModifier(c);
+            byte charModifier = getModifier(c);
+            byte combinedModifier = (byte) (charModifier | activeModifiers);
 
             if (keycode == 0x00) {
                 Log.w(TAG, "Skipping unmapped character: '" + c + "'");
@@ -386,15 +520,15 @@ public class HidKeyboardService extends Service {
             }
 
             // Key press report
-            byte[] pressReport = {modifier, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00};
+            byte[] pressReport = {combinedModifier, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00};
             boolean sent = hidDevice.sendReport(connectedDevice, REPORT_ID, pressReport);
             if (!sent) {
                 Log.w(TAG, "sendReport (press) failed for char '" + c + "'");
             }
             sleep(typingDelay);
 
-            // Key release report
-            byte[] releaseReport = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+            // Key release report (must maintain activeModifiers)
+            byte[] releaseReport = {activeModifiers, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
             hidDevice.sendReport(connectedDevice, REPORT_ID, releaseReport);
             sleep(typingDelay);
         }
@@ -406,6 +540,25 @@ public class HidKeyboardService extends Service {
         try { Thread.sleep(ms); } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public void sendKeyDown(byte modifier, byte keycode) {
+        if (hidDevice == null || connectedDevice == null) return;
+        byte combinedModifier = (byte) (modifier | activeModifiers);
+        byte[] report = {combinedModifier, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00};
+        hidDevice.sendReport(connectedDevice, REPORT_ID, report);
+    }
+    
+    public void sendKeyUp() {
+        if (hidDevice == null || connectedDevice == null) return;
+        byte[] report = {activeModifiers, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        hidDevice.sendReport(connectedDevice, REPORT_ID, report);
+    }
+    
+    public void sendMouseReport(byte buttons, byte dx, byte dy, byte scroll) {
+        if (hidDevice == null || connectedDevice == null) return;
+        byte[] report = {buttons, dx, dy, scroll};
+        hidDevice.sendReport(connectedDevice, 2, report);
     }
 
     // ─── Notification ────────────────────────────────────────────────────────
@@ -524,6 +677,11 @@ public class HidKeyboardService extends Service {
 
     // ─── Cleanup ─────────────────────────────────────────────────────────────
     private void cleanup() {
+        if (bluetoothAdapter != null && originalAdapterName != null && !originalAdapterName.equals("PassPress Keyboard")) {
+            try {
+                bluetoothAdapter.setName(originalAdapterName);
+            } catch (SecurityException ignored) {}
+        }
         if (hidDevice != null) {
             if (connectedDevice != null) {
                 try { hidDevice.disconnect(connectedDevice); } catch (Exception ignored) {}
