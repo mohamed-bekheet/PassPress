@@ -248,6 +248,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadMainUI() {
+        FrameLayout rootContainer = new FrameLayout(this);
+        
         LinearLayout mainLayout = new LinearLayout(this);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setBackgroundColor(Color.parseColor(COLOR_BG));
@@ -272,7 +274,14 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout.addView(createBottomNav());
 
-        setContentView(mainLayout);
+        rootContainer.addView(mainLayout);
+        
+        if (!prefs.getBoolean("has_seen_onboarding", false)) {
+            View onboardingView = createOnboardingView(rootContainer);
+            rootContainer.addView(onboardingView);
+        }
+
+        setContentView(rootContainer);
         setupConnectionListener();
         
         // Auto-reconnect on app launch if we have a saved device
@@ -282,6 +291,108 @@ public class MainActivity extends AppCompatActivity {
                 reconnectDevice();
             }
         }, 500);
+    }
+    
+    private View createOnboardingView(android.view.ViewGroup parent) {
+        LinearLayout overlay = new LinearLayout(this);
+        overlay.setOrientation(LinearLayout.VERTICAL);
+        overlay.setBackgroundColor(Color.parseColor("#E6060B18")); // Dark semi-transparent
+        overlay.setGravity(Gravity.CENTER);
+        overlay.setPadding(dp(30), dp(40), dp(30), dp(40));
+        overlay.setClickable(true); // Block touches to underlying view
+        
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        GradientDrawable cardBg = new GradientDrawable();
+        cardBg.setColor(Color.parseColor(COLOR_SURFACE));
+        cardBg.setCornerRadius(dp(20));
+        card.setBackground(cardBg);
+        card.setPadding(dp(24), dp(32), dp(24), dp(24));
+        card.setGravity(Gravity.CENTER_HORIZONTAL);
+        
+        TextView iconView = new TextView(this);
+        iconView.setTextSize(64);
+        iconView.setGravity(Gravity.CENTER);
+        
+        TextView titleView = new TextView(this);
+        titleView.setTextSize(24);
+        titleView.setTextColor(Color.WHITE);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setPadding(0, dp(16), 0, dp(16));
+        
+        TextView descView = new TextView(this);
+        descView.setTextSize(16);
+        descView.setTextColor(Color.parseColor(COLOR_TEXT));
+        descView.setGravity(Gravity.CENTER);
+        descView.setLineSpacing(dp(4), 1.2f);
+        
+        String[] icons = {"👋", "💻", "❓"};
+        String[] titles = {"Welcome to PassPress", "Connect to PC", "Crucial Step"};
+        String[] descriptions = {
+            "Your secure, offline hardware password manager. PassPress acts as a virtual Bluetooth keyboard.",
+            "To connect, ensure Bluetooth is enabled on your PC/Laptop, then tap the 'Connect PC' option after tapping the target device icon.",
+            "If you can't find 'PassPress Keyboard' in the Windows Bluetooth devices list, you must click 'Show all devices', then look for and choose one of the 'Unknown devices'. Wait a moment and the pairing code will appear!"
+        };
+        
+        final int[] currentSlide = {0};
+        
+        Runnable updateSlide = () -> {
+            iconView.setText(icons[currentSlide[0]]);
+            titleView.setText(titles[currentSlide[0]]);
+            descView.setText(descriptions[currentSlide[0]]);
+        };
+        updateSlide.run();
+        
+        card.addView(iconView);
+        card.addView(titleView);
+        card.addView(descView);
+        
+        View spacer = new View(this);
+        spacer.setLayoutParams(new LinearLayout.LayoutParams(1, dp(40)));
+        card.addView(spacer);
+        
+        LinearLayout btnRow = new LinearLayout(this);
+        btnRow.setOrientation(LinearLayout.HORIZONTAL);
+        btnRow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        
+        Button btnSkip = new Button(this);
+        btnSkip.setText("Skip");
+        btnSkip.setBackgroundColor(Color.TRANSPARENT);
+        btnSkip.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        
+        View flexSpacer = new View(this);
+        flexSpacer.setLayoutParams(new LinearLayout.LayoutParams(0, 1, 1f));
+        
+        Button btnNext = createStyledButton("Next ➔", COLOR_PRIMARY, COLOR_PRIMARY_DARK);
+        
+        btnRow.addView(btnSkip);
+        btnRow.addView(flexSpacer);
+        btnRow.addView(btnNext);
+        card.addView(btnRow);
+        
+        overlay.addView(card);
+        
+        Runnable finishOnboarding = () -> {
+            prefs.edit().putBoolean("has_seen_onboarding", true).apply();
+            parent.removeView(overlay);
+        };
+        
+        btnSkip.setOnClickListener(v -> finishOnboarding.run());
+        
+        btnNext.setOnClickListener(v -> {
+            if (currentSlide[0] < 2) {
+                currentSlide[0]++;
+                updateSlide.run();
+                if (currentSlide[0] == 2) {
+                    btnNext.setText("Finish ✔️");
+                }
+            } else {
+                finishOnboarding.run();
+            }
+        });
+        
+        return overlay;
     }
 
     private View createPasswordsView() {
@@ -319,12 +430,6 @@ public class MainActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setBackgroundColor(Color.parseColor(COLOR_BG));
         layout.setPadding(dp(16), dp(16), dp(16), dp(16));
-        
-        TextView label = new TextView(this);
-        label.setText("NATIVE KEYBOARD");
-        label.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
-        label.setTextSize(12);
-        label.setPadding(0, dp(24), 0, dp(8));
 
         // Native Input Area
         EditText inputField = new EditText(this);
@@ -400,14 +505,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Virtual Keyboard Layout
-        TextView keyboardLabel = new TextView(this);
-        keyboardLabel.setText("VIRTUAL KEYBOARD (Modifiers are tap-to-hold)");
-        keyboardLabel.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
-        keyboardLabel.setTextSize(12);
-        keyboardLabel.setPadding(0, 0, 0, dp(8)); // Top layout
-        layout.addView(keyboardLabel);
-
         GridLayout grid = new GridLayout(this);
         grid.setColumnCount(4);
         
@@ -417,12 +514,23 @@ public class MainActivity extends AppCompatActivity {
             "F8", "F9", "F10", "F11",
             "F12", "Tab", "Del", "Bksp",
             "Copy", "Paste", "Home", "End",
-            "Shift", "Ctrl", "Win", "Alt",
-            "Lang", "", "▲", "Enter",
+            "Shift", "Ctrl", "⊞", "Alt",
+            "🌍", "Fn", "▲", "Enter",
+            "", "◀", "▼", "▶"
+        };
+        
+        String[] mediaNames = {
+            "Esc", "🔇", "Vol-", "Vol+",
+            "⏯", "⏮", "⏭", "Stop",
+            "🔅", "🔆", "🔢", "🌐",
+            "PrtSc", "Tab", "Del", "Bksp",
+            "Copy", "Paste", "Home", "End",
+            "Shift", "Ctrl", "⊞", "Alt",
+            "🌍", "Fn", "▲", "Enter",
             "", "◀", "▼", "▶"
         };
 
-        // 0=Special, 1=Modifier, 2=Macro, 3=Empty
+        // 0=Special, 1=Modifier, 2=Macro, 3=Empty, 4=Fn Toggle
         int[] keyTypes = {
             0, 0, 0, 0,
             0, 0, 0, 0,
@@ -430,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
             0, 0, 0, 0,
             2, 2, 0, 0,
             1, 1, 1, 1,
-            0, 3, 0, 0,
+            0, 4, 0, 0,
             3, 0, 0, 0
         };
 
@@ -453,6 +561,23 @@ public class MainActivity extends AppCompatActivity {
             0x2C, 0, 0x52, 0x28,
             0, 0x50, 0x51, 0x4F
         };
+        
+        // Media bytes for F1-F11 (Consumer Control usage IDs - 16 bit)
+        short[] mediaCodes = new short[32];
+        mediaCodes[1] = 0x0010; // Mute
+        mediaCodes[2] = 0x0020; // Vol Down
+        mediaCodes[3] = 0x0040; // Vol Up
+        mediaCodes[4] = 0x0008; // Play/Pause
+        mediaCodes[5] = 0x0002; // Prev Track
+        mediaCodes[6] = 0x0001; // Next Track
+        mediaCodes[7] = 0x0004; // Stop
+        mediaCodes[8] = 0x0100; // Brightness Dec
+        mediaCodes[9] = 0x0080; // Brightness Inc
+        mediaCodes[10] = 0x0200; // Calculator
+        mediaCodes[11] = 0x0400; // Browser
+        
+        byte[] fnKeyboardCodes = new byte[32];
+        fnKeyboardCodes[12] = 0x46; // Print Screen
 
         byte[] macroMods = new byte[32];
         macroMods[16] = 0x01; // Copy (Ctrl)
@@ -463,19 +588,56 @@ public class MainActivity extends AppCompatActivity {
         macroCodes[17] = 0x19; // V
 
         int margin = dp(2);
+        Button[] buttons = new Button[32];
+        final boolean[] fnToggled = {false};
+
         for (int i = 0; i < keyNames.length; i++) {
             Button btn = createStyledButton(keyNames[i], COLOR_SURFACE_ALT, COLOR_SURFACE);
-            btn.setTextSize(12); // Slightly smaller text for dense grid
+            btn.setTextSize(12);
+            
+            // Color code based on groups
+            int textColor = Color.WHITE;
+            String name = keyNames[i];
+            if (name.startsWith("F") && name.length() > 1 && Character.isDigit(name.charAt(1))) {
+                textColor = Color.parseColor("#BB86FC"); // Purple for F-keys
+            } else if (name.equals("Copy") || name.equals("Paste")) {
+                textColor = Color.parseColor("#FFB300"); // Amber for Macros
+            } else if (name.equals("▲") || name.equals("▼") || name.equals("◀") || name.equals("▶")) {
+                textColor = Color.parseColor("#03DAC6"); // Teal for Arrows
+            } else if (name.equals("Shift") || name.equals("Ctrl") || name.equals("⊞") || name.equals("Alt") || name.equals("Fn") || name.equals("🌍")) {
+                textColor = Color.parseColor("#FF5252"); // Red for Modifiers
+            }
+            btn.setTextColor(textColor);
+
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
-            params.height = dp(46); // Minimized button height
+            params.height = dp(46);
             params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
             params.setMargins(margin, margin, margin, margin);
             btn.setLayoutParams(params);
+            buttons[i] = btn;
+            
+            final int index = i;
             
             if (keyTypes[i] == 3) {
                 // Empty space
                 btn.setVisibility(View.INVISIBLE);
+            } else if (keyTypes[i] == 4) {
+                // Fn Toggle logic
+                btn.setOnClickListener(v -> {
+                    fnToggled[0] = !fnToggled[0];
+                    if (fnToggled[0]) {
+                        btn.setBackgroundColor(Color.parseColor(COLOR_PRIMARY));
+                        for(int j=1; j<=12; j++) buttons[j].setText(mediaNames[j]);
+                    } else {
+                        GradientDrawable bg = new GradientDrawable();
+                        bg.setColor(Color.parseColor(COLOR_SURFACE));
+                        bg.setCornerRadius(dp(12));
+                        bg.setStroke(dp(1), Color.parseColor(COLOR_SURFACE_ALT));
+                        btn.setBackground(bg);
+                        for(int j=1; j<=12; j++) buttons[j].setText(keyNames[j]);
+                    }
+                });
             } else if (keyTypes[i] == 1) {
                 // Modifier
                 final byte mask = modMasks[i];
@@ -524,6 +686,8 @@ public class MainActivity extends AppCompatActivity {
                 // Special key
                 final byte mod = specialMods[i];
                 final byte code = specialCodes[i];
+                final short mediaCode = mediaCodes[i];
+                final byte fnSpecial = fnKeyboardCodes[i];
                 
                 btn.setOnTouchListener((v, event) -> {
                     HidKeyboardService svc = HidKeyboardService.getInstance();
@@ -531,14 +695,24 @@ public class MainActivity extends AppCompatActivity {
                     
                     if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
                         btn.setBackgroundColor(Color.parseColor(COLOR_PRIMARY));
-                        svc.sendKeyDown(mod, code);
+                        if (fnToggled[0] && mediaCode != 0) {
+                            svc.sendConsumerReport(mediaCode);
+                        } else if (fnToggled[0] && fnSpecial != 0) {
+                            svc.sendKeyDown((byte)0, fnSpecial);
+                        } else {
+                            svc.sendKeyDown(mod, code);
+                        }
                     } else if (event.getAction() == android.view.MotionEvent.ACTION_UP || event.getAction() == android.view.MotionEvent.ACTION_CANCEL) {
                         GradientDrawable bg = new GradientDrawable();
                         bg.setColor(Color.parseColor(COLOR_SURFACE));
                         bg.setCornerRadius(dp(12));
                         bg.setStroke(dp(1), Color.parseColor(COLOR_SURFACE_ALT));
                         btn.setBackground(bg);
-                        svc.sendKeyUp();
+                        if (fnToggled[0] && mediaCode != 0) {
+                            svc.sendConsumerReport((short)0);
+                        } else {
+                            svc.sendKeyUp();
+                        }
                     }
                     return true;
                 });
@@ -550,7 +724,6 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         // Add Native Input at the bottom
-        layout.addView(label);
         layout.addView(inputContainer);
 
         ScrollView scroller = new ScrollView(this);
@@ -587,6 +760,23 @@ public class MainActivity extends AppCompatActivity {
         trackpad.addView(instructions, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
 
+        // Visual Scrollbar on the right edge
+        View scrollBar = new View(this);
+        GradientDrawable scrollBg = new GradientDrawable();
+        scrollBg.setColor(Color.parseColor("#1AFFFFFF"));
+        scrollBg.setCornerRadii(new float[]{0,0, dp(16),dp(16), dp(16),dp(16), 0,0});
+        scrollBar.setBackground(scrollBg);
+        FrameLayout.LayoutParams scrollParams = new FrameLayout.LayoutParams(dp(45), FrameLayout.LayoutParams.MATCH_PARENT);
+        scrollParams.gravity = Gravity.END;
+        trackpad.addView(scrollBar, scrollParams);
+        
+        TextView scrollIcon = new TextView(this);
+        scrollIcon.setText("↕");
+        scrollIcon.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        scrollIcon.setTextSize(20);
+        scrollIcon.setGravity(Gravity.CENTER);
+        trackpad.addView(scrollIcon, scrollParams);
+
         // Mouse buttons
         LinearLayout buttonsLayout = new LinearLayout(this);
         buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -612,45 +802,153 @@ public class MainActivity extends AppCompatActivity {
         // Touch handling
         trackpad.setOnTouchListener(new View.OnTouchListener() {
             private float lastX, lastY;
+            private float fractionScroll = 0;
             private long downTime;
+            
+            // Multi-touch tracking
+            private boolean isThreeFingerSwipe = false;
+            private float threeFingerStartX, threeFingerStartY;
+            private boolean threeFingerFired = false;
+            private int scrollBarWidth = dp(45);
 
             @Override
             public boolean onTouch(View v, android.view.MotionEvent event) {
-                switch (event.getAction()) {
+                int pointerCount = event.getPointerCount();
+                int action = event.getActionMasked();
+
+                switch (action) {
                     case android.view.MotionEvent.ACTION_DOWN:
                         lastX = event.getX();
                         lastY = event.getY();
                         downTime = System.currentTimeMillis();
+                        isThreeFingerSwipe = false;
+                        threeFingerFired = false;
+                        fractionScroll = 0;
+                        return true;
+
+                    case android.view.MotionEvent.ACTION_POINTER_DOWN:
+                        if (pointerCount == 2) {
+                            lastY = (event.getY(0) + event.getY(1)) / 2;
+                            fractionScroll = 0;
+                        } else if (pointerCount == 3) {
+                            isThreeFingerSwipe = true;
+                            threeFingerStartX = (event.getX(0) + event.getX(1) + event.getX(2)) / 3;
+                            threeFingerStartY = (event.getY(0) + event.getY(1) + event.getY(2)) / 3;
+                            threeFingerFired = false;
+                        }
                         return true;
 
                     case android.view.MotionEvent.ACTION_MOVE:
-                        float dx = event.getX() - lastX;
-                        float dy = event.getY() - lastY;
-                        
-                        int sendDx = (int) (dx * 1.5f);
-                        int sendDy = (int) (dy * 1.5f);
+                        if (isThreeFingerSwipe && !threeFingerFired && pointerCount == 3) {
+                            float currX = (event.getX(0) + event.getX(1) + event.getX(2)) / 3;
+                            float currY = (event.getY(0) + event.getY(1) + event.getY(2)) / 3;
+                            float dx = currX - threeFingerStartX;
+                            float dy = currY - threeFingerStartY;
+                            
+                            // Trigger if moved more than 100px
+                            if (Math.abs(dx) > 100 || Math.abs(dy) > 100) {
+                                HidKeyboardService svc = HidKeyboardService.getInstance();
+                                if (svc != null && svc.isServiceReady()) {
+                                    if (Math.abs(dy) > Math.abs(dx)) {
+                                        if (dy < 0) {
+                                            // Swipe Up -> Win + Tab (Task View)
+                                            svc.sendKeyDown((byte)0x08, (byte)0x2B); // Win + Tab
+                                            svc.sendKeyUp();
+                                        } else {
+                                            // Swipe Down -> Win + D (Desktop)
+                                            svc.sendKeyDown((byte)0x08, (byte)0x07); // Win + D
+                                            svc.sendKeyUp();
+                                        }
+                                    } else {
+                                        if (dx != 0) { // Any horizontal swipe -> Alt + Tab
+                                            svc.sendKeyDown((byte)0x04, (byte)0x2B); // Alt + Tab
+                                            svc.sendKeyUp();
+                                        }
+                                    }
+                                }
+                                threeFingerFired = true; // Prevent multiple fires
+                            }
+                            return true;
+                        }
 
-                        if (sendDx != 0 || sendDy != 0) {
-                            sendDx = Math.max(-127, Math.min(127, sendDx));
-                            sendDy = Math.max(-127, Math.min(127, sendDy));
+                        if (pointerCount == 2 && !isThreeFingerSwipe) {
+                            // Two-finger scroll
+                            float currY = (event.getY(0) + event.getY(1)) / 2;
+                            float dy = currY - lastY;
+                            fractionScroll += (dy * -0.05f); // Negative for natural scrolling, scale factor
+                            
+                            int sendScroll = (int) fractionScroll;
+                            if (sendScroll != 0) {
+                                HidKeyboardService svc = HidKeyboardService.getInstance();
+                                if (svc != null && svc.isServiceReady()) {
+                                    svc.sendMouseReport((byte)0, (byte)0, (byte)0, (byte)sendScroll);
+                                }
+                                fractionScroll -= sendScroll;
+                            }
+                            lastY = currY;
+                            return true;
+                        }
+
+                        if (pointerCount == 1 && !isThreeFingerSwipe) {
+                            float dx = event.getX() - lastX;
+                            float dy = event.getY() - lastY;
                             
                             HidKeyboardService svc = HidKeyboardService.getInstance();
                             if (svc != null && svc.isServiceReady()) {
-                                svc.sendMouseReport((byte)0, (byte)sendDx, (byte)sendDy, (byte)0);
+                                if (lastX > v.getWidth() - scrollBarWidth) {
+                                    // 1-Finger Scroll Bar
+                                    fractionScroll += (dy * -0.05f);
+                                    int sendScroll = (int) fractionScroll;
+                                    if (sendScroll != 0) {
+                                        svc.sendMouseReport((byte)0, (byte)0, (byte)0, (byte)sendScroll);
+                                        fractionScroll -= sendScroll;
+                                    }
+                                    lastY = event.getY();
+                                } else {
+                                    // Normal Mouse Move
+                                    int sendDx = (int) (dx * 1.5f);
+                                    int sendDy = (int) (dy * 1.5f);
+                                    if (sendDx != 0 || sendDy != 0) {
+                                        sendDx = Math.max(-127, Math.min(127, sendDx));
+                                        sendDy = Math.max(-127, Math.min(127, sendDy));
+                                        svc.sendMouseReport((byte)0, (byte)sendDx, (byte)sendDy, (byte)0);
+                                        lastX = event.getX();
+                                        lastY = event.getY();
+                                    }
+                                }
                             }
-                            
-                            lastX = event.getX();
-                            lastY = event.getY();
+                            return true;
                         }
                         return true;
 
                     case android.view.MotionEvent.ACTION_UP:
-                        if (System.currentTimeMillis() - downTime < 200) { // Tap to click
-                            HidKeyboardService svc = HidKeyboardService.getInstance();
-                            if (svc != null && svc.isServiceReady()) {
-                                svc.sendMouseReport((byte)1, (byte)0, (byte)0, (byte)0); // Left down
-                                svc.sendMouseReport((byte)0, (byte)0, (byte)0, (byte)0); // Release
+                        if (pointerCount == 1 && !isThreeFingerSwipe && System.currentTimeMillis() - downTime < 200) {
+                            // Only click if it wasn't a scrollbar touch
+                            float startX = event.getX() - (event.getX() - lastX); // Approx startX
+                            if (lastX <= v.getWidth() - scrollBarWidth) {
+                                HidKeyboardService svc = HidKeyboardService.getInstance();
+                                if (svc != null && svc.isServiceReady()) {
+                                    svc.sendMouseReport((byte)1, (byte)0, (byte)0, (byte)0);
+                                    svc.sendMouseReport((byte)0, (byte)0, (byte)0, (byte)0);
+                                }
                             }
+                        }
+                        isThreeFingerSwipe = false;
+                        return true;
+                        
+                    case android.view.MotionEvent.ACTION_POINTER_UP:
+                        if (pointerCount == 3) {
+                            // Keep lastY correct for 2 finger scroll if we drop from 3 to 2
+                            int remaining1 = event.getActionIndex() == 0 ? 1 : 0;
+                            int remaining2 = event.getActionIndex() == 2 ? 1 : 2;
+                            lastY = (event.getY(remaining1) + event.getY(remaining2)) / 2;
+                            fractionScroll = 0;
+                        } else if (pointerCount == 2) {
+                            // Keep lastX/lastY correct if we drop from 2 to 1
+                            int remainingIndex = event.getActionIndex() == 0 ? 1 : 0;
+                            lastX = event.getX(remainingIndex);
+                            lastY = event.getY(remainingIndex);
+                            fractionScroll = 0;
                         }
                         return true;
                 }
@@ -726,6 +1024,8 @@ public class MainActivity extends AppCompatActivity {
         
         return navBar;
     }
+
+
 
     private void refreshPasswordGrid() {
         if (slotsContainer == null) return;
@@ -1863,6 +2163,8 @@ public class MainActivity extends AppCompatActivity {
             "*(Note: It is perfectly normal if Windows displays a 'Phone' icon. It will still function fully as a keyboard!)*");
             
         addHelpSection(layout, "🛠️ Troubleshooting",
+            "• Can't find the device in Windows?\n" +
+            "  If you aren't able to find the \"PassPress Keyboard\" in the Windows Bluetooth search list, you need to press \"Show all devices\", then choose one of the \"Unknown Devices\" shown in the list. Wait a moment, and the pairing code will appear on both your phone and laptop.\n" +
             "• Stuck on 'Connecting...'?\n" +
             "  Go to your PC's Bluetooth settings, completely remove/unpair the device, and try connecting again.\n" +
             "• Doesn't Type?\n" +

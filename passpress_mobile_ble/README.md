@@ -28,6 +28,8 @@ passpress_mobile_ble/
 The primary Android companion app allowing your smartphone to communicate with the target PC over Bluetooth LE.
 - **Key Features**:
   - **BLE Keyboard Emulation**: Wirelessly type saved passwords into Target PCs (`💻 Connect PC`).
+  - **Multi-Touch Trackpad**: Move mouse, click, two-finger scroll, dedicated visual scrollbar, and 3-finger Windows shortcuts (Task View, Desktop, Switch Apps).
+  - **First-Launch Onboarding Demo**: Interactive welcome tutorial that guides users through crucial Windows Bluetooth pairing quirks (e.g., "Unknown Device").
   - **Biometric Security & Encryption**: Encrypted storage using AES-256 GCM + Android Biometric Auth.
   - **Per-Slot Device Trusting**: Secure verification for untrusted PCs.
   - **Encrypted Backup & Restore**: Master-password encrypted export/import.

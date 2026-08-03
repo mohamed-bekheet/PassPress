@@ -94,6 +94,32 @@ public class HidKeyboardService extends Service {
         (byte)0x95, (byte)0x03,  //     Report Count (3)
         (byte)0x81, (byte)0x06,  //     Input (Data, Variable, Relative)
         (byte)0xC0,              //   End Collection
+        (byte)0xC0,              // End Collection
+
+        // ─── Consumer Control Report (Report ID 3) ───
+        (byte)0x05, (byte)0x0C,  // Usage Page (Consumer)
+        (byte)0x09, (byte)0x01,  // Usage (Consumer Control)
+        (byte)0xA1, (byte)0x01,  // Collection (Application)
+        (byte)0x85, (byte)0x03,  //   Report ID (3)
+        (byte)0x15, (byte)0x00,  //   Logical Minimum (0)
+        (byte)0x25, (byte)0x01,  //   Logical Maximum (1)
+        (byte)0x75, (byte)0x01,  //   Report Size (1)
+        (byte)0x95, (byte)0x0B,  //   Report Count (11)
+        (byte)0x09, (byte)0xB5,  //   Usage (Scan Next Track)      (Bit 0)
+        (byte)0x09, (byte)0xB6,  //   Usage (Scan Previous Track)  (Bit 1)
+        (byte)0x09, (byte)0xB7,  //   Usage (Stop)                 (Bit 2)
+        (byte)0x09, (byte)0xCD,  //   Usage (Play/Pause)           (Bit 3)
+        (byte)0x09, (byte)0xE2,  //   Usage (Mute)                 (Bit 4)
+        (byte)0x09, (byte)0xEA,  //   Usage (Volume Down)          (Bit 5)
+        (byte)0x09, (byte)0xE9,  //   Usage (Volume Up)            (Bit 6)
+        (byte)0x09, (byte)0x6F,  //   Usage (Brightness Inc)       (Bit 7)
+        (byte)0x09, (byte)0x70,  //   Usage (Brightness Dec)       (Bit 8)
+        (byte)0x0A, (byte)0x92, (byte)0x01, // Usage (Calculator) (Bit 9)
+        (byte)0x0A, (byte)0x23, (byte)0x02, // Usage (Browser)    (Bit 10)
+        (byte)0x81, (byte)0x02,  //   Input (Data, Variable, Absolute)
+        (byte)0x95, (byte)0x01,  //   Report Count (1)
+        (byte)0x75, (byte)0x05,  //   Report Size (5) (Padding to 16 bits = 2 bytes)
+        (byte)0x81, (byte)0x01,  //   Input (Constant)
         (byte)0xC0               // End Collection
     };
 
@@ -559,6 +585,12 @@ public class HidKeyboardService extends Service {
         if (hidDevice == null || connectedDevice == null) return;
         byte[] report = {buttons, dx, dy, scroll};
         hidDevice.sendReport(connectedDevice, 2, report);
+    }
+
+    public void sendConsumerReport(short buttons) {
+        if (hidDevice == null || connectedDevice == null) return;
+        byte[] report = {(byte)(buttons & 0xFF), (byte)((buttons >> 8) & 0xFF)};
+        hidDevice.sendReport(connectedDevice, 3, report);
     }
 
     // ─── Notification ────────────────────────────────────────────────────────
