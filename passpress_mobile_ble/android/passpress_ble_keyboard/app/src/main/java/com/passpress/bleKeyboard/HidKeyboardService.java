@@ -145,6 +145,8 @@ public class HidKeyboardService extends Service {
     private volatile boolean                  workerAlive = false;
     private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
 
+    private volatile boolean autoReconnectEnabled = true;
+
     private byte activeModifiers = 0;
 
     public void setModifierState(byte modifierMask, boolean isActive) {
@@ -187,11 +189,13 @@ public class HidKeyboardService extends Service {
             String action = intent.getAction();
             if ("ACTION_DISCONNECT".equals(action)) {
                 Log.d(TAG, "Disconnect action received from notification");
+                autoReconnectEnabled = false;
                 disconnectDevice();
                 updateNotification("Disconnected (User Action)");
                 return START_STICKY;
             } else if ("ACTION_RECONNECT".equals(action)) {
                 Log.d(TAG, "Reconnect action received from notification");
+                autoReconnectEnabled = true;
                 autoConnect();
                 return START_STICKY;
             }
@@ -269,6 +273,7 @@ public class HidKeyboardService extends Service {
     }
 
     public void autoConnect() {
+        if (!autoReconnectEnabled) return;
         if (connectedDevice != null) return;
         reconnectQueue.clear();
         if (reconnectTimeoutRunnable != null) {
@@ -295,8 +300,16 @@ public class HidKeyboardService extends Service {
     }
 
     private void tryNextReconnect() {
+        if (!autoReconnectEnabled) {
+            updateNotification("Reconnection paused");
+            return;
+        }
         if (reconnectQueue.isEmpty()) {
-            updateNotification("Reconnection exhausted");
+            updateNotification("Scanning for devices...");
+            reconnectTimeoutRunnable = () -> {
+                autoConnect();
+            };
+            mainHandler.postDelayed(reconnectTimeoutRunnable, 5000);
             return;
         }
 
@@ -308,7 +321,7 @@ public class HidKeyboardService extends Service {
             Log.d(TAG, "Connection timeout for " + mac);
             tryNextReconnect();
         };
-        mainHandler.postDelayed(reconnectTimeoutRunnable, 6000);
+        mainHandler.postDelayed(reconnectTimeoutRunnable, 5000);
     }
 
     public void disconnectDevice() {
@@ -440,6 +453,11 @@ public class HidKeyboardService extends Service {
                     }
                 }
                 
+                if (connectedDevice != null && !connectedDevice.equals(device)) {
+                    Log.d(TAG, "Already connected to another device. Disconnecting old device: " + safeGetName(connectedDevice));
+                    hidDevice.disconnect(connectedDevice);
+                }
+                
                 Log.d(TAG, "✓ Device connected: " + safeGetName(device));
                 connectedDevice = device;
                 notifyConnectionStatusChanged(true, device);
@@ -471,12 +489,20 @@ public class HidKeyboardService extends Service {
                 notifyConnectionStatusChanged(false, null);
                 updateNotification("Disconnected – ready to reconnect");
 
-                if (!reconnectQueue.isEmpty()) {
-                    if (reconnectTimeoutRunnable != null) {
-                        mainHandler.removeCallbacks(reconnectTimeoutRunnable);
-                        reconnectTimeoutRunnable = null;
+                if (autoReconnectEnabled) {
+                    if (!reconnectQueue.isEmpty()) {
+                        if (reconnectTimeoutRunnable != null) {
+                            mainHandler.removeCallbacks(reconnectTimeoutRunnable);
+                            reconnectTimeoutRunnable = null;
+                        }
+                        tryNextReconnect();
+                    } else {
+                        if (reconnectTimeoutRunnable != null) {
+                            mainHandler.removeCallbacks(reconnectTimeoutRunnable);
+                        }
+                        reconnectTimeoutRunnable = () -> autoConnect();
+                        mainHandler.postDelayed(reconnectTimeoutRunnable, 5000);
                     }
-                    tryNextReconnect();
                 }
             }
         }
@@ -689,6 +715,57 @@ public class HidKeyboardService extends Service {
             case ',': case '<': return 0x36;
             case '.': case '>': return 0x37;
             case '/': case '?': return 0x38;
+            
+            // Arabic mappings (assumes PC is set to Arabic Layout)
+            case 'ض': return 0x14; // Q
+            case 'ص': return 0x1A; // W
+            case 'ث': return 0x08; // E
+            case 'ق': return 0x15; // R
+            case 'ف': return 0x17; // T
+            case 'غ': return 0x1C; // Y
+            case 'ع': return 0x18; // U
+            case 'ه': return 0x0C; // I
+            case 'خ': return 0x12; // O
+            case 'ح': return 0x13; // P
+            case 'ج': return 0x2F; // [
+            case 'د': return 0x30; // ]
+            case 'ش': return 0x04; // A
+            case 'س': return 0x16; // S
+            case 'ي': return 0x07; // D
+            case 'ب': return 0x09; // F
+            case 'ل': return 0x0A; // G
+            case 'ا': return 0x0B; // H
+            case 'ت': return 0x0D; // J
+            case 'ن': return 0x0E; // K
+            case 'م': return 0x0F; // L
+            case 'ك': return 0x33; // ;
+            case 'ط': return 0x34; // '
+            case 'ئ': return 0x1D; // Z
+            case 'ء': return 0x1B; // X
+            case 'ؤ': return 0x06; // C
+            case 'ر': return 0x19; // V
+            case 'ى': return 0x11; // N
+            case 'ة': return 0x10; // M
+            case 'و': return 0x36; // ,
+            case 'ز': return 0x37; // .
+            case 'ظ': return 0x38; // /
+            case 'ذ': return 0x35; // `
+            
+            // Shift + Arabic
+            case 'َ': return 0x14; // Shift + Q
+            case 'ً': return 0x1A; // Shift + W
+            case 'ُ': return 0x08; // Shift + E
+            case 'ٌ': return 0x15; // Shift + R
+            case 'إ': return 0x1C; // Shift + Y
+            case 'ِ': return 0x04; // Shift + A
+            case 'ٍ': return 0x16; // Shift + S
+            case 'أ': return 0x0B; // Shift + H
+            case 'ـ': return 0x0D; // Shift + J
+            case '،': return 0x0E; // Shift + K
+            case 'ْ': return 0x1B; // Shift + X
+            case 'آ': return 0x11; // Shift + N
+            case '؟': return 0x38; // Shift + /
+            
             default: return 0x00;
         }
     }
@@ -701,6 +778,9 @@ public class HidKeyboardService extends Service {
             case '_': case '+': case '{': case '}': case '|':
             case ':': case '"': case '~': case '<': case '>':
             case '?':
+            case 'َ': case 'ً': case 'ُ': case 'ٌ': case 'إ':
+            case 'ِ': case 'ٍ': case 'أ': case 'ـ': case '،':
+            case 'ْ': case 'آ': case '؟':
                 return 0x02; // Left Shift
             default:
                 return 0x00;

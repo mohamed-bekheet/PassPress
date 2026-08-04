@@ -875,7 +875,8 @@ public class MainActivity extends AppCompatActivity {
                             // Two-finger scroll
                             float currY = (event.getY(0) + event.getY(1)) / 2;
                             float dy = currY - lastY;
-                            fractionScroll += (dy * -0.05f); // Negative for natural scrolling, scale factor
+                            float scrollSens = prefs.getFloat("scroll_sensitivity", 0.05f);
+                            fractionScroll += (dy * -scrollSens); // Negative for natural scrolling, scale factor
                             
                             int sendScroll = (int) fractionScroll;
                             if (sendScroll != 0) {
@@ -897,7 +898,8 @@ public class MainActivity extends AppCompatActivity {
                             if (svc != null && svc.isServiceReady()) {
                                 if (lastX > v.getWidth() - scrollBarWidth) {
                                     // 1-Finger Scroll Bar
-                                    fractionScroll += (dy * -0.05f);
+                                    float scrollSens = prefs.getFloat("scroll_sensitivity", 0.05f);
+                                    fractionScroll += (dy * -scrollSens);
                                     int sendScroll = (int) fractionScroll;
                                     if (sendScroll != 0) {
                                         svc.sendMouseReport((byte)0, (byte)0, (byte)0, (byte)sendScroll);
@@ -906,8 +908,9 @@ public class MainActivity extends AppCompatActivity {
                                     lastY = event.getY();
                                 } else {
                                     // Normal Mouse Move
-                                    int sendDx = (int) (dx * 1.5f);
-                                    int sendDy = (int) (dy * 1.5f);
+                                    float mouseSens = prefs.getFloat("mouse_sensitivity", 1.5f);
+                                    int sendDx = (int) (dx * mouseSens);
+                                    int sendDy = (int) (dy * mouseSens);
                                     if (sendDx != 0 || sendDy != 0) {
                                         sendDx = Math.max(-127, Math.min(127, sendDx));
                                         sendDy = Math.max(-127, Math.min(127, sendDy));
@@ -2230,6 +2233,67 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         layout.addView(delaySeekBar);
+
+        // Spacer
+        View spacerSens = new View(this);
+        spacerSens.setLayoutParams(new LinearLayout.LayoutParams(1, dp(16)));
+        layout.addView(spacerSens);
+
+        // Mouse Sensitivity
+        TextView mouseLabel = new TextView(this);
+        float currentMouseSens = prefs.getFloat("mouse_sensitivity", 1.5f);
+        mouseLabel.setText("Mouse DPI / Sensitivity: " + String.format("%.1fx", currentMouseSens));
+        mouseLabel.setTextColor(Color.WHITE);
+        layout.addView(mouseLabel);
+
+        android.widget.SeekBar mouseSeekBar = new android.widget.SeekBar(this);
+        mouseSeekBar.setMax(50); // 0.1 to 5.0
+        mouseSeekBar.setProgress((int)(currentMouseSens * 10));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mouseSeekBar.setProgressTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+            mouseSeekBar.setThumbTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
+        mouseSeekBar.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
+                float val = Math.max(1, progress) / 10f;
+                mouseLabel.setText("Mouse DPI / Sensitivity: " + String.format("%.1fx", val));
+            }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
+                float val = Math.max(1, seekBar.getProgress()) / 10f;
+                prefs.edit().putFloat("mouse_sensitivity", val).apply();
+            }
+        });
+        layout.addView(mouseSeekBar);
+
+        // Scroll Sensitivity
+        TextView scrollLabel = new TextView(this);
+        float currentScrollSens = prefs.getFloat("scroll_sensitivity", 0.05f);
+        scrollLabel.setText("Scroll Sensitivity: " + String.format("%.2fx", currentScrollSens));
+        scrollLabel.setTextColor(Color.WHITE);
+        layout.addView(scrollLabel);
+
+        android.widget.SeekBar scrollSeekBar = new android.widget.SeekBar(this);
+        scrollSeekBar.setMax(50); // 0.01 to 0.50
+        scrollSeekBar.setProgress((int)(currentScrollSens * 100));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            scrollSeekBar.setProgressTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+            scrollSeekBar.setThumbTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
+        scrollSeekBar.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
+                float val = Math.max(1, progress) / 100f;
+                scrollLabel.setText("Scroll Sensitivity: " + String.format("%.2fx", val));
+            }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
+                float val = Math.max(1, seekBar.getProgress()) / 100f;
+                prefs.edit().putFloat("scroll_sensitivity", val).apply();
+            }
+        });
+        layout.addView(scrollSeekBar);
 
         // Auto-Lock Toggle
         android.widget.CheckBox autoLockCheck = new android.widget.CheckBox(this);
