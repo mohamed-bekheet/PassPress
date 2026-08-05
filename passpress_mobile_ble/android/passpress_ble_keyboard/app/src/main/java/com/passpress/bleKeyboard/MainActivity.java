@@ -1075,7 +1075,12 @@ public class MainActivity extends AppCompatActivity {
     private void refreshPasswordGrid() {
         if (slotsContainer == null) return;
         slotsContainer.removeAllViews();
-        int slotCount = prefs.getInt(SLOT_COUNT_KEY, 2);
+        int minSlotCount = secureStorage.getMaxSlotWithData();
+        int savedSlotCount = prefs.getInt(SLOT_COUNT_KEY, 2);
+        int slotCount = Math.max(savedSlotCount, minSlotCount);
+        if (slotCount > savedSlotCount) {
+            prefs.edit().putInt(SLOT_COUNT_KEY, slotCount).apply();
+        }
 
         LinearLayout currentRow = null;
         for (int i = 0; i < slotCount; i++) {
@@ -2416,9 +2421,13 @@ public class MainActivity extends AppCompatActivity {
         slotsLabel.setGravity(Gravity.CENTER_VERTICAL);
         slotsConfigLayout.addView(slotsLabel);
 
-        for (int i = 0; i < 5; i++) {
+        int totalSlots = Math.max(prefs.getInt(SLOT_COUNT_KEY, 2), secureStorage.getMaxSlotWithData());
+        int availableNotifSlots = Math.min(5, totalSlots);
+
+        for (int i = 0; i < availableNotifSlots; i++) {
             android.widget.CheckBox slotCheck = new android.widget.CheckBox(this);
-            slotCheck.setText(String.valueOf(i + 1));
+            String label = prefs.getString("label_" + i, String.valueOf(i + 1));
+            slotCheck.setText(label);
             slotCheck.setTextColor(Color.parseColor(COLOR_TEXT));
             slotCheck.setChecked(prefs.getBoolean("show_slot_" + i + "_notif", true));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -2541,7 +2550,17 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle("Reset to Defaults?")
                 .setMessage("This will reset your theme, notification, and widget settings. Your passwords and paired devices will NOT be deleted.")
                 .setPositiveButton("Reset", (d, w) -> {
-                    prefs.edit().clear().apply();
+                    prefs.edit()
+                        .putBoolean("is_light_theme", true)
+                        .putBoolean("require_biometrics", true)
+                        .putBoolean("auto_lock_enabled", false)
+                        .putBoolean("enable_custom_notif", false)
+                        .putBoolean("enable_quick_tile", true)
+                        .putBoolean("enable_bubble", false)
+                        .putFloat("mouse_sensitivity", 1.5f)
+                        .putInt("typing_delay", 25)
+                        .putFloat("scroll_sensitivity", 0.05f)
+                        .apply();
                     recreate();
                 })
                 .setNegativeButton("Cancel", null)

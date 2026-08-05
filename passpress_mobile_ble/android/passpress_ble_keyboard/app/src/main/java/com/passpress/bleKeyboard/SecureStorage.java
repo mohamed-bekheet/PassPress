@@ -102,4 +102,15 @@ public class SecureStorage {
             Log.d(TAG, "Migrated password for slot " + slotId + " to secure storage");
         }
     }
+
+    public int getMaxSlotWithData() {
+        int max = 2;
+        for (int i = 0; i < 50; i++) {
+            String p = getPassword(i);
+            if (p != null && !p.isEmpty()) {
+                if (i + 1 > max) max = i + 1;
+            }
+        }
+        return max;
+    }
 }

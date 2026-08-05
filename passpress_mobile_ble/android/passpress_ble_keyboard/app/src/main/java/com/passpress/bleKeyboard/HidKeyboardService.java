@@ -689,14 +689,18 @@ public class HidKeyboardService extends Service {
             
 
             // Slots
+            int totalSlots = Math.max(prefs.getInt("slot_count", 2), SecureStorage.getInstance(this).getMaxSlotWithData());
             int[] btnIds = {R.id.btn_notif_s1, R.id.btn_notif_s2, R.id.btn_notif_s3, R.id.btn_notif_s4, R.id.btn_notif_s5};
             for (int i = 0; i < 5; i++) {
-                if (!prefs.getBoolean("show_slot_" + i + "_notif", true)) {
+                if (i >= totalSlots || !prefs.getBoolean("show_slot_" + i + "_notif", true)) {
                     customView.setViewVisibility(btnIds[i], android.view.View.GONE);
                     continue;
                 }
                 customView.setViewVisibility(btnIds[i], android.view.View.VISIBLE);
                 
+                String label = prefs.getString("label_" + i, "🔑" + (i + 1));
+                customView.setTextViewText(btnIds[i], label);
+
                 if (isLight) {
                     customView.setInt(btnIds[i], "setBackgroundResource", R.drawable.notif_btn_bg_light);
                     customView.setTextColor(btnIds[i], android.graphics.Color.parseColor("#0F172A"));
