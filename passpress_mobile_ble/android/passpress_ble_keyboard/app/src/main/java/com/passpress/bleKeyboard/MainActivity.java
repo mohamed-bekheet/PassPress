@@ -349,7 +349,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 HidKeyboardService svc = HidKeyboardService.getInstance();
                 if (svc != null && svc.getConnectedDevice() == null) {
-                    reconnectDevice();
+                    if (!getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getBoolean("manual_disconnect", false)) {
+                        reconnectDevice();
+                    }
                 }
             }
         }, 500);

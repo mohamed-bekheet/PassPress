@@ -251,6 +251,7 @@ public class HidKeyboardService extends Service {
     }
 
     public void connectToDevice(String address) {
+        getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).edit().putBoolean("manual_disconnect", false).apply();
         if (hidDevice == null || address == null) {
             Log.w(TAG, "connectToDevice: hidDevice not ready or address null");
             notifyConnectionStatusChanged(false, null);
@@ -285,6 +286,11 @@ public class HidKeyboardService extends Service {
     public void autoConnect() {
         if (!autoReconnectEnabled) return;
         if (connectedDevice != null) return;
+        
+        if (getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getBoolean("manual_disconnect", false)) {
+            Log.d(TAG, "autoConnect skipped: User manually disconnected.");
+            return;
+        }
         reconnectQueue.clear();
         if (reconnectTimeoutRunnable != null) {
             mainHandler.removeCallbacks(reconnectTimeoutRunnable);
@@ -335,6 +341,7 @@ public class HidKeyboardService extends Service {
     }
 
     public void disconnectDevice() {
+        getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).edit().putBoolean("manual_disconnect", true).apply();
         if (hidDevice != null && connectedDevice != null) {
             Log.d(TAG, "Disconnecting from " + connectedDevice.getAddress());
             hidDevice.disconnect(connectedDevice);
