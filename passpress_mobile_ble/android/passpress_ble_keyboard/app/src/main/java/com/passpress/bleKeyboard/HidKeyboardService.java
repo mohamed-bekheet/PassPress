@@ -575,6 +575,14 @@ public class HidKeyboardService extends Service {
             return;
         }
 
+        // --- WAKE UP BLE CONNECTION ---
+        // If the connection was idle, it might be in sniff mode. 
+        // Sending a dummy release report and waiting gives the radio and host PC time to wake up,
+        // preventing the first few characters of the password from being dropped.
+        byte[] dummyReport = {activeModifiers, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        hidDevice.sendReport(connectedDevice, REPORT_ID, dummyReport);
+        sleep(300); // 300ms is a safe buffer for Windows/macOS to wake the HID driver
+
         android.content.SharedPreferences prefs = getSharedPreferences("passpress_prefs", android.content.Context.MODE_PRIVATE);
         int typingDelay = prefs.getInt("typing_delay", 25);
 
