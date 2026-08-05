@@ -2133,20 +2133,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addHelpSection(LinearLayout parent, String titleText, String contentText) {
+        // Section Title
         TextView title = new TextView(this);
         title.setText(titleText);
         title.setTextSize(18);
         title.setTypeface(null, Typeface.BOLD);
         title.setTextColor(Color.parseColor(COLOR_ACCENT));
-        title.setPadding(0, dp(16), 0, dp(4));
+        title.setPadding(0, dp(20), 0, dp(6));
         parent.addView(title);
         
+        // Section Content
         TextView content = new TextView(this);
         content.setText(contentText);
         content.setTextSize(14);
-        content.setTextColor(Color.parseColor(COLOR_TEXT));
-        content.setLineSpacing(0, 1.2f);
+        content.setTextColor(Color.parseColor("#CCCCCC")); // Slightly brighter text for readability
+        content.setLineSpacing(dp(4), 1.3f); // Better line spacing
         parent.addView(content);
+        
+        // Divider
+        View divider = new View(this);
+        divider.setBackgroundColor(Color.parseColor("#334155"));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1));
+        params.setMargins(0, dp(16), 0, 0);
+        divider.setLayoutParams(params);
+        parent.addView(divider);
     }
 
     private void showHelpDialog() {
@@ -2158,60 +2168,70 @@ public class MainActivity extends AppCompatActivity {
             versionCode = pInfo.versionCode;
         } catch (Exception ignored) {}
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
         
         ScrollView scrollView = new ScrollView(this);
-        scrollView.setBackgroundColor(Color.parseColor(COLOR_BG));
         
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(dp(24), dp(24), dp(24), dp(24));
         
+        // Title
         TextView title = new TextView(this);
         title.setText("PassPress Help");
         title.setTextSize(24);
         title.setTypeface(null, Typeface.BOLD);
         title.setTextColor(Color.WHITE);
         title.setGravity(Gravity.CENTER);
+        title.setPadding(0, 0, 0, dp(8));
         layout.addView(title);
         
         addHelpSection(layout, "🔌 How to Connect", 
             "1. Turn on Bluetooth on your PC/Mac.\n" +
             "2. Tap 'Connect PC' in PassPress.\n" +
-            "3. On your PC, look for 'PassPress Keyboard' and pair it.\n" +
-            "*(Note: It is perfectly normal if Windows displays a 'Phone' icon. It will still function fully as a keyboard!)*");
+            "3. On your PC, look for 'PassPress Keyboard' and pair it.\n\n" +
+            "Note: It's normal if Windows displays a 'Phone' icon. It will still function fully as a keyboard!");
             
         addHelpSection(layout, "🛠️ Troubleshooting",
             "• Can't find the device in Windows?\n" +
-            "  If you aren't able to find the \"PassPress Keyboard\" in the Windows Bluetooth search list, you need to press \"Show all devices\", then choose one of the \"Unknown Devices\" shown in the list. Wait a moment, and the pairing code will appear on both your phone and laptop.\n" +
+            "  If you aren't able to find the \"PassPress Keyboard\" in the Windows Bluetooth search list, press \"Show all devices\", then choose one of the \"Unknown Devices\". Wait a moment, and the pairing code will appear.\n\n" +
             "• Stuck on 'Connecting...'?\n" +
-            "  Go to your PC's Bluetooth settings, completely remove/unpair the device, and try connecting again.\n" +
+            "  Go to your PC's Bluetooth settings, completely remove/unpair the device, and try connecting again.\n\n" +
             "• Doesn't Type?\n" +
-            "  Ensure your text cursor is actively inside a password field on your PC before tapping Send.\n" +
+            "  Ensure your text cursor is actively inside a password field on your PC before tapping Send.\n\n" +
             "• Auto-Reconnect Failing?\n" +
             "  The app attempts to reconnect automatically in the background. If it fails, simply tap the '⚡ Reconnect' button.");
             
-        addHelpSection(layout, "📱 Usage & Widgets",
-            "• Tap any password slot to type it.\n" +
-            "• Long-press your phone's home screen to add PassPress Widgets for instant one-tap access without opening the app.");
+        addHelpSection(layout, "📱 Usage & Quick Access",
+            "• Widgets: Long-press your home screen to add PassPress Widgets for instant one-tap access.\n\n" +
+            "• Settings: Enable the Custom Notification Toolbar, Quick Settings Tile, or Floating Bubble from the settings menu for even faster access.");
 
         addHelpSection(layout, "🔒 Security",
-            "• All passwords are encrypted directly on your device.\n" +
-            "• Untrusted PCs will always require your fingerprint authentication before sending a password.");
+            "• Encryption: All passwords are encrypted directly on your device.\n\n" +
+            "• Biometrics: Untrusted PCs will always require your fingerprint authentication before sending a password.");
             
         TextView versionText = new TextView(this);
         versionText.setText("Version " + versionName + " (Build " + versionCode + ")");
         versionText.setTextSize(12);
         versionText.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
         versionText.setGravity(Gravity.CENTER);
-        versionText.setPadding(0, dp(24), 0, dp(8));
+        versionText.setPadding(0, dp(16), 0, dp(8));
         layout.addView(versionText);
 
         scrollView.addView(layout);
         builder.setView(scrollView);
         
+        // Add Close Button
+        builder.setPositiveButton("Close", null);
+        
         android.app.AlertDialog dialog = builder.create();
         dialog.show();
+        
+        // Style the Close button
+        Button positiveButton = dialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+        if (positiveButton != null) {
+            positiveButton.setTextColor(Color.parseColor(COLOR_ACCENT));
+        }
     }
 
     private void showSettingsDialog() {

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="8dp"
+    android:padding="12dp"
     android:background="#0F172A">
 
     <TextView
@@ -12,69 +12,76 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="⌨️"
-        android:textSize="20sp"
-        android:paddingEnd="8dp"/>
+        android:textSize="22sp"
+        android:paddingEnd="12dp"/>
 
     <Button
         android:id="@+id/btn_notif_connect"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="38dp"
         android:text="Connect"
         android:textSize="12sp"
+        android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:background="#1E293B"
-        android:layout_marginEnd="8dp"/>
+        android:background="@drawable/notif_btn_bg_accent"
+        android:layout_marginEnd="12dp"/>
 
     <!-- Password Slots -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="end">
 
         <Button
             android:id="@+id/btn_notif_s1"
-            android:layout_width="40dp"
-            android:layout_height="36dp"
-            android:text="1"
+            android:layout_width="44dp"
+            android:layout_height="38dp"
+            android:text="🔑1"
+            android:textSize="12sp"
             android:textColor="#FFFFFF"
-            android:background="#334155"
-            android:layout_marginEnd="4dp"/>
+            android:background="@drawable/notif_btn_bg"
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s2"
-            android:layout_width="40dp"
-            android:layout_height="36dp"
-            android:text="2"
+            android:layout_width="44dp"
+            android:layout_height="38dp"
+            android:text="🔑2"
+            android:textSize="12sp"
             android:textColor="#FFFFFF"
-            android:background="#334155"
-            android:layout_marginEnd="4dp"/>
+            android:background="@drawable/notif_btn_bg"
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s3"
-            android:layout_width="40dp"
-            android:layout_height="36dp"
-            android:text="3"
+            android:layout_width="44dp"
+            android:layout_height="38dp"
+            android:text="🔑3"
+            android:textSize="12sp"
             android:textColor="#FFFFFF"
-            android:background="#334155"
-            android:layout_marginEnd="4dp"/>
+            android:background="@drawable/notif_btn_bg"
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s4"
-            android:layout_width="40dp"
-            android:layout_height="36dp"
-            android:text="4"
+            android:layout_width="44dp"
+            android:layout_height="38dp"
+            android:text="🔑4"
+            android:textSize="12sp"
             android:textColor="#FFFFFF"
-            android:background="#334155"
-            android:layout_marginEnd="4dp"/>
+            android:background="@drawable/notif_btn_bg"
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s5"
-            android:layout_width="40dp"
-            android:layout_height="36dp"
-            android:text="5"
+            android:layout_width="44dp"
+            android:layout_height="38dp"
+            android:text="🔑5"
+            android:textSize="12sp"
             android:textColor="#FFFFFF"
-            android:background="#334155"/>
+            android:background="@drawable/notif_btn_bg"/>
 
     </LinearLayout>
 
