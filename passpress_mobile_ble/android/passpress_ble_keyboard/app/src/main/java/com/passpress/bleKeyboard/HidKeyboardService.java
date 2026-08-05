@@ -673,6 +673,12 @@ public class HidKeyboardService extends Service {
             // Slots
             int[] btnIds = {R.id.btn_notif_s1, R.id.btn_notif_s2, R.id.btn_notif_s3, R.id.btn_notif_s4, R.id.btn_notif_s5};
             for (int i = 0; i < 5; i++) {
+                if (!prefs.getBoolean("show_slot_" + i + "_notif", true)) {
+                    customView.setViewVisibility(btnIds[i], android.view.View.GONE);
+                    continue;
+                }
+                customView.setViewVisibility(btnIds[i], android.view.View.VISIBLE);
+                
                 Intent slotIntent = new Intent(this, WidgetProxyActivity.class);
                 slotIntent.putExtra("slot_index", i);
                 slotIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

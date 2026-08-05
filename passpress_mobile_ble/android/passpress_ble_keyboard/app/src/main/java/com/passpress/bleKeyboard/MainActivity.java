@@ -2365,12 +2365,44 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notifCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
         }
+        
+        // Slot visibility toggles for Notification Toolbar
+        LinearLayout slotsConfigLayout = new LinearLayout(this);
+        slotsConfigLayout.setOrientation(LinearLayout.HORIZONTAL);
+        slotsConfigLayout.setPadding(dp(32), dp(4), 0, dp(12)); // Indented
+        slotsConfigLayout.setVisibility(notifCheck.isChecked() ? View.VISIBLE : View.GONE);
+
+        TextView slotsLabel = new TextView(this);
+        slotsLabel.setText("Show Slots: ");
+        slotsLabel.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+        slotsLabel.setGravity(Gravity.CENTER_VERTICAL);
+        slotsConfigLayout.addView(slotsLabel);
+
+        for (int i = 0; i < 5; i++) {
+            android.widget.CheckBox slotCheck = new android.widget.CheckBox(this);
+            slotCheck.setText(String.valueOf(i + 1));
+            slotCheck.setTextColor(Color.WHITE);
+            slotCheck.setChecked(prefs.getBoolean("show_slot_" + i + "_notif", true));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                slotCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+            }
+            final int slotIdx = i;
+            slotCheck.setOnCheckedChangeListener((btn, isChecked) -> {
+                prefs.edit().putBoolean("show_slot_" + slotIdx + "_notif", isChecked).apply();
+                HidKeyboardService svc = HidKeyboardService.getInstance();
+                if (svc != null) svc.updateNotification(svc.getConnectedDevice() != null ? "Connected to " + svc.getConnectedDevice().getName() : "Disconnected");
+            });
+            slotsConfigLayout.addView(slotCheck);
+        }
+
         notifCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean("enable_custom_notif", isChecked).apply();
+            slotsConfigLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             HidKeyboardService svc = HidKeyboardService.getInstance();
             if (svc != null) svc.updateNotification(svc.getConnectedDevice() != null ? "Connected to " + svc.getConnectedDevice().getName() : "Disconnected");
         });
         layout.addView(notifCheck);
+        layout.addView(slotsConfigLayout);
 
         // Quick Settings Tile Toggle
         android.widget.CheckBox tileCheck = new android.widget.CheckBox(this);
