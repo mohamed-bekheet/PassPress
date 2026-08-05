@@ -26,6 +26,13 @@ public class WidgetProxyActivity extends AppCompatActivity {
             return;
         }
 
+        boolean requireBiometrics = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getBoolean("require_biometrics", true);
+
+        if (!requireBiometrics) {
+            sendPasswordAndFinish(slotIndex);
+            return;
+        }
+
         BiometricManager biometricManager = BiometricManager.from(this);
         int canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL);
 

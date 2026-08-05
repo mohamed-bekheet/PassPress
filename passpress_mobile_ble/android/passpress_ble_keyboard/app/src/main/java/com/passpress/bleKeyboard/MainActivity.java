@@ -2331,6 +2331,19 @@ public class MainActivity extends AppCompatActivity {
         });
         layout.addView(scrollSeekBar);
 
+        // Biometrics for Quick Access Toggle
+        android.widget.CheckBox biometricsCheck = new android.widget.CheckBox(this);
+        biometricsCheck.setText("Require Fingerprint for Quick Access");
+        biometricsCheck.setTextColor(Color.WHITE);
+        biometricsCheck.setChecked(prefs.getBoolean("require_biometrics", true));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            biometricsCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
+        biometricsCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("require_biometrics", isChecked).apply();
+        });
+        layout.addView(biometricsCheck);
+
         // Auto-Lock Toggle
         android.widget.CheckBox autoLockCheck = new android.widget.CheckBox(this);
         autoLockCheck.setText("Enable 3-Minute Auto-Lock");
