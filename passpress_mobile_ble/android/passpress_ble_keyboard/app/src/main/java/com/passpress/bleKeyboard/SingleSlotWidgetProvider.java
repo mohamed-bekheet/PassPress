@@ -47,7 +47,10 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
             views.setInt(R.id.widget_single_container, "setBackgroundResource", R.drawable.widget_bg);
             views.setTextColor(R.id.widget_single_text, android.graphics.Color.WHITE);
         }
-        views.setTextViewText(R.id.widget_single_text, label);
+        HidKeyboardService svc = HidKeyboardService.getInstance();
+        boolean isConnected = (svc != null && svc.getConnectedDevice() != null);
+        String displayStatus = (isConnected ? "🟢 " : "") + label;
+        views.setTextViewText(R.id.widget_single_text, displayStatus);
 
         Intent clickIntent = new Intent(context, SingleSlotWidgetProvider.class);
         clickIntent.setAction(ACTION_CLICK_SINGLE);

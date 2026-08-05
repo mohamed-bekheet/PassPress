@@ -123,8 +123,45 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void showUndoSnackbar(BackupState backup, String message) {
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), message, 10000);
-        snackbar.setAction("UNDO", v -> {
+        View root = findViewById(android.R.id.content);
+        if (root == null) return;
+
+        Snackbar snackbar = Snackbar.make(root, message, 8000);
+        View snackbarView = snackbar.getView();
+
+        // Background styling
+        GradientDrawable shape = new GradientDrawable();
+        shape.setCornerRadius(dp(16));
+        shape.setColor(Color.parseColor(COLOR_SURFACE));
+        shape.setStroke(dp(1), Color.parseColor(COLOR_PRIMARY));
+        snackbarView.setBackground(shape);
+
+        // Elevation & floating position above bottom bar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            snackbarView.setElevation(dp(8));
+        }
+
+        if (snackbarView.getLayoutParams() instanceof android.view.ViewGroup.MarginLayoutParams) {
+            android.view.ViewGroup.MarginLayoutParams p = (android.view.ViewGroup.MarginLayoutParams) snackbarView.getLayoutParams();
+            p.setMargins(dp(16), 0, dp(16), dp(80));
+            snackbarView.setLayoutParams(p);
+        }
+
+        TextView textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        if (textView != null) {
+            textView.setTextColor(Color.parseColor(COLOR_TEXT));
+            textView.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
+            textView.setTextSize(13);
+        }
+
+        Button actionBtn = snackbarView.findViewById(com.google.android.material.R.id.snackbar_action);
+        if (actionBtn != null) {
+            actionBtn.setTextColor(Color.parseColor(COLOR_PRIMARY));
+            actionBtn.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
+            actionBtn.setTextSize(13);
+        }
+
+        snackbar.setAction("UNDO ↩️", v -> {
             if (backup.wasDeleted) {
                 int currentCount = prefs.getInt(SLOT_COUNT_KEY, 2);
                 
@@ -160,19 +197,12 @@ public class MainActivity extends AppCompatActivity {
             // Restore trusted devices
             secureStorage.clearTrustedDevices(backup.index);
             for (String device : backup.trustedDevices) {
-                // Manually re-add to shared prefs to preserve exact string (MAC|Name)
-                Set<String> devices = secureStorage.getTrustedDevices(backup.index);
-                devices.add(device);
-                getSharedPreferences("passpress_secure_prefs", Context.MODE_PRIVATE)
-                    .edit().putStringSet("trusted_" + backup.index, devices).apply();
-                // We use the secure storage's underlying logic by re-fetching and saving
                 secureStorage.addTrustedDevice(backup.index, device.split("\\|")[0], device.contains("|") ? device.split("\\|")[1] : "Unknown Device");
             }
             
             refreshPasswordGrid();
-            Toast.makeText(this, "Restored!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Restored! ✨", Toast.LENGTH_SHORT).show();
         });
-        snackbar.setActionTextColor(Color.parseColor(COLOR_ACCENT));
         snackbar.show();
     }
 
@@ -1127,16 +1157,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateWidget() {
-        android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(this);
-        
-        // Update Grid Widget
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new android.content.ComponentName(this, PassPressWidgetProvider.class));
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid);
-        
-        // Update Single Widgets
-        int[] singleWidgetIds = appWidgetManager.getAppWidgetIds(new android.content.ComponentName(this, SingleSlotWidgetProvider.class));
-        for (int id : singleWidgetIds) {
-            SingleSlotWidgetProvider.updateAppWidget(this, appWidgetManager, id);
+        updateAllWidgets(this);
+    }
+
+    public static void updateAllWidgets(Context context) {
+        try {
+            android.appwidget.AppWidgetManager appWidgetManager = android.appwidget.AppWidgetManager.getInstance(context);
+            
+            // Grid widgets
+            android.content.ComponentName gridComponent = new android.content.ComponentName(context, PassPressWidgetProvider.class);
+            int[] gridIds = appWidgetManager.getAppWidgetIds(gridComponent);
+            if (gridIds != null && gridIds.length > 0) {
+                for (int id : gridIds) {
+                    PassPressWidgetProvider.updateAppWidget(context, appWidgetManager, id);
+                }
+                appWidgetManager.notifyAppWidgetViewDataChanged(gridIds, R.id.widget_grid);
+            }
+
+            // Single slot widgets
+            android.content.ComponentName singleComponent = new android.content.ComponentName(context, SingleSlotWidgetProvider.class);
+            int[] singleIds = appWidgetManager.getAppWidgetIds(singleComponent);
+            if (singleIds != null && singleIds.length > 0) {
+                for (int id : singleIds) {
+                    SingleSlotWidgetProvider.updateAppWidget(context, appWidgetManager, id);
+                }
+            }
+        } catch (Exception e) {
+            Log.e("MainActivity", "Error updating widgets", e);
         }
     }
 
@@ -2095,16 +2142,50 @@ public class MainActivity extends AppCompatActivity {
             String oldPass = secureStorage.getPassword(index);
             String oldSuffix = prefs.getString("suffix_" + index, "Enter");
             Set<String> oldTrusted = secureStorage.getTrustedDevices(index);
-            BackupState backup = new BackupState(index, oldLabel, oldPass, oldSuffix, oldTrusted, false);
 
-            prefs.edit().remove("label_" + index).apply();
-            prefs.edit().remove("suffix_" + index).apply();
-            secureStorage.removePassword(index);
-            secureStorage.clearTrustedDevices(index);
+            int currentCount = prefs.getInt(SLOT_COUNT_KEY, 2);
+            boolean isDeletedCard = currentCount > 2;
+
+            BackupState backup = new BackupState(index, oldLabel, oldPass, oldSuffix, oldTrusted, isDeletedCard);
+
+            if (isDeletedCard) {
+                // Shift subsequent slots UP
+                for (int i = index; i < currentCount - 1; i++) {
+                    String nextPass = secureStorage.getPassword(i + 1);
+                    String nextLabel = prefs.getString("label_" + (i + 1), "Slot " + (i + 2));
+                    String nextSuffix = prefs.getString("suffix_" + (i + 1), "Enter");
+                    Set<String> nextTrusted = secureStorage.getTrustedDevices(i + 1);
+
+                    secureStorage.savePassword(i, nextPass);
+                    prefs.edit().putString("label_" + i, nextLabel).apply();
+                    prefs.edit().putString("suffix_" + i, nextSuffix).apply();
+
+                    secureStorage.clearTrustedDevices(i);
+                    for (String device : nextTrusted) {
+                        secureStorage.addTrustedDevice(i, device.split("\\|")[0], device.contains("|") ? device.split("\\|")[1] : "Unknown Device");
+                    }
+                }
+
+                // Delete last slot data
+                int last = currentCount - 1;
+                prefs.edit().remove("label_" + last).apply();
+                prefs.edit().remove("suffix_" + last).apply();
+                secureStorage.removePassword(last);
+                secureStorage.clearTrustedDevices(last);
+
+                // Reduce slot count
+                prefs.edit().putInt(SLOT_COUNT_KEY, currentCount - 1).apply();
+            } else {
+                // Clear single slot content
+                prefs.edit().remove("label_" + index).apply();
+                prefs.edit().remove("suffix_" + index).apply();
+                secureStorage.removePassword(index);
+                secureStorage.clearTrustedDevices(index);
+            }
+
             refreshPasswordGrid();
-            
             dialog.dismiss();
-            showUndoSnackbar(backup, "Slot cleared");
+            showUndoSnackbar(backup, isDeletedCard ? "Slot deleted" : "Slot cleared");
         });
 
         cancelBtn.setOnClickListener(v -> dialog.dismiss());
@@ -2215,6 +2296,13 @@ public class MainActivity extends AppCompatActivity {
         title.setPadding(0, 0, 0, dp(8));
         layout.addView(title);
         
+        addHelpSection(layout, "✨ Features & Capabilities",
+            "• 🔑 Hardware BLE Keyboard: Emulates an offline physical Bluetooth HID keyboard without drivers.\n\n" +
+            "• 🔐 Zero-Knowledge Storage: Passwords encrypted on-device via AES-256 GCM in Android Keystore.\n\n" +
+            "• ⚡ Quick Access Options: Floating Bubble, Custom Notification Toolbar, and Quick Settings Tile.\n\n" +
+            "• 📱 Home Screen Widgets: Instant 1-tap password typing directly from your home screen.\n\n" +
+            "• 🛡️ Biometric Security: Untrusted PCs require fingerprint authentication before sending.");
+
         addHelpSection(layout, "🔌 How to Connect", 
             "1. Turn on Bluetooth on your PC/Mac.\n" +
             "2. Tap 'Connect PC' in PassPress.\n" +

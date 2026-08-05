@@ -736,6 +736,7 @@ public class HidKeyboardService extends Service {
     public void updateNotification(String status) {
         NotificationManager nm = getSystemService(NotificationManager.class);
         if (nm != null) nm.notify(NOTIF_ID, buildNotification(status));
+        MainActivity.updateAllWidgets(this);
     }
 
     // ─── Connection Status ───────────────────────────────────────────────────
