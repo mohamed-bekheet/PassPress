@@ -2175,13 +2175,13 @@ public class MainActivity extends AppCompatActivity {
         TextView content = new TextView(this);
         content.setText(contentText);
         content.setTextSize(14);
-        content.setTextColor(Color.parseColor("#CCCCCC")); // Slightly brighter text for readability
+        content.setTextColor(Color.parseColor(COLOR_TEXT));
         content.setLineSpacing(dp(4), 1.3f); // Better line spacing
         parent.addView(content);
         
         // Divider
         View divider = new View(this);
-        divider.setBackgroundColor(Color.parseColor("#334155"));
+        divider.setBackgroundColor(Color.parseColor(COLOR_SURFACE_ALT));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1));
         params.setMargins(0, dp(16), 0, 0);
         divider.setLayoutParams(params);
