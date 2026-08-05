@@ -40,7 +40,11 @@ public class SingleSlotWidgetConfigActivity extends Activity {
         
         List<String> slotNames = new ArrayList<>();
         for (int i = 0; i < slotCount; i++) {
-            slotNames.add(prefs.getString("label_" + i, "Slot " + (i + 1)));
+            slotNames.add("🔑 " + prefs.getString("label_" + i, "Slot " + (i + 1)));
+        }
+        int macroCount = prefs.getInt("macro_count", 0);
+        for (int i = 0; i < macroCount; i++) {
+            slotNames.add("⚡ " + prefs.getString("macro_name_" + i, "Macro " + (i + 1)));
         }
 
         ListView listView = findViewById(R.id.config_list_view);

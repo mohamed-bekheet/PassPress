@@ -36,7 +36,13 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
         
         if (slotIndex == -1) return;
 
-        String label = prefs.getString("label_" + slotIndex, "Slot " + (slotIndex + 1));
+        int slotCount = prefs.getInt("slot_count", 2);
+        boolean isMacro = slotIndex >= slotCount;
+        int macroIndex = slotIndex - slotCount;
+        
+        String label = isMacro ? 
+            prefs.getString("macro_name_" + macroIndex, "Macro " + (macroIndex + 1)) : 
+            prefs.getString("label_" + slotIndex, "Slot " + (slotIndex + 1));
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_single_main);
         boolean isLight = prefs.getBoolean("is_light_theme", true);

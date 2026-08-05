@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
@@ -102,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
     private View passwordsView;
     private View keyboardView;
     private View trackpadView;
+    private View macrosView;
+    private LinearLayout macrosContainer;
 
     // --- Undo State ---
     private static class BackupState {
@@ -316,14 +319,17 @@ public class MainActivity extends AppCompatActivity {
         passwordsView = createPasswordsView();
         keyboardView = createKeyboardView();
         trackpadView = createTrackpadView();
+        macrosView = createMacrosView();
 
         tabContainer.addView(passwordsView);
         tabContainer.addView(keyboardView);
         tabContainer.addView(trackpadView);
+        tabContainer.addView(macrosView);
 
         passwordsView.setVisibility(View.VISIBLE);
         keyboardView.setVisibility(View.GONE);
         trackpadView.setVisibility(View.GONE);
+        macrosView.setVisibility(View.GONE);
 
         mainLayout.addView(tabContainer, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
@@ -1055,6 +1061,277 @@ public class MainActivity extends AppCompatActivity {
         return layout;
     }
 
+    
+    // ─── Macros / Shortcuts UI ──────────────────────────────────────────────
+    private View createMacrosView() {
+        ScrollView scroll = new ScrollView(this);
+        scroll.setFillViewport(true);
+        scroll.setBackgroundColor(Color.parseColor(COLOR_BG));
+
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setPadding(dp(16), dp(16), dp(16), dp(120));
+
+        TextView title = new TextView(this);
+        title.setText("Custom Shortcuts");
+        title.setTextSize(24);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(Color.parseColor(COLOR_TEXT));
+        title.setPadding(0, 0, 0, dp(16));
+        container.addView(title);
+
+        macrosContainer = new LinearLayout(this);
+        macrosContainer.setOrientation(LinearLayout.VERTICAL);
+        container.addView(macrosContainer);
+        
+        refreshMacrosGrid();
+
+        Button addMacroBtn = new Button(this);
+        addMacroBtn.setText("➕ Create Shortcut");
+        addMacroBtn.setBackgroundColor(Color.parseColor(COLOR_PRIMARY));
+        addMacroBtn.setTextColor(Color.WHITE);
+        addMacroBtn.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        addMacroBtn.setElevation(dp(4));
+        addMacroBtn.setOnClickListener(v -> showMacroDialog(-1));
+        
+        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(48));
+        btnParams.topMargin = dp(24);
+        container.addView(addMacroBtn, btnParams);
+
+        scroll.addView(container);
+        return scroll;
+    }
+
+    private void refreshMacrosGrid() {
+        if (macrosContainer == null) return;
+        macrosContainer.removeAllViews();
+        
+        int count = prefs.getInt("macro_count", 0);
+        if (count == 0) {
+            TextView empty = new TextView(this);
+            empty.setText("No shortcuts created yet.");
+            empty.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
+            empty.setTextSize(16);
+            empty.setGravity(Gravity.CENTER);
+            empty.setPadding(0, dp(32), 0, dp(32));
+            macrosContainer.addView(empty);
+            return;
+        }
+
+        for (int i = 0; i < count; i++) {
+            final int index = i;
+            String name = prefs.getString("macro_name_" + i, "Macro " + (i + 1));
+            String desc = prefs.getString("macro_desc_" + i, "");
+
+            LinearLayout card = new LinearLayout(this);
+            card.setOrientation(LinearLayout.HORIZONTAL);
+            card.setBackground(createRoundedBg(Color.parseColor(COLOR_SURFACE), dp(12)));
+            card.setElevation(dp(2));
+            card.setPadding(dp(16), dp(16), dp(16), dp(16));
+            card.setGravity(Gravity.CENTER_VERTICAL);
+            
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            cardParams.bottomMargin = dp(12);
+            card.setLayoutParams(cardParams);
+
+            LinearLayout textContainer = new LinearLayout(this);
+            textContainer.setOrientation(LinearLayout.VERTICAL);
+            textContainer.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+
+            TextView nameText = new TextView(this);
+            nameText.setText(name);
+            nameText.setTextSize(18);
+            nameText.setTypeface(null, Typeface.BOLD);
+            nameText.setTextColor(Color.parseColor(COLOR_TEXT));
+            textContainer.addView(nameText);
+
+            TextView descText = new TextView(this);
+            descText.setText(desc);
+            descText.setTextSize(14);
+            descText.setTextColor(Color.parseColor(COLOR_ACCENT));
+            descText.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+            textContainer.addView(descText);
+
+            card.addView(textContainer);
+
+            Button btnEdit = new Button(this);
+            btnEdit.setText("✏️");
+            btnEdit.setBackgroundColor(Color.TRANSPARENT);
+            btnEdit.setTextSize(20);
+            btnEdit.setOnClickListener(v -> showMacroDialog(index));
+            card.addView(btnEdit, new LinearLayout.LayoutParams(dp(48), dp(48)));
+
+            Button btnRun = new Button(this);
+            btnRun.setText("▶️");
+            btnRun.setBackground(createRoundedBg(Color.parseColor(COLOR_PRIMARY), dp(8)));
+            btnRun.setTextColor(Color.WHITE);
+            btnRun.setTextSize(18);
+            btnRun.setOnClickListener(v -> triggerMacro(index));
+            LinearLayout.LayoutParams runParams = new LinearLayout.LayoutParams(dp(64), dp(48));
+            runParams.leftMargin = dp(8);
+            card.addView(btnRun, runParams);
+
+            macrosContainer.addView(card);
+        }
+    }
+
+    private void triggerMacro(int index) {
+        byte modifiers = (byte) prefs.getInt("macro_mod_" + index, 0);
+        byte keycode = (byte) prefs.getInt("macro_key_" + index, 0);
+        
+        HidKeyboardService svc = HidKeyboardService.getInstance();
+        if (svc != null && svc.getConnectedDevice() != null) {
+            svc.sendQueue.add("[MACRO]:" + modifiers + "," + keycode);
+            Toast.makeText(this, "Sent shortcut", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Not connected to PC", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showMacroDialog(int index) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+        builder.setTitle(index == -1 ? "New Shortcut" : "Edit Shortcut");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(dp(24), dp(16), dp(24), dp(16));
+
+        // Name
+        EditText nameInput = new EditText(this);
+        nameInput.setHint("Name (e.g. Task Manager)");
+        nameInput.setTextColor(Color.BLACK);
+        nameInput.setHintTextColor(Color.GRAY);
+        if (index != -1) nameInput.setText(prefs.getString("macro_name_" + index, ""));
+        layout.addView(nameInput);
+
+        TextView modLabel = new TextView(this);
+        modLabel.setText("Modifiers:");
+        modLabel.setTextColor(Color.BLACK);
+        modLabel.setPadding(0, dp(16), 0, dp(8));
+        layout.addView(modLabel);
+
+        // Modifiers
+        LinearLayout modLayout1 = new LinearLayout(this);
+        modLayout1.setOrientation(LinearLayout.HORIZONTAL);
+        CheckBox chkCtrl = new CheckBox(this); chkCtrl.setText("Ctrl"); chkCtrl.setTextColor(Color.BLACK);
+        CheckBox chkShift = new CheckBox(this); chkShift.setText("Shift"); chkShift.setTextColor(Color.BLACK);
+        modLayout1.addView(chkCtrl); modLayout1.addView(chkShift);
+        
+        LinearLayout modLayout2 = new LinearLayout(this);
+        modLayout2.setOrientation(LinearLayout.HORIZONTAL);
+        CheckBox chkAlt = new CheckBox(this); chkAlt.setText("Alt"); chkAlt.setTextColor(Color.BLACK);
+        CheckBox chkWin = new CheckBox(this); chkWin.setText("Win/Cmd"); chkWin.setTextColor(Color.BLACK);
+        modLayout2.addView(chkAlt); modLayout2.addView(chkWin);
+
+        layout.addView(modLayout1);
+        layout.addView(modLayout2);
+
+        TextView keyLabel = new TextView(this);
+        keyLabel.setText("Key:");
+        keyLabel.setTextColor(Color.BLACK);
+        keyLabel.setPadding(0, dp(16), 0, dp(8));
+        layout.addView(keyLabel);
+
+        // Keys Dropdown
+        android.widget.Spinner keySpinner = new android.widget.Spinner(this);
+        String[] keyNames = {"None", "Delete", "Escape", "Enter", "Space", "Tab", "Left Arrow", "Right Arrow", "Up Arrow", "Down Arrow", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+        byte[] keyCodes = {0x00, 0x4C, 0x29, 0x28, 0x2C, 0x2B, 0x50, 0x4F, 0x52, 0x51, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D};
+        
+        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(this, android.R.layout.simple_spinner_item, keyNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        keySpinner.setAdapter(adapter);
+        layout.addView(keySpinner);
+
+        // Load existing
+        if (index != -1) {
+            byte mods = (byte) prefs.getInt("macro_mod_" + index, 0);
+            if ((mods & 0x01) != 0) chkCtrl.setChecked(true);
+            if ((mods & 0x02) != 0) chkShift.setChecked(true);
+            if ((mods & 0x04) != 0) chkAlt.setChecked(true);
+            if ((mods & 0x08) != 0) chkWin.setChecked(true);
+
+            byte key = (byte) prefs.getInt("macro_key_" + index, 0);
+            for (int i = 0; i < keyCodes.length; i++) {
+                if (keyCodes[i] == key) {
+                    keySpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        builder.setView(layout);
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String name = nameInput.getText().toString().trim();
+            if (name.isEmpty()) name = "Shortcut";
+            
+            byte mods = 0;
+            if (chkCtrl.isChecked()) mods |= 0x01;
+            if (chkShift.isChecked()) mods |= 0x02;
+            if (chkAlt.isChecked()) mods |= 0x04;
+            if (chkWin.isChecked()) mods |= 0x08;
+
+            byte key = keyCodes[keySpinner.getSelectedItemPosition()];
+            String keyName = keyNames[keySpinner.getSelectedItemPosition()];
+
+            // build description string like "Ctrl + Shift + Delete"
+            StringBuilder desc = new StringBuilder();
+            if (chkCtrl.isChecked()) desc.append("Ctrl + ");
+            if (chkWin.isChecked()) desc.append("Win + ");
+            if (chkAlt.isChecked()) desc.append("Alt + ");
+            if (chkShift.isChecked()) desc.append("Shift + ");
+            if (key != 0) desc.append(keyName);
+            else {
+                if (desc.length() > 3) desc.setLength(desc.length() - 3);
+            }
+
+            int saveIndex = index == -1 ? prefs.getInt("macro_count", 0) : index;
+            prefs.edit()
+                 .putString("macro_name_" + saveIndex, name)
+                 .putString("macro_desc_" + saveIndex, desc.toString())
+                 .putInt("macro_mod_" + saveIndex, mods)
+                 .putInt("macro_key_" + saveIndex, key)
+                 .apply();
+
+            if (index == -1) {
+                prefs.edit().putInt("macro_count", saveIndex + 1).apply();
+            }
+            refreshMacrosGrid();
+            updateAllWidgets(this);
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        
+        if (index != -1) {
+            builder.setNeutralButton("Delete", (dialog, which) -> {
+                int count = prefs.getInt("macro_count", 0);
+                for (int i = index; i < count - 1; i++) {
+                    prefs.edit()
+                         .putString("macro_name_" + i, prefs.getString("macro_name_" + (i + 1), ""))
+                         .putString("macro_desc_" + i, prefs.getString("macro_desc_" + (i + 1), ""))
+                         .putInt("macro_mod_" + i, prefs.getInt("macro_mod_" + (i + 1), 0))
+                         .putInt("macro_key_" + i, prefs.getInt("macro_key_" + (i + 1), 0))
+                         .apply();
+                }
+                prefs.edit().putInt("macro_count", count - 1).apply();
+                refreshMacrosGrid();
+                updateAllWidgets(this);
+            });
+        }
+
+        builder.show();
+    }
+
+    
+    private android.graphics.drawable.GradientDrawable createRoundedBg(int color, float radius) {
+        android.graphics.drawable.GradientDrawable shape = new android.graphics.drawable.GradientDrawable();
+        shape.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+        shape.setCornerRadius(radius);
+        shape.setColor(color);
+        return shape;
+    }
+
     private View createBottomNav() {
         LinearLayout navBar = new LinearLayout(this);
         navBar.setOrientation(LinearLayout.HORIZONTAL);
@@ -1081,23 +1358,33 @@ public class MainActivity extends AppCompatActivity {
         btnMouse.setBackgroundColor(Color.TRANSPARENT);
         btnMouse.setTextColor(Color.parseColor(COLOR_TEXT));
         
+        Button btnMacros = new Button(this);
+        btnMacros.setText("⚡");
+        btnMacros.setTextSize(28);
+        btnMacros.setBackgroundColor(Color.TRANSPARENT);
+        btnMacros.setTextColor(Color.parseColor(COLOR_TEXT));
+        
         navBar.addView(btnPasswords, btnParams);
         navBar.addView(btnKeyboard, btnParams);
         navBar.addView(btnMouse, btnParams);
+        navBar.addView(btnMacros, btnParams);
         
         View.OnClickListener listener = v -> {
             passwordsView.setVisibility(v == btnPasswords ? View.VISIBLE : View.GONE);
             keyboardView.setVisibility(v == btnKeyboard ? View.VISIBLE : View.GONE);
             trackpadView.setVisibility(v == btnMouse ? View.VISIBLE : View.GONE);
+            macrosView.setVisibility(v == btnMacros ? View.VISIBLE : View.GONE);
             
             btnPasswords.setTextColor(v == btnPasswords ? Color.parseColor(COLOR_PRIMARY) : Color.parseColor(COLOR_TEXT));
             btnKeyboard.setTextColor(v == btnKeyboard ? Color.parseColor(COLOR_PRIMARY) : Color.parseColor(COLOR_TEXT));
             btnMouse.setTextColor(v == btnMouse ? Color.parseColor(COLOR_PRIMARY) : Color.parseColor(COLOR_TEXT));
+            btnMacros.setTextColor(v == btnMacros ? Color.parseColor(COLOR_PRIMARY) : Color.parseColor(COLOR_TEXT));
         };
         
         btnPasswords.setOnClickListener(listener);
         btnKeyboard.setOnClickListener(listener);
         btnMouse.setOnClickListener(listener);
+        btnMacros.setOnClickListener(listener);
         
         return navBar;
     }

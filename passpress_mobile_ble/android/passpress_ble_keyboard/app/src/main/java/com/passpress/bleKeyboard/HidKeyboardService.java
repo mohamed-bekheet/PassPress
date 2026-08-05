@@ -141,7 +141,7 @@ public class HidKeyboardService extends Service {
     private LinkedList<String>    reconnectQueue     = new LinkedList<>();
     private Runnable              reconnectTimeoutRunnable = null;
 
-    private final LinkedBlockingQueue<String> sendQueue   = new LinkedBlockingQueue<>();
+    public final LinkedBlockingQueue<String> sendQueue   = new LinkedBlockingQueue<>();
     private volatile boolean                  workerAlive = false;
     private final Handler                     mainHandler = new Handler(Looper.getMainLooper());
 
@@ -555,7 +555,20 @@ public class HidKeyboardService extends Service {
             while (workerAlive) {
                 try {
                     String text = sendQueue.take();
-                    sendKeySequenceInternal(text);
+                    if (text.startsWith("[MACRO]:")) {
+                        try {
+                            String[] parts = text.substring(8).split(",");
+                            if (parts.length == 2) {
+                                byte modifiers = Byte.parseByte(parts[0]);
+                                byte keycode = Byte.parseByte(parts[1]);
+                                sendMacroInternal(modifiers, keycode);
+                            }
+                        } catch (Exception ex) {
+                            Log.e(TAG, "Failed to parse macro: " + text, ex);
+                        }
+                    } else {
+                        sendKeySequenceInternal(text);
+                    }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -611,6 +624,31 @@ public class HidKeyboardService extends Service {
         }
 
         Log.d(TAG, "Sent key sequence (" + text.length() + " chars)");
+    }
+
+    private void sendMacroInternal(byte modifiers, byte keycode) {
+        if (hidDevice == null || connectedDevice == null) {
+            Log.e(TAG, "Not connected – skipping macro");
+            return;
+        }
+
+        // --- WAKE UP BLE CONNECTION ---
+        byte[] dummyReport = {activeModifiers, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        hidDevice.sendReport(connectedDevice, REPORT_ID, dummyReport);
+        sleep(300); // 300ms wakeup buffer
+
+        byte combinedModifiers = (byte) (activeModifiers | modifiers);
+
+        // Key press report
+        byte[] pressReport = {combinedModifiers, 0x00, keycode, 0x00, 0x00, 0x00, 0x00, 0x00};
+        hidDevice.sendReport(connectedDevice, REPORT_ID, pressReport);
+        sleep(50); // Small hold duration for macro detection
+
+        // Key release report
+        byte[] releaseReport = {activeModifiers, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        hidDevice.sendReport(connectedDevice, REPORT_ID, releaseReport);
+
+        Log.d(TAG, "Sent macro sequence");
     }
 
     private void sleep(long ms) {
@@ -703,19 +741,25 @@ public class HidKeyboardService extends Service {
             
 
             // Slots
-            int totalSlots = Math.max(prefs.getInt("slot_count", 2), SecureStorage.getInstance(this).getMaxSlotWithData());
+            int slotCount = prefs.getInt("slot_count", 2);
+            int totalOptions = slotCount + prefs.getInt("macro_count", 0);
             int[] btnIds = {R.id.btn_notif_s1, R.id.btn_notif_s2, R.id.btn_notif_s3, R.id.btn_notif_s4, R.id.btn_notif_s5};
             for (int i = 0; i < 5; i++) {
-                int defaultTarget = i < totalSlots ? i : -1;
+                int defaultTarget = i < slotCount ? i : -1;
                 int targetSlot = prefs.getInt("notif_btn_" + i + "_slot", defaultTarget);
 
-                if (targetSlot < 0 || targetSlot >= totalSlots) {
+                if (targetSlot < 0 || targetSlot >= totalOptions) {
                     customView.setViewVisibility(btnIds[i], android.view.View.GONE);
                     continue;
                 }
                 customView.setViewVisibility(btnIds[i], android.view.View.VISIBLE);
                 
-                String label = prefs.getString("label_" + targetSlot, "🔑" + (targetSlot + 1));
+                boolean isMacro = targetSlot >= slotCount;
+                int macroIndex = targetSlot - slotCount;
+                String label = isMacro ? 
+                    "⚡ " + prefs.getString("macro_name_" + macroIndex, "Macro") :
+                    prefs.getString("label_" + targetSlot, "🔑" + (targetSlot + 1));
+                
                 customView.setTextViewText(btnIds[i], label);
 
                 if (isLight) {
@@ -724,7 +768,11 @@ public class HidKeyboardService extends Service {
                 }
                 
                 Intent slotIntent = new Intent(this, WidgetProxyActivity.class);
-                slotIntent.putExtra("slot_index", targetSlot);
+                slotIntent.putExtra("SLOT_INDEX", targetSlot);
+                if (isMacro) {
+                    slotIntent.putExtra("IS_MACRO", true);
+                    slotIntent.putExtra("MACRO_INDEX", macroIndex);
+                }
                 slotIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 PendingIntent pSlot = PendingIntent.getActivity(this, 100 + i, slotIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                 customView.setOnClickPendingIntent(btnIds[i], pSlot);
