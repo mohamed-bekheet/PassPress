@@ -2409,37 +2409,71 @@ public class MainActivity extends AppCompatActivity {
             notifCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
         }
         
-        // Slot visibility toggles for Notification Toolbar
+        // Slot assignment rows for Notification Toolbar
         LinearLayout slotsConfigLayout = new LinearLayout(this);
-        slotsConfigLayout.setOrientation(LinearLayout.HORIZONTAL);
-        slotsConfigLayout.setPadding(dp(32), dp(4), 0, dp(12)); // Indented
+        slotsConfigLayout.setOrientation(LinearLayout.VERTICAL);
+        slotsConfigLayout.setPadding(dp(20), dp(4), 0, dp(12));
         slotsConfigLayout.setVisibility(notifCheck.isChecked() ? View.VISIBLE : View.GONE);
 
         TextView slotsLabel = new TextView(this);
-        slotsLabel.setText("Show Slots: ");
+        slotsLabel.setText("Notification Button Assignments:");
         slotsLabel.setTextColor(Color.parseColor(COLOR_TEXT_DIM));
-        slotsLabel.setGravity(Gravity.CENTER_VERTICAL);
+        slotsLabel.setTextSize(12);
+        slotsLabel.setPadding(0, dp(4), 0, dp(4));
         slotsConfigLayout.addView(slotsLabel);
 
         int totalSlots = Math.max(prefs.getInt(SLOT_COUNT_KEY, 2), secureStorage.getMaxSlotWithData());
-        int availableNotifSlots = Math.min(5, totalSlots);
 
-        for (int i = 0; i < availableNotifSlots; i++) {
-            android.widget.CheckBox slotCheck = new android.widget.CheckBox(this);
-            String label = prefs.getString("label_" + i, String.valueOf(i + 1));
-            slotCheck.setText(label);
-            slotCheck.setTextColor(Color.parseColor(COLOR_TEXT));
-            slotCheck.setChecked(prefs.getBoolean("show_slot_" + i + "_notif", true));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                slotCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
-            }
-            final int slotIdx = i;
-            slotCheck.setOnCheckedChangeListener((btn, isChecked) -> {
-                prefs.edit().putBoolean("show_slot_" + slotIdx + "_notif", isChecked).apply();
-                HidKeyboardService svc = HidKeyboardService.getInstance();
-                if (svc != null) svc.updateNotification(svc.getConnectedDevice() != null ? "Connected to " + svc.getConnectedDevice().getName() : "Disconnected");
+        for (int i = 0; i < 5; i++) {
+            final int notifBtnIndex = i;
+            int defaultTarget = i < totalSlots ? i : -1;
+            int mappedSlot = prefs.getInt("notif_btn_" + notifBtnIndex + "_slot", defaultTarget);
+
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            row.setPadding(0, dp(2), 0, dp(2));
+
+            TextView btnLabelText = new TextView(this);
+            btnLabelText.setText("Btn " + (i + 1) + ": ");
+            btnLabelText.setTextColor(Color.parseColor(COLOR_TEXT));
+            btnLabelText.setTextSize(13);
+            row.addView(btnLabelText);
+
+            Button selectBtn = createStyledButton(getNotifBtnLabelText(mappedSlot), COLOR_SURFACE_ALT, COLOR_SURFACE);
+            LinearLayout.LayoutParams btnP = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, dp(36));
+            selectBtn.setLayoutParams(btnP);
+            selectBtn.setTextSize(12);
+
+            selectBtn.setOnClickListener(v -> {
+                String[] options = new String[totalSlots + 1];
+                options[0] = "Disabled 🚫";
+                for (int s = 0; s < totalSlots; s++) {
+                    String slotName = prefs.getString("label_" + s, "Slot " + (s + 1));
+                    options[s + 1] = "Slot " + (s + 1) + ": " + slotName;
+                }
+
+                int currentSelected = prefs.getInt("notif_btn_" + notifBtnIndex + "_slot", defaultTarget);
+                int checkedItem = (currentSelected >= 0 && currentSelected < totalSlots) ? (currentSelected + 1) : 0;
+
+                new android.app.AlertDialog.Builder(this, prefs.getBoolean("is_light_theme", true) ? android.R.style.Theme_DeviceDefault_Light_Dialog_Alert : android.R.style.Theme_DeviceDefault_Dialog_Alert)
+                    .setTitle("Assign Notification Button " + (notifBtnIndex + 1))
+                    .setSingleChoiceItems(options, checkedItem, (dialog, which) -> {
+                        int selectedSlot = which == 0 ? -1 : (which - 1);
+                        prefs.edit().putInt("notif_btn_" + notifBtnIndex + "_slot", selectedSlot).apply();
+                        selectBtn.setText(getNotifBtnLabelText(selectedSlot));
+                        dialog.dismiss();
+
+                        HidKeyboardService svc = HidKeyboardService.getInstance();
+                        if (svc != null) svc.updateNotification(svc.getConnectedDevice() != null ? "Connected to " + svc.getConnectedDevice().getName() : "Disconnected");
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
             });
-            slotsConfigLayout.addView(slotCheck);
+
+            row.addView(selectBtn);
+            slotsConfigLayout.addView(row);
         }
 
         notifCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -2585,6 +2619,12 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(scrollView);
         builder.setPositiveButton("Close", null);
         builder.show();
+    }
+
+    private String getNotifBtnLabelText(int slotIndex) {
+        if (slotIndex < 0) return "Disabled 🚫";
+        String label = prefs.getString("label_" + slotIndex, "Slot " + (slotIndex + 1));
+        return "Slot " + (slotIndex + 1) + " (" + label + ")";
     }
     
     private void showExportDialog() {

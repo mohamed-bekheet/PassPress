@@ -692,13 +692,16 @@ public class HidKeyboardService extends Service {
             int totalSlots = Math.max(prefs.getInt("slot_count", 2), SecureStorage.getInstance(this).getMaxSlotWithData());
             int[] btnIds = {R.id.btn_notif_s1, R.id.btn_notif_s2, R.id.btn_notif_s3, R.id.btn_notif_s4, R.id.btn_notif_s5};
             for (int i = 0; i < 5; i++) {
-                if (i >= totalSlots || !prefs.getBoolean("show_slot_" + i + "_notif", true)) {
+                int defaultTarget = i < totalSlots ? i : -1;
+                int targetSlot = prefs.getInt("notif_btn_" + i + "_slot", defaultTarget);
+
+                if (targetSlot < 0 || targetSlot >= totalSlots) {
                     customView.setViewVisibility(btnIds[i], android.view.View.GONE);
                     continue;
                 }
                 customView.setViewVisibility(btnIds[i], android.view.View.VISIBLE);
                 
-                String label = prefs.getString("label_" + i, "🔑" + (i + 1));
+                String label = prefs.getString("label_" + targetSlot, "🔑" + (targetSlot + 1));
                 customView.setTextViewText(btnIds[i], label);
 
                 if (isLight) {
@@ -707,7 +710,7 @@ public class HidKeyboardService extends Service {
                 }
                 
                 Intent slotIntent = new Intent(this, WidgetProxyActivity.class);
-                slotIntent.putExtra("slot_index", i);
+                slotIntent.putExtra("slot_index", targetSlot);
                 slotIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 PendingIntent pSlot = PendingIntent.getActivity(this, 100 + i, slotIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                 customView.setOnClickPendingIntent(btnIds[i], pSlot);
