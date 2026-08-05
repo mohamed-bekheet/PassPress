@@ -37,13 +37,20 @@ public class QuickMenuActivity extends Activity {
         root.setGravity(Gravity.CENTER);
 
         GradientDrawable bg = new GradientDrawable();
-        bg.setColor(Color.parseColor("#0F172A"));
+        SharedPreferences prefs = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
+        boolean isLight = prefs.getBoolean("is_light_theme", true);
+        String colorBg = isLight ? "#F8FAFC" : "#0F172A";
+        String colorSurface = isLight ? "#FFFFFF" : "#1E293B";
+        String colorSurfaceAlt = isLight ? "#E2E8F0" : "#334155";
+        String colorText = isLight ? "#0F172A" : "#F1F5F9";
+
+        bg.setColor(Color.parseColor(colorBg));
         bg.setCornerRadius(dp(16));
         root.setBackground(bg);
 
         TextView title = new TextView(this);
         title.setText("PassPress Quick Actions");
-        title.setTextColor(Color.WHITE);
+        title.setTextColor(Color.parseColor(colorText));
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         title.setGravity(Gravity.CENTER);
         root.addView(title);
@@ -57,14 +64,13 @@ public class QuickMenuActivity extends Activity {
         HidKeyboardService svc = HidKeyboardService.getInstance();
         boolean connected = svc != null && svc.getConnectedDevice() != null;
         connBtn.setText(connected ? "Disconnect PC" : "Connect PC");
-        connBtn.setTextColor(Color.WHITE);
-        connBtn.setBackgroundColor(Color.parseColor("#1E293B"));
+        connBtn.setTextColor(Color.parseColor(colorText));
+        connBtn.setBackgroundColor(Color.parseColor(colorSurface));
         connBtn.setOnClickListener(v -> {
             if (svc != null) {
                 if (connected) {
                     svc.disconnectDevice();
                 } else {
-                    SharedPreferences prefs = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
                     String lastDevice = prefs.getString("last_connected_device", null);
                     if (lastDevice != null) {
                         svc.connectToDevice(lastDevice);
@@ -90,8 +96,8 @@ public class QuickMenuActivity extends Activity {
         for (int i = 0; i < 5; i++) {
             Button slotBtn = new Button(this);
             slotBtn.setText(String.valueOf(i + 1));
-            slotBtn.setTextColor(Color.WHITE);
-            slotBtn.setBackgroundColor(Color.parseColor("#334155"));
+            slotBtn.setTextColor(Color.parseColor(colorText));
+            slotBtn.setBackgroundColor(Color.parseColor(colorSurfaceAlt));
             
             LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(dp(48), dp(48));
             p.setMargins(dp(4), dp(4), dp(4), dp(4));

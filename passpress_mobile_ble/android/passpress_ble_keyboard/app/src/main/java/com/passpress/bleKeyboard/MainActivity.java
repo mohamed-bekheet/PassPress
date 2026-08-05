@@ -57,17 +57,32 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERM_REQUEST_PICKER = 101;
 
     // ─── Color Palette ───────────────────────────────────────────────────────
-    private static final String COLOR_BG = "#0F172A";  // Deep navy background
-    private static final String COLOR_SURFACE = "#1E293B";  // Card surface
-    private static final String COLOR_SURFACE_ALT = "#334155";  // Elevated surface
-    private static final String COLOR_PRIMARY = "#6366F1";  // Indigo
-    private static final String COLOR_PRIMARY_DARK = "#4F46E5";  // Darker indigo
-    private static final String COLOR_ACCENT = "#22D3EE";  // Cyan accent
-    private static final String COLOR_SUCCESS = "#34D399";  // Emerald
-    private static final String COLOR_TEXT = "#F1F5F9";  // Light text
-    private static final String COLOR_TEXT_DIM = "#94A3B8";  // Dimmed text
-    private static final String COLOR_SEND_BTN = "#8B5CF6";  // Violet send
-    private static final String COLOR_WARNING = "#F59E0B";  // Amber warning
+    public static String COLOR_BG;
+    public static String COLOR_SURFACE;
+    public static String COLOR_SURFACE_ALT;
+    public static String COLOR_PRIMARY;
+    public static String COLOR_PRIMARY_DARK;
+    public static String COLOR_ACCENT;
+    public static String COLOR_SUCCESS;
+    public static String COLOR_TEXT;
+    public static String COLOR_TEXT_DIM;
+    public static String COLOR_SEND_BTN;
+    public static String COLOR_WARNING;
+
+    private void setupThemeColors() {
+        boolean isLight = prefs.getBoolean("is_light_theme", true);
+        COLOR_BG = isLight ? "#F8FAFC" : "#0F172A";
+        COLOR_SURFACE = isLight ? "#FFFFFF" : "#1E293B";
+        COLOR_SURFACE_ALT = isLight ? "#E2E8F0" : "#334155";
+        COLOR_PRIMARY = isLight ? "#4F46E5" : "#6366F1";
+        COLOR_PRIMARY_DARK = isLight ? "#4338CA" : "#4F46E5";
+        COLOR_ACCENT = isLight ? "#0891B2" : "#22D3EE";
+        COLOR_SUCCESS = isLight ? "#10B981" : "#34D399";
+        COLOR_TEXT = isLight ? "#0F172A" : "#F1F5F9";
+        COLOR_TEXT_DIM = isLight ? "#64748B" : "#94A3B8";
+        COLOR_SEND_BTN = isLight ? "#7C3AED" : "#8B5CF6";
+        COLOR_WARNING = isLight ? "#D97706" : "#F59E0B";
+    }
 
     private boolean permissionDeniedAtStartup = false;
     private SharedPreferences prefs;
@@ -167,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         secureStorage = SecureStorage.getInstance(this);
 
+        setupThemeColors();
+
         // Run migrations for existing passwords
         int numSlots = prefs.getInt(SLOT_COUNT_KEY, 10);
         for (int i = 0; i < numSlots; i++) {
@@ -177,8 +194,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Status bar color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.parseColor("#060B18"));
+            getWindow().setStatusBarColor(Color.parseColor(COLOR_BG));
             getWindow().setNavigationBarColor(Color.parseColor(COLOR_BG));
+            
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && prefs.getBoolean("is_light_theme", true)) {
+                int flags = getWindow().getDecorView().getSystemUiVisibility();
+                flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                }
+                getWindow().getDecorView().setSystemUiVisibility(flags);
+            }
         }
 
         requestRequiredPermissions();
@@ -332,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
         
         TextView titleView = new TextView(this);
         titleView.setTextSize(24);
-        titleView.setTextColor(Color.WHITE);
+        titleView.setTextColor(Color.parseColor(COLOR_TEXT));
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setGravity(Gravity.CENTER);
         titleView.setPadding(0, dp(16), 0, dp(16));
@@ -612,7 +638,7 @@ public class MainActivity extends AppCompatActivity {
             btn.setTextSize(12);
             
             // Color code based on groups
-            int textColor = Color.WHITE;
+            int textColor = Color.parseColor(COLOR_TEXT);
             String name = keyNames[i];
             if (name.startsWith("F") && name.length() > 1 && Character.isDigit(name.charAt(1))) {
                 textColor = Color.parseColor("#BB86FC"); // Purple for F-keys
@@ -1015,13 +1041,13 @@ public class MainActivity extends AppCompatActivity {
         btnKeyboard.setText("⌨️");
         btnKeyboard.setTextSize(28);
         btnKeyboard.setBackgroundColor(Color.TRANSPARENT);
-        btnKeyboard.setTextColor(Color.WHITE);
+        btnKeyboard.setTextColor(Color.parseColor(COLOR_TEXT));
         
         Button btnMouse = new Button(this);
         btnMouse.setText("🖱️");
         btnMouse.setTextSize(28);
         btnMouse.setBackgroundColor(Color.TRANSPARENT);
-        btnMouse.setTextColor(Color.WHITE);
+        btnMouse.setTextColor(Color.parseColor(COLOR_TEXT));
         
         navBar.addView(btnPasswords, btnParams);
         navBar.addView(btnKeyboard, btnParams);
@@ -1032,9 +1058,9 @@ public class MainActivity extends AppCompatActivity {
             keyboardView.setVisibility(v == btnKeyboard ? View.VISIBLE : View.GONE);
             trackpadView.setVisibility(v == btnMouse ? View.VISIBLE : View.GONE);
             
-            btnPasswords.setTextColor(v == btnPasswords ? Color.parseColor(COLOR_PRIMARY) : Color.WHITE);
-            btnKeyboard.setTextColor(v == btnKeyboard ? Color.parseColor(COLOR_PRIMARY) : Color.WHITE);
-            btnMouse.setTextColor(v == btnMouse ? Color.parseColor(COLOR_PRIMARY) : Color.WHITE);
+            btnPasswords.setTextColor(v == btnPasswords ? Color.parseColor(COLOR_PRIMARY) : Color.parseColor(COLOR_TEXT));
+            btnKeyboard.setTextColor(v == btnKeyboard ? Color.parseColor(COLOR_PRIMARY) : Color.parseColor(COLOR_TEXT));
+            btnMouse.setTextColor(v == btnMouse ? Color.parseColor(COLOR_PRIMARY) : Color.parseColor(COLOR_TEXT));
         };
         
         btnPasswords.setOnClickListener(listener);
@@ -1179,7 +1205,7 @@ public class MainActivity extends AppCompatActivity {
         TextView appTitle = new TextView(this);
         appTitle.setText("PassPress");
         appTitle.setTextSize(22);
-        appTitle.setTextColor(Color.WHITE);
+        appTitle.setTextColor(Color.parseColor(COLOR_TEXT));
         appTitle.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
         titleRow.addView(appTitle);
 
@@ -1322,7 +1348,7 @@ public class MainActivity extends AppCompatActivity {
         TextView badge = new TextView(this);
         badge.setText(String.valueOf(index + 1));
         badge.setTextSize(11);
-        badge.setTextColor(Color.WHITE);
+        badge.setTextColor(Color.parseColor(COLOR_TEXT));
         badge.setTypeface(null, Typeface.BOLD);
         badge.setGravity(Gravity.CENTER);
         GradientDrawable badgeBg = new GradientDrawable();
@@ -1433,7 +1459,7 @@ public class MainActivity extends AppCompatActivity {
         Button btn = new Button(this);
         btn.setText(text);
         btn.setTextSize(13);
-        btn.setTextColor(Color.WHITE);
+        btn.setTextColor(Color.parseColor(COLOR_TEXT));
         btn.setTypeface(null, Typeface.BOLD);
         btn.setAllCaps(false);
 
@@ -1613,7 +1639,7 @@ public class MainActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText("Select Target PC 💻");
         title.setTextSize(20);
-        title.setTextColor(Color.WHITE);
+        title.setTextColor(Color.parseColor(COLOR_TEXT));
         title.setTypeface(null, Typeface.BOLD);
         title.setPadding(0, 0, 0, dp(16));
         dialogLayout.addView(title);
@@ -1845,7 +1871,7 @@ public class MainActivity extends AppCompatActivity {
         };
         title.setText(funnyTitles[index % funnyTitles.length] + " (Slot " + (index + 1) + ")");
         title.setTextSize(18);
-        title.setTextColor(Color.WHITE);
+        title.setTextColor(Color.parseColor(COLOR_TEXT));
         title.setTypeface(null, Typeface.BOLD);
         title.setPadding(0, 0, 0, dp(16));
         dialogLayout.addView(title);
@@ -1854,7 +1880,7 @@ public class MainActivity extends AppCompatActivity {
         EditText labelInput = new EditText(this);
         labelInput.setHint("What is this? (e.g. My secret Netflix account)");
         labelInput.setText(prefs.getString("label_" + index, "Slot " + (index + 1)));
-        labelInput.setTextColor(Color.WHITE);
+        labelInput.setTextColor(Color.parseColor(COLOR_TEXT));
         labelInput.setHintTextColor(Color.parseColor(COLOR_TEXT_DIM));
         labelInput.setTextSize(14);
         labelInput.setPadding(dp(12), dp(12), dp(12), dp(12));
@@ -1873,7 +1899,7 @@ public class MainActivity extends AppCompatActivity {
         passInput.setHint("The actual password shhh 🤫");
         passInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         passInput.setText(secureStorage.getPassword(index));
-        passInput.setTextColor(Color.WHITE);
+        passInput.setTextColor(Color.parseColor(COLOR_TEXT));
         passInput.setHintTextColor(Color.parseColor(COLOR_TEXT_DIM));
         passInput.setTextSize(14);
         passInput.setPadding(dp(12), dp(12), dp(12), dp(12));
@@ -2050,7 +2076,7 @@ public class MainActivity extends AppCompatActivity {
         btnRow.setGravity(Gravity.END);
 
         Button clearBtn = createStyledButton("🗑 Destroy", COLOR_WARNING, "#D97706");
-        clearBtn.setTextColor(Color.WHITE);
+        clearBtn.setTextColor(Color.parseColor(COLOR_TEXT));
         
         Button cancelBtn = createStyledButton("Cancel", COLOR_SURFACE_ALT, COLOR_BG);
         
@@ -2181,7 +2207,7 @@ public class MainActivity extends AppCompatActivity {
         title.setText("PassPress Help");
         title.setTextSize(24);
         title.setTypeface(null, Typeface.BOLD);
-        title.setTextColor(Color.WHITE);
+        title.setTextColor(Color.parseColor(COLOR_TEXT));
         title.setGravity(Gravity.CENTER);
         title.setPadding(0, 0, 0, dp(8));
         layout.addView(title);
@@ -2246,7 +2272,7 @@ public class MainActivity extends AppCompatActivity {
         TextView delayLabel = new TextView(this);
         int currentDelay = prefs.getInt("typing_delay", 25);
         delayLabel.setText("Typing Delay (Anti-Paste): " + currentDelay + "ms");
-        delayLabel.setTextColor(Color.WHITE);
+        delayLabel.setTextColor(Color.parseColor(COLOR_TEXT));
         layout.addView(delayLabel);
 
         android.widget.SeekBar delaySeekBar = new android.widget.SeekBar(this);
@@ -2279,7 +2305,7 @@ public class MainActivity extends AppCompatActivity {
         TextView mouseLabel = new TextView(this);
         float currentMouseSens = prefs.getFloat("mouse_sensitivity", 1.5f);
         mouseLabel.setText("Mouse DPI / Sensitivity: " + String.format("%.1fx", currentMouseSens));
-        mouseLabel.setTextColor(Color.WHITE);
+        mouseLabel.setTextColor(Color.parseColor(COLOR_TEXT));
         layout.addView(mouseLabel);
 
         android.widget.SeekBar mouseSeekBar = new android.widget.SeekBar(this);
@@ -2307,7 +2333,7 @@ public class MainActivity extends AppCompatActivity {
         TextView scrollLabel = new TextView(this);
         float currentScrollSens = prefs.getFloat("scroll_sensitivity", 0.05f);
         scrollLabel.setText("Scroll Sensitivity: " + String.format("%.2fx", currentScrollSens));
-        scrollLabel.setTextColor(Color.WHITE);
+        scrollLabel.setTextColor(Color.parseColor(COLOR_TEXT));
         layout.addView(scrollLabel);
 
         android.widget.SeekBar scrollSeekBar = new android.widget.SeekBar(this);
@@ -2331,10 +2357,24 @@ public class MainActivity extends AppCompatActivity {
         });
         layout.addView(scrollSeekBar);
 
+        // Light Theme Toggle
+        android.widget.CheckBox themeCheck = new android.widget.CheckBox(this);
+        themeCheck.setText("Enable Light Theme");
+        themeCheck.setTextColor(Color.parseColor(COLOR_TEXT));
+        themeCheck.setChecked(prefs.getBoolean("is_light_theme", true));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            themeCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
+        themeCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("is_light_theme", isChecked).apply();
+            recreate();
+        });
+        layout.addView(themeCheck);
+
         // Biometrics for Quick Access Toggle
         android.widget.CheckBox biometricsCheck = new android.widget.CheckBox(this);
         biometricsCheck.setText("Require Fingerprint for Quick Access");
-        biometricsCheck.setTextColor(Color.WHITE);
+        biometricsCheck.setTextColor(Color.parseColor(COLOR_TEXT));
         biometricsCheck.setChecked(prefs.getBoolean("require_biometrics", true));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             biometricsCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
@@ -2347,7 +2387,7 @@ public class MainActivity extends AppCompatActivity {
         // Auto-Lock Toggle
         android.widget.CheckBox autoLockCheck = new android.widget.CheckBox(this);
         autoLockCheck.setText("Enable 3-Minute Auto-Lock");
-        autoLockCheck.setTextColor(Color.WHITE);
+        autoLockCheck.setTextColor(Color.parseColor(COLOR_TEXT));
         autoLockCheck.setChecked(prefs.getBoolean("auto_lock_enabled", false));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             autoLockCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
@@ -2360,7 +2400,7 @@ public class MainActivity extends AppCompatActivity {
         // Custom Notification Toggle
         android.widget.CheckBox notifCheck = new android.widget.CheckBox(this);
         notifCheck.setText("Enable Custom Notification Toolbar");
-        notifCheck.setTextColor(Color.WHITE);
+        notifCheck.setTextColor(Color.parseColor(COLOR_TEXT));
         notifCheck.setChecked(prefs.getBoolean("enable_custom_notif", false));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notifCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
@@ -2381,7 +2421,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 5; i++) {
             android.widget.CheckBox slotCheck = new android.widget.CheckBox(this);
             slotCheck.setText(String.valueOf(i + 1));
-            slotCheck.setTextColor(Color.WHITE);
+            slotCheck.setTextColor(Color.parseColor(COLOR_TEXT));
             slotCheck.setChecked(prefs.getBoolean("show_slot_" + i + "_notif", true));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 slotCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
@@ -2407,7 +2447,7 @@ public class MainActivity extends AppCompatActivity {
         // Quick Settings Tile Toggle
         android.widget.CheckBox tileCheck = new android.widget.CheckBox(this);
         tileCheck.setText("Enable Quick Settings Menu Tile");
-        tileCheck.setTextColor(Color.WHITE);
+        tileCheck.setTextColor(Color.parseColor(COLOR_TEXT));
         tileCheck.setChecked(prefs.getBoolean("enable_quick_tile", true));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             tileCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
@@ -2429,7 +2469,7 @@ public class MainActivity extends AppCompatActivity {
         // Floating Bubble Toggle
         android.widget.CheckBox bubbleCheck = new android.widget.CheckBox(this);
         bubbleCheck.setText("Enable Floating Bubble");
-        bubbleCheck.setTextColor(Color.WHITE);
+        bubbleCheck.setTextColor(Color.parseColor(COLOR_TEXT));
         bubbleCheck.setChecked(prefs.getBoolean("enable_bubble", false));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             bubbleCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
@@ -2496,7 +2536,7 @@ public class MainActivity extends AppCompatActivity {
         // Shut Down & Exit Button
         Button shutDownBtn = createStyledButton("🛑 Shut Down & Exit App", COLOR_WARNING, "#D97706");
         shutDownBtn.setLayoutParams(btnParams);
-        shutDownBtn.setTextColor(Color.WHITE);
+        shutDownBtn.setTextColor(Color.parseColor(COLOR_TEXT));
         shutDownBtn.setOnClickListener(v -> shutDownApp());
         layout.addView(shutDownBtn);
 

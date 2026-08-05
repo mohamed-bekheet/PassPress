@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notif_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
+    android:orientation="vertical"
     android:padding="8dp"
     android:background="#0F172A">
 
-    <TextView
-        android:id="@+id/notif_status_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="⌨️"
-        android:textSize="20sp"
-        android:layout_marginEnd="8dp"/>
-
-    <Button
-        android:id="@+id/btn_notif_connect"
-        android:layout_width="0dp"
-        android:layout_weight="1.2"
-        android:layout_height="36dp"
-        android:text="Connect"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/notif_btn_bg_accent"
-        android:layout_marginEnd="8dp"/>
-
-    <!-- Password Slots container -->
+    <!-- Row 1: Status & Connect/Disconnect -->
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="3.8"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/notif_device_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="🔴 Disconnected"
+            android:textSize="13sp"
+            android:textColor="#FFFFFF"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btn_notif_connect"
+            android:layout_width="90dp"
+            android:layout_height="32dp"
+            android:text="Connect"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/notif_btn_bg_accent"/>
+    </LinearLayout>
+
+    <!-- Row 2: Password Slots container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <Button
             android:id="@+id/btn_notif_s1"
@@ -41,10 +51,10 @@
             android:layout_weight="1"
             android:layout_height="36dp"
             android:text="🔑1"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/notif_btn_bg"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s2"
@@ -52,10 +62,10 @@
             android:layout_weight="1"
             android:layout_height="36dp"
             android:text="🔑2"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/notif_btn_bg"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s3"
@@ -63,10 +73,10 @@
             android:layout_weight="1"
             android:layout_height="36dp"
             android:text="🔑3"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/notif_btn_bg"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s4"
@@ -74,10 +84,10 @@
             android:layout_weight="1"
             android:layout_height="36dp"
             android:text="🔑4"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/notif_btn_bg"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginEnd="6dp"/>
             
         <Button
             android:id="@+id/btn_notif_s5"
@@ -85,7 +95,7 @@
             android:layout_weight="1"
             android:layout_height="36dp"
             android:text="🔑5"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/notif_btn_bg"/>
 

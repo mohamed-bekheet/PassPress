@@ -661,15 +661,33 @@ public class HidKeyboardService extends Service {
                 
         if (customNotif) {
             android.widget.RemoteViews customView = new android.widget.RemoteViews(getPackageName(), R.layout.notification_toolbar);
-            customView.setTextViewText(R.id.notif_status_icon, (connectedDevice != null) ? "🟢" : "🔴");
             
-            // Connect Button (opens app with SHOW_PICKER)
-            Intent connectIntent = new Intent(this, MainActivity.class);
-            connectIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            connectIntent.putExtra("SHOW_PICKER", true);
-            PendingIntent pConnect = PendingIntent.getActivity(this, 99, connectIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-            customView.setOnClickPendingIntent(R.id.btn_notif_connect, pConnect);
+            boolean isLight = prefs.getBoolean("is_light_theme", true);
+            if (isLight) {
+                customView.setInt(R.id.notif_root, "setBackgroundColor", android.graphics.Color.parseColor("#F8FAFC"));
+                customView.setTextColor(R.id.notif_device_name, android.graphics.Color.parseColor("#0F172A"));
+                customView.setInt(R.id.btn_notif_connect, "setBackgroundResource", R.drawable.notif_btn_bg_accent_light);
+            }
             
+            if (connectedDevice != null) {
+                customView.setTextViewText(R.id.notif_device_name, "🟢 " + safeGetName(connectedDevice));
+                customView.setTextViewText(R.id.btn_notif_connect, "Disconnect");
+                
+                Intent discIntent = new Intent(this, HidKeyboardService.class).setAction("ACTION_DISCONNECT");
+                PendingIntent pDisc = PendingIntent.getService(this, 1, discIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+                customView.setOnClickPendingIntent(R.id.btn_notif_connect, pDisc);
+            } else {
+                customView.setTextViewText(R.id.notif_device_name, "🔴 Disconnected");
+                customView.setTextViewText(R.id.btn_notif_connect, "Connect");
+                
+                Intent connectIntent = new Intent(this, MainActivity.class);
+                connectIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                connectIntent.putExtra("SHOW_PICKER", true);
+                PendingIntent pConnect = PendingIntent.getActivity(this, 99, connectIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                customView.setOnClickPendingIntent(R.id.btn_notif_connect, pConnect);
+            }
+            
+
             // Slots
             int[] btnIds = {R.id.btn_notif_s1, R.id.btn_notif_s2, R.id.btn_notif_s3, R.id.btn_notif_s4, R.id.btn_notif_s5};
             for (int i = 0; i < 5; i++) {
@@ -678,6 +696,11 @@ public class HidKeyboardService extends Service {
                     continue;
                 }
                 customView.setViewVisibility(btnIds[i], android.view.View.VISIBLE);
+                
+                if (isLight) {
+                    customView.setInt(btnIds[i], "setBackgroundResource", R.drawable.notif_btn_bg_light);
+                    customView.setTextColor(btnIds[i], android.graphics.Color.parseColor("#0F172A"));
+                }
                 
                 Intent slotIntent = new Intent(this, WidgetProxyActivity.class);
                 slotIntent.putExtra("slot_index", i);
