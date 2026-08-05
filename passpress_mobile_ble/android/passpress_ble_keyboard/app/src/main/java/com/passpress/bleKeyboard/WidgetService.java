@@ -45,6 +45,14 @@ class PassPressRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
         
         String label = prefs.getString("label_" + position, "Slot " + (position + 1));
         views.setTextViewText(R.id.widget_item_text, label);
+        boolean isLight = prefs.getBoolean("is_light_theme", true);
+        if (isLight) {
+            views.setInt(R.id.widget_item_container, "setBackgroundResource", R.drawable.widget_item_bg_light);
+            views.setTextColor(R.id.widget_item_text, android.graphics.Color.parseColor("#0F172A"));
+        } else {
+            views.setInt(R.id.widget_item_container, "setBackgroundResource", R.drawable.widget_item_bg);
+            views.setTextColor(R.id.widget_item_text, android.graphics.Color.WHITE);
+        }
         
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra(PassPressWidgetProvider.EXTRA_SLOT_INDEX, position);

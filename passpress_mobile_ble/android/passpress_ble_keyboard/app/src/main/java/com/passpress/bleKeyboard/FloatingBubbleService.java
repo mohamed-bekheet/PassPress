@@ -53,11 +53,28 @@ public class FloatingBubbleService extends Service {
         expandedMenu = floatingView.findViewById(R.id.bubble_expanded_menu);
         View bubbleIcon = floatingView.findViewById(R.id.bubble_icon_container);
 
+        boolean isLight = getSharedPreferences("passpress_prefs", android.content.Context.MODE_PRIVATE).getBoolean("is_light_theme", true);
+        if (isLight) {
+            expandedMenu.setBackgroundColor(android.graphics.Color.parseColor("#E6FFFFFF"));
+            bubbleIcon.setBackgroundResource(R.drawable.bubble_bg_light);
+        } else {
+            expandedMenu.setBackgroundColor(android.graphics.Color.parseColor("#E60F172A"));
+            bubbleIcon.setBackgroundResource(R.drawable.bubble_bg);
+        }
+
         // Slots
         int[] btnIds = {R.id.btn_bubble_s1, R.id.btn_bubble_s2, R.id.btn_bubble_s3, R.id.btn_bubble_s4, R.id.btn_bubble_s5};
         for (int i = 0; i < 5; i++) {
             final int slotIndex = i;
-            floatingView.findViewById(btnIds[i]).setOnClickListener(v -> {
+            android.widget.Button btn = floatingView.findViewById(btnIds[i]);
+            if (isLight) {
+                btn.setBackgroundColor(android.graphics.Color.parseColor("#F8FAFC"));
+                btn.setTextColor(android.graphics.Color.parseColor("#0F172A"));
+            } else {
+                btn.setBackgroundColor(android.graphics.Color.parseColor("#334155"));
+                btn.setTextColor(android.graphics.Color.parseColor("#FFFFFF"));
+            }
+            btn.setOnClickListener(v -> {
                 expandedMenu.setVisibility(View.GONE);
                 Intent slotIntent = new Intent(this, WidgetProxyActivity.class);
                 slotIntent.putExtra("slot_index", slotIndex);

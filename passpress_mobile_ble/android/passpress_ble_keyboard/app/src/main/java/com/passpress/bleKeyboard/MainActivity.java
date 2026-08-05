@@ -1182,13 +1182,11 @@ public class MainActivity extends AppCompatActivity {
         header.setOrientation(LinearLayout.VERTICAL);
         header.setPadding(dp(20), dp(16), dp(20), dp(16));
 
+        boolean isLight = prefs.getBoolean("is_light_theme", true);
         GradientDrawable headerBg = new GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
-                new int[]{
-                        Color.parseColor("#1E1B4B"),
-                        Color.parseColor("#0F172A"),
-                        Color.parseColor("#164E63")
-                }
+                isLight ? new int[]{Color.parseColor("#E0E7FF"), Color.parseColor("#CFFAFE")}
+                        : new int[]{Color.parseColor("#1E1B4B"), Color.parseColor("#0F172A"), Color.parseColor("#164E63")}
         );
         header.setBackground(headerBg);
 
@@ -2194,7 +2192,7 @@ public class MainActivity extends AppCompatActivity {
             versionCode = pInfo.versionCode;
         } catch (Exception ignored) {}
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, prefs.getBoolean("is_light_theme", true) ? android.R.style.Theme_DeviceDefault_Light_Dialog_Alert : android.R.style.Theme_DeviceDefault_Dialog_Alert);
         
         ScrollView scrollView = new ScrollView(this);
         
@@ -2261,7 +2259,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSettingsDialog() {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this, prefs.getBoolean("is_light_theme", true) ? android.R.style.Theme_DeviceDefault_Light_Dialog_Alert : android.R.style.Theme_DeviceDefault_Dialog_Alert);
         builder.setTitle("Settings");
 
         LinearLayout layout = new LinearLayout(this);
@@ -2271,7 +2269,7 @@ public class MainActivity extends AppCompatActivity {
         // Typing Delay
         TextView delayLabel = new TextView(this);
         int currentDelay = prefs.getInt("typing_delay", 25);
-        delayLabel.setText("Typing Delay (Anti-Paste): " + currentDelay + "ms");
+        delayLabel.setText("🐢 Typing Delay (Anti-Paste): " + currentDelay + "ms 🐇");
         delayLabel.setTextColor(Color.parseColor(COLOR_TEXT));
         layout.addView(delayLabel);
 
@@ -2285,7 +2283,7 @@ public class MainActivity extends AppCompatActivity {
         delaySeekBar.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
-                delayLabel.setText("Typing Delay (Anti-Paste): " + progress + "ms");
+                delayLabel.setText("🐢 Typing Delay (Anti-Paste): " + progress + "ms 🐇");
             }
             @Override
             public void onStartTrackingTouch(android.widget.SeekBar seekBar) {}
@@ -2304,7 +2302,7 @@ public class MainActivity extends AppCompatActivity {
         // Mouse Sensitivity
         TextView mouseLabel = new TextView(this);
         float currentMouseSens = prefs.getFloat("mouse_sensitivity", 1.5f);
-        mouseLabel.setText("Mouse DPI / Sensitivity: " + String.format("%.1fx", currentMouseSens));
+        mouseLabel.setText("🐢 Mouse DPI / Sensitivity: " + String.format("%.1fx", currentMouseSens) + " 🐇");
         mouseLabel.setTextColor(Color.parseColor(COLOR_TEXT));
         layout.addView(mouseLabel);
 
@@ -2319,7 +2317,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
                 float val = Math.max(1, progress) / 10f;
-                mouseLabel.setText("Mouse DPI / Sensitivity: " + String.format("%.1fx", val));
+                mouseLabel.setText("🐢 Mouse DPI / Sensitivity: " + String.format("%.1fx", val) + " 🐇");
             }
             @Override public void onStartTrackingTouch(android.widget.SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
@@ -2332,7 +2330,7 @@ public class MainActivity extends AppCompatActivity {
         // Scroll Sensitivity
         TextView scrollLabel = new TextView(this);
         float currentScrollSens = prefs.getFloat("scroll_sensitivity", 0.05f);
-        scrollLabel.setText("Scroll Sensitivity: " + String.format("%.2fx", currentScrollSens));
+        scrollLabel.setText("🐢 Scroll Sensitivity: " + String.format("%.2fx", currentScrollSens) + " 🐇");
         scrollLabel.setTextColor(Color.parseColor(COLOR_TEXT));
         layout.addView(scrollLabel);
 
@@ -2347,7 +2345,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(android.widget.SeekBar seekBar, int progress, boolean fromUser) {
                 float val = Math.max(1, progress) / 100f;
-                scrollLabel.setText("Scroll Sensitivity: " + String.format("%.2fx", val));
+                scrollLabel.setText("🐢 Scroll Sensitivity: " + String.format("%.2fx", val) + " 🐇");
             }
             @Override public void onStartTrackingTouch(android.widget.SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(android.widget.SeekBar seekBar) {
@@ -2533,6 +2531,29 @@ public class MainActivity extends AppCompatActivity {
         spacer3.setLayoutParams(new LinearLayout.LayoutParams(1, dp(20)));
         layout.addView(spacer3);
 
+
+        // Reset Button
+        Button resetBtn = createStyledButton("🔄 Reset to Defaults", COLOR_WARNING, "#D97706");
+        resetBtn.setLayoutParams(btnParams);
+        resetBtn.setTextColor(Color.parseColor(COLOR_TEXT));
+        resetBtn.setOnClickListener(v -> {
+            new android.app.AlertDialog.Builder(this, prefs.getBoolean("is_light_theme", true) ? android.R.style.Theme_DeviceDefault_Light_Dialog_Alert : android.R.style.Theme_DeviceDefault_Dialog_Alert)
+                .setTitle("Reset to Defaults?")
+                .setMessage("This will reset your theme, notification, and widget settings. Your passwords and paired devices will NOT be deleted.")
+                .setPositiveButton("Reset", (d, w) -> {
+                    prefs.edit().clear().apply();
+                    recreate();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
+        layout.addView(resetBtn);
+        
+        // Spacer 4
+        View spacer4 = new View(this);
+        spacer4.setLayoutParams(new LinearLayout.LayoutParams(1, dp(20)));
+        layout.addView(spacer4);
+
         // Shut Down & Exit Button
         Button shutDownBtn = createStyledButton("🛑 Shut Down & Exit App", COLOR_WARNING, "#D97706");
         shutDownBtn.setLayoutParams(btnParams);
@@ -2540,7 +2561,9 @@ public class MainActivity extends AppCompatActivity {
         shutDownBtn.setOnClickListener(v -> shutDownApp());
         layout.addView(shutDownBtn);
 
-        builder.setView(layout);
+        android.widget.ScrollView scrollView = new android.widget.ScrollView(this);
+        scrollView.addView(layout);
+        builder.setView(scrollView);
         builder.setPositiveButton("Close", null);
         builder.show();
     }
@@ -2550,7 +2573,7 @@ public class MainActivity extends AppCompatActivity {
         input.setHint("Master Password");
         input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
         
-        new android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+        new android.app.AlertDialog.Builder(this, prefs.getBoolean("is_light_theme", true) ? android.R.style.Theme_DeviceDefault_Light_Dialog_Alert : android.R.style.Theme_DeviceDefault_Dialog_Alert)
             .setTitle("Export Backup")
             .setMessage("Set a master password for this backup. If you lose this password, you cannot restore the backup!")
             .setView(input)
@@ -2576,7 +2599,7 @@ public class MainActivity extends AppCompatActivity {
         input.setHint("Master Password");
         input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
         
-        new android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+        new android.app.AlertDialog.Builder(this, prefs.getBoolean("is_light_theme", true) ? android.R.style.Theme_DeviceDefault_Light_Dialog_Alert : android.R.style.Theme_DeviceDefault_Dialog_Alert)
             .setTitle("Import Backup")
             .setMessage("Enter the master password used to encrypt the backup.")
             .setView(input)

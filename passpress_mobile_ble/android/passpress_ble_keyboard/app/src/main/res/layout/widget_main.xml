@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_main_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_bg"
@@ -7,6 +8,7 @@
     android:padding="12dp">
 
     <TextView
+        android:id="@+id/widget_main_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="PassPress ⌨️"
@@ -24,3 +26,4 @@
         android:verticalSpacing="8dp"
         android:horizontalSpacing="8dp" />
 </LinearLayout>
+

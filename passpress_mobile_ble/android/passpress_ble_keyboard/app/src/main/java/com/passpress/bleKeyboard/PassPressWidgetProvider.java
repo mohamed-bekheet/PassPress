@@ -26,6 +26,14 @@ public class PassPressWidgetProvider extends AppWidgetProvider {
         serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_main);
+        boolean isLight = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getBoolean("is_light_theme", true);
+        if (isLight) {
+            views.setInt(R.id.widget_main_root, "setBackgroundResource", R.drawable.widget_bg_light);
+            views.setTextColor(R.id.widget_main_title, android.graphics.Color.parseColor("#0F172A"));
+        } else {
+            views.setInt(R.id.widget_main_root, "setBackgroundResource", R.drawable.widget_bg);
+            views.setTextColor(R.id.widget_main_title, android.graphics.Color.WHITE);
+        }
         views.setRemoteAdapter(R.id.widget_grid, serviceIntent);
         views.setEmptyView(R.id.widget_grid, android.R.id.empty); // Not used
 

@@ -39,6 +39,14 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
         String label = prefs.getString("label_" + slotIndex, "Slot " + (slotIndex + 1));
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_single_main);
+        boolean isLight = prefs.getBoolean("is_light_theme", true);
+        if (isLight) {
+            views.setInt(R.id.widget_single_container, "setBackgroundResource", R.drawable.widget_bg_light);
+            views.setTextColor(R.id.widget_single_text, android.graphics.Color.parseColor("#0F172A"));
+        } else {
+            views.setInt(R.id.widget_single_container, "setBackgroundResource", R.drawable.widget_bg);
+            views.setTextColor(R.id.widget_single_text, android.graphics.Color.WHITE);
+        }
         views.setTextViewText(R.id.widget_single_text, label);
 
         Intent clickIntent = new Intent(context, SingleSlotWidgetProvider.class);
