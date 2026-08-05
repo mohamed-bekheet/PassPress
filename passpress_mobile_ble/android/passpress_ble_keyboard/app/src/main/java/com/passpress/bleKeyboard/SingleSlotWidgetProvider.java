@@ -86,24 +86,35 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
     }
     
     private void sendPasswordSeamlessly(Context context, int slotIndex) {
-        SecureStorage secureStorage = SecureStorage.getInstance(context);
-        String pass = secureStorage.getPassword(slotIndex);
-        String suffix = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE)
-                .getString("suffix_" + slotIndex, "Enter");
-        
-        if ((pass == null || pass.isEmpty()) && "None".equals(suffix)) {
-            android.widget.Toast.makeText(context, "Slot is empty", android.widget.Toast.LENGTH_SHORT).show();
-            return;
-        }
-        
+        SharedPreferences prefs = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
+        int slotCount = prefs.getInt("slot_count", 2);
+        boolean isMacro = slotIndex >= slotCount;
+        int macroIndex = slotIndex - slotCount;
+
         HidKeyboardService svc = HidKeyboardService.getInstance();
         if (svc != null && svc.getConnectedDevice() != null) {
-            String toSend = pass != null ? pass : "";
-            if ("Enter".equals(suffix)) toSend += "\n";
-            else if ("Tab".equals(suffix)) toSend += "\t";
-            
-            svc.sendKeySequence(toSend);
-            android.widget.Toast.makeText(context, "Password sent!", android.widget.Toast.LENGTH_SHORT).show();
+            if (isMacro) {
+                byte modifiers = (byte) prefs.getInt("macro_mod_" + macroIndex, 0);
+                byte keycode = (byte) prefs.getInt("macro_key_" + macroIndex, 0);
+                svc.sendQueue.add("[MACRO]:" + modifiers + "," + keycode);
+                android.widget.Toast.makeText(context, "Shortcut sent!", android.widget.Toast.LENGTH_SHORT).show();
+            } else {
+                SecureStorage secureStorage = SecureStorage.getInstance(context);
+                String pass = secureStorage.getPassword(slotIndex);
+                String suffix = prefs.getString("suffix_" + slotIndex, "Enter");
+                
+                if ((pass == null || pass.isEmpty()) && "None".equals(suffix)) {
+                    android.widget.Toast.makeText(context, "Slot is empty", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String toSend = pass != null ? pass : "";
+                if ("Enter".equals(suffix)) toSend += "\n";
+                else if ("Tab".equals(suffix)) toSend += "\t";
+                
+                svc.sendKeySequence(toSend);
+                android.widget.Toast.makeText(context, "Password sent!", android.widget.Toast.LENGTH_SHORT).show();
+            }
         } else {
             android.widget.Toast.makeText(context, "Keyboard not connected!", android.widget.Toast.LENGTH_SHORT).show();
             
@@ -117,7 +128,6 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
                 android.widget.Toast.makeText(context, "Starting keyboard service... tap again later", android.widget.Toast.LENGTH_LONG).show();
             } else {
                 svc.autoConnect();
-                SharedPreferences prefs = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
                 String pcName = prefs.getString("last_connected_device_name", "PC");
                 android.widget.Toast.makeText(context, "Connecting to " + pcName + "... tap again later", android.widget.Toast.LENGTH_LONG).show();
             }

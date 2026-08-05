@@ -2,10 +2,11 @@ package com.passpress.bleKeyboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -18,18 +19,20 @@ public class WidgetProxyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // No layout, transparent background in manifest
-        
-        int slotIndex = getIntent().getIntExtra("slot_index", -1);
-        if (slotIndex == -1) {
+        Intent intent = getIntent();
+        int slotIndex = intent.getIntExtra("SLOT_INDEX", intent.getIntExtra("slot_index", -1));
+        boolean isMacro = intent.getBooleanExtra("IS_MACRO", intent.getBooleanExtra("is_macro", false));
+        int macroIndex = intent.getIntExtra("MACRO_INDEX", intent.getIntExtra("macro_index", -1));
+
+        if (slotIndex == -1 && macroIndex == -1) {
             finish();
             return;
         }
 
         boolean requireBiometrics = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getBoolean("require_biometrics", true);
 
-        if (!requireBiometrics) {
-            sendPasswordAndFinish(slotIndex);
+        if (!requireBiometrics || isMacro) {
+            sendPasswordAndFinish(slotIndex, isMacro, macroIndex);
             return;
         }
 
@@ -47,7 +50,7 @@ public class WidgetProxyActivity extends AppCompatActivity {
 
                 @Override
                 public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
-                    sendPasswordAndFinish(slotIndex);
+                    sendPasswordAndFinish(slotIndex, isMacro, macroIndex);
                 }
 
                 @Override
@@ -64,30 +67,38 @@ public class WidgetProxyActivity extends AppCompatActivity {
                     .build();
             biometricPrompt.authenticate(promptInfo);
         } else {
-            // No biometric available, just send
-            sendPasswordAndFinish(slotIndex);
+            sendPasswordAndFinish(slotIndex, isMacro, macroIndex);
         }
     }
 
-    private void sendPasswordAndFinish(int slotIndex) {
-        SecureStorage secureStorage = SecureStorage.getInstance(this);
-        String pass = secureStorage.getPassword(slotIndex);
-        String suffix = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE).getString("suffix_" + slotIndex, "Enter");
-        
-        if ((pass == null || pass.isEmpty()) && "None".equals(suffix)) {
-            Toast.makeText(this, "Slot is empty", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-        
+    private void sendPasswordAndFinish(int slotIndex, boolean isMacro, int macroIndex) {
+        SharedPreferences prefs = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
         HidKeyboardService svc = HidKeyboardService.getInstance();
+
         if (svc != null && svc.getConnectedDevice() != null) {
-            String toSend = pass != null ? pass : "";
-            if ("Enter".equals(suffix)) toSend += "\n";
-            else if ("Tab".equals(suffix)) toSend += "\t";
-            
-            svc.sendKeySequence(toSend);
-            Toast.makeText(this, "Password sent!", Toast.LENGTH_SHORT).show();
+            if (isMacro && macroIndex >= 0) {
+                byte modifiers = (byte) prefs.getInt("macro_mod_" + macroIndex, 0);
+                byte keycode = (byte) prefs.getInt("macro_key_" + macroIndex, 0);
+                svc.sendQueue.add("[MACRO]:" + modifiers + "," + keycode);
+                Toast.makeText(this, "Shortcut sent!", Toast.LENGTH_SHORT).show();
+            } else {
+                SecureStorage secureStorage = SecureStorage.getInstance(this);
+                String pass = secureStorage.getPassword(slotIndex);
+                String suffix = prefs.getString("suffix_" + slotIndex, "Enter");
+                
+                if ((pass == null || pass.isEmpty()) && "None".equals(suffix)) {
+                    Toast.makeText(this, "Slot is empty", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+
+                String toSend = pass != null ? pass : "";
+                if ("Enter".equals(suffix)) toSend += "\n";
+                else if ("Tab".equals(suffix)) toSend += "\t";
+                
+                svc.sendKeySequence(toSend);
+                Toast.makeText(this, "Password sent!", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, "Keyboard not connected!", Toast.LENGTH_SHORT).show();
             
@@ -101,7 +112,6 @@ public class WidgetProxyActivity extends AppCompatActivity {
                 Toast.makeText(this, "Starting keyboard service... tap again later", Toast.LENGTH_LONG).show();
             } else {
                 svc.autoConnect();
-                android.content.SharedPreferences prefs = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
                 String pcName = prefs.getString("last_connected_device_name", "PC");
                 Toast.makeText(this, "Connecting to " + pcName + "... tap again later", Toast.LENGTH_LONG).show();
             }
