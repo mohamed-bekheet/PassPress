@@ -253,16 +253,23 @@ public class HidKeyboardService extends Service {
     public void connectToDevice(String address) {
         if (hidDevice == null || address == null) {
             Log.w(TAG, "connectToDevice: hidDevice not ready or address null");
+            notifyConnectionStatusChanged(false, null);
             return;
         }
         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
             Log.e(TAG, "connectToDevice: Could not resolve address " + address);
+            notifyConnectionStatusChanged(false, null);
             return;
         }
 
-        // If already connected to another device, disconnect first
-        if (connectedDevice != null && !connectedDevice.getAddress().equals(address)) {
+        if (connectedDevice != null && connectedDevice.getAddress().equals(address)) {
+            Log.d(TAG, "Already connected to " + address);
+            notifyConnectionStatusChanged(true, connectedDevice);
+            return;
+        }
+
+        if (connectedDevice != null) {
             Log.d(TAG, "Disconnecting from " + connectedDevice.getAddress() + " before connecting to " + address);
             hidDevice.disconnect(connectedDevice);
         }
@@ -270,6 +277,9 @@ public class HidKeyboardService extends Service {
         Log.d(TAG, "Connecting to " + address);
         boolean result = hidDevice.connect(device);
         Log.d(TAG, "connect() returned: " + result);
+        if (!result) {
+            notifyConnectionStatusChanged(false, null);
+        }
     }
 
     public void autoConnect() {
@@ -633,6 +643,9 @@ public class HidKeyboardService extends Service {
     }
 
     private Notification buildNotification(String status) {
+        SharedPreferences prefs = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
+        boolean customNotif = prefs.getBoolean("enable_custom_notif", false);
+        
         Intent tapIntent = new Intent(this, MainActivity.class);
         tapIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pi = PendingIntent.getActivity(this, 0, tapIntent,
@@ -646,20 +659,45 @@ public class HidKeyboardService extends Service {
                 .setOngoing(true)
                 .setPriority(NotificationCompat.PRIORITY_LOW);
                 
-        if (connectedDevice != null) {
-            Intent discIntent = new Intent(this, HidKeyboardService.class).setAction("ACTION_DISCONNECT");
-            PendingIntent pDisc = PendingIntent.getService(this, 1, discIntent, PendingIntent.FLAG_IMMUTABLE);
-            builder.addAction(0, "Disconnect", pDisc);
+        if (customNotif) {
+            android.widget.RemoteViews customView = new android.widget.RemoteViews(getPackageName(), R.layout.notification_toolbar);
+            customView.setTextViewText(R.id.notif_status_icon, (connectedDevice != null) ? "🟢" : "🔴");
+            
+            // Connect Button (opens app with SHOW_PICKER)
+            Intent connectIntent = new Intent(this, MainActivity.class);
+            connectIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            connectIntent.putExtra("SHOW_PICKER", true);
+            PendingIntent pConnect = PendingIntent.getActivity(this, 99, connectIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            customView.setOnClickPendingIntent(R.id.btn_notif_connect, pConnect);
+            
+            // Slots
+            int[] btnIds = {R.id.btn_notif_s1, R.id.btn_notif_s2, R.id.btn_notif_s3, R.id.btn_notif_s4, R.id.btn_notif_s5};
+            for (int i = 0; i < 5; i++) {
+                Intent slotIntent = new Intent(this, WidgetProxyActivity.class);
+                slotIntent.putExtra("slot_index", i);
+                slotIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                PendingIntent pSlot = PendingIntent.getActivity(this, 100 + i, slotIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                customView.setOnClickPendingIntent(btnIds[i], pSlot);
+            }
+            
+            builder.setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                   .setCustomContentView(customView);
         } else {
-            Intent recIntent = new Intent(this, HidKeyboardService.class).setAction("ACTION_RECONNECT");
-            PendingIntent pRec = PendingIntent.getService(this, 2, recIntent, PendingIntent.FLAG_IMMUTABLE);
-            builder.addAction(0, "Reconnect", pRec);
+            if (connectedDevice != null) {
+                Intent discIntent = new Intent(this, HidKeyboardService.class).setAction("ACTION_DISCONNECT");
+                PendingIntent pDisc = PendingIntent.getService(this, 1, discIntent, PendingIntent.FLAG_IMMUTABLE);
+                builder.addAction(0, "Disconnect", pDisc);
+            } else {
+                Intent recIntent = new Intent(this, HidKeyboardService.class).setAction("ACTION_RECONNECT");
+                PendingIntent pRec = PendingIntent.getService(this, 2, recIntent, PendingIntent.FLAG_IMMUTABLE);
+                builder.addAction(0, "Reconnect", pRec);
+            }
         }
         
         return builder.build();
     }
 
-    private void updateNotification(String status) {
+    public void updateNotification(String status) {
         NotificationManager nm = getSystemService(NotificationManager.class);
         if (nm != null) nm.notify(NOTIF_ID, buildNotification(status));
     }

@@ -286,11 +286,27 @@ public class MainActivity extends AppCompatActivity {
         
         // Auto-reconnect on app launch if we have a saved device
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            HidKeyboardService svc = HidKeyboardService.getInstance();
-            if (svc != null && svc.getConnectedDevice() == null) {
-                reconnectDevice();
+            boolean showPicker = getIntent().getBooleanExtra("SHOW_PICKER", false);
+            if (showPicker) {
+                showPairedDevicePicker();
+                getIntent().removeExtra("SHOW_PICKER");
+            } else {
+                HidKeyboardService svc = HidKeyboardService.getInstance();
+                if (svc != null && svc.getConnectedDevice() == null) {
+                    reconnectDevice();
+                }
             }
         }, 500);
+    }
+    
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (isAuthenticated && intent.getBooleanExtra("SHOW_PICKER", false)) {
+            showPairedDevicePicker();
+            intent.removeExtra("SHOW_PICKER");
+        }
     }
     
     private View createOnboardingView(android.view.ViewGroup parent) {
@@ -2308,6 +2324,70 @@ public class MainActivity extends AppCompatActivity {
         });
         layout.addView(autoLockCheck);
 
+        // Custom Notification Toggle
+        android.widget.CheckBox notifCheck = new android.widget.CheckBox(this);
+        notifCheck.setText("Enable Custom Notification Toolbar");
+        notifCheck.setTextColor(Color.WHITE);
+        notifCheck.setChecked(prefs.getBoolean("enable_custom_notif", false));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            notifCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
+        notifCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("enable_custom_notif", isChecked).apply();
+            HidKeyboardService svc = HidKeyboardService.getInstance();
+            if (svc != null) svc.updateNotification(svc.getConnectedDevice() != null ? "Connected to " + svc.getConnectedDevice().getName() : "Disconnected");
+        });
+        layout.addView(notifCheck);
+
+        // Quick Settings Tile Toggle
+        android.widget.CheckBox tileCheck = new android.widget.CheckBox(this);
+        tileCheck.setText("Enable Quick Settings Menu Tile");
+        tileCheck.setTextColor(Color.WHITE);
+        tileCheck.setChecked(prefs.getBoolean("enable_quick_tile", true));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tileCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
+        tileCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("enable_quick_tile", isChecked).apply();
+            android.content.ComponentName component = new android.content.ComponentName(this, PassPressTileService.class);
+            getPackageManager().setComponentEnabledSetting(
+                component,
+                isChecked ? android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED : android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                android.content.pm.PackageManager.DONT_KILL_APP
+            );
+            if (isChecked) {
+                Toast.makeText(this, "Tile Enabled. Add it from your notification drop-down.", Toast.LENGTH_LONG).show();
+            }
+        });
+        layout.addView(tileCheck);
+
+        // Floating Bubble Toggle
+        android.widget.CheckBox bubbleCheck = new android.widget.CheckBox(this);
+        bubbleCheck.setText("Enable Floating Bubble");
+        bubbleCheck.setTextColor(Color.WHITE);
+        bubbleCheck.setChecked(prefs.getBoolean("enable_bubble", false));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            bubbleCheck.setButtonTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(COLOR_PRIMARY)));
+        }
+        bubbleCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !android.provider.Settings.canDrawOverlays(this)) {
+                    bubbleCheck.setChecked(false);
+                    Toast.makeText(this, "Please grant 'Display over other apps' permission", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            android.net.Uri.parse("package:" + getPackageName()));
+                    startActivityForResult(intent, 201);
+                } else {
+                    prefs.edit().putBoolean("enable_bubble", true).apply();
+                    startService(new Intent(this, FloatingBubbleService.class));
+                }
+            } else {
+                prefs.edit().putBoolean("enable_bubble", false).apply();
+                stopService(new Intent(this, FloatingBubbleService.class));
+            }
+        });
+        layout.addView(bubbleCheck);
+
         // Spacer
         View spacer = new View(this);
         spacer.setLayoutParams(new LinearLayout.LayoutParams(1, dp(20)));
@@ -2414,6 +2494,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 201) { // Overlay permission
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && android.provider.Settings.canDrawOverlays(this)) {
+                prefs.edit().putBoolean("enable_bubble", true).apply();
+                startService(new Intent(this, FloatingBubbleService.class));
+            } else {
+                Toast.makeText(this, "Permission denied. Bubble disabled.", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
         if (resultCode == RESULT_OK && data != null && data.getData() != null) {
             android.net.Uri uri = data.getData();
             if (requestCode == 101) { // Export

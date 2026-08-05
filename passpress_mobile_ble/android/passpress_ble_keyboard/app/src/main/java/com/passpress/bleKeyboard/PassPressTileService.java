@@ -6,6 +6,7 @@ import android.service.quicksettings.TileService;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 import android.content.Context;
+import android.content.Intent;
 
 public class PassPressTileService extends TileService {
 
@@ -18,24 +19,9 @@ public class PassPressTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
-        HidKeyboardService svc = HidKeyboardService.getInstance();
-        if (svc != null) {
-            if (svc.getConnectedDevice() != null) {
-                svc.disconnectDevice();
-                Toast.makeText(this, "PassPress Disconnected", Toast.LENGTH_SHORT).show();
-            } else {
-                SharedPreferences prefs = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
-                String lastDevice = prefs.getString("last_connected_device", null);
-                if (lastDevice != null) {
-                    svc.connectToDevice(lastDevice);
-                    Toast.makeText(this, "PassPress Connecting...", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "No saved device to connect to", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } else {
-            Toast.makeText(this, "Keyboard Service not running", Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(this, QuickMenuActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivityAndCollapse(intent);
         updateTileState();
     }
 

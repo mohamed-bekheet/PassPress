@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="8dp"
+    android:background="#0F172A">
+
+    <TextView
+        android:id="@+id/notif_status_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⌨️"
+        android:textSize="20sp"
+        android:paddingEnd="8dp"/>
+
+    <Button
+        android:id="@+id/btn_notif_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="Connect"
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
+        android:background="#1E293B"
+        android:layout_marginEnd="8dp"/>
+
+    <!-- Password Slots -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btn_notif_s1"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:text="1"
+            android:textColor="#FFFFFF"
+            android:background="#334155"
+            android:layout_marginEnd="4dp"/>
+            
+        <Button
+            android:id="@+id/btn_notif_s2"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:text="2"
+            android:textColor="#FFFFFF"
+            android:background="#334155"
+            android:layout_marginEnd="4dp"/>
+            
+        <Button
+            android:id="@+id/btn_notif_s3"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:text="3"
+            android:textColor="#FFFFFF"
+            android:background="#334155"
+            android:layout_marginEnd="4dp"/>
+            
+        <Button
+            android:id="@+id/btn_notif_s4"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:text="4"
+            android:textColor="#FFFFFF"
+            android:background="#334155"
+            android:layout_marginEnd="4dp"/>
+            
+        <Button
+            android:id="@+id/btn_notif_s5"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:text="5"
+            android:textColor="#FFFFFF"
+            android:background="#334155"/>
+
+    </LinearLayout>
+
+</LinearLayout>

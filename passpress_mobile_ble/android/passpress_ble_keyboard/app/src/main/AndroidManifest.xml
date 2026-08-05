@@ -22,6 +22,7 @@
     
     <!-- Auto-start on boot -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -113,6 +114,20 @@
         <!-- Transparent Proxy Activity for Biometric Auth -->
         <activity
             android:name=".WidgetProxyActivity"
+            android:theme="@style/Theme.Transparent"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:launchMode="singleInstance" />
+
+        <!-- Floating Bubble Service -->
+        <service
+            android:name=".FloatingBubbleService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <!-- Quick Menu Activity -->
+        <activity
+            android:name=".QuickMenuActivity"
             android:theme="@style/Theme.Transparent"
             android:excludeFromRecents="true"
             android:taskAffinity=""
