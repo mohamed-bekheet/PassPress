@@ -49,7 +49,7 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
         }
         HidKeyboardService svc = HidKeyboardService.getInstance();
         boolean isConnected = (svc != null && svc.getConnectedDevice() != null);
-        String displayStatus = (isConnected ? "🟢 " : "") + label;
+        String displayStatus = (isConnected ? "🟢 " : "🔴 ") + label;
         views.setTextViewText(R.id.widget_single_text, displayStatus);
 
         Intent clickIntent = new Intent(context, SingleSlotWidgetProvider.class);
@@ -111,7 +111,9 @@ public class SingleSlotWidgetProvider extends AppWidgetProvider {
                 android.widget.Toast.makeText(context, "Starting keyboard service... tap again later", android.widget.Toast.LENGTH_LONG).show();
             } else {
                 svc.autoConnect();
-                android.widget.Toast.makeText(context, "Connecting... tap again later", android.widget.Toast.LENGTH_LONG).show();
+                SharedPreferences prefs = context.getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
+                String pcName = prefs.getString("last_connected_device_name", "PC");
+                android.widget.Toast.makeText(context, "Connecting to " + pcName + "... tap again later", android.widget.Toast.LENGTH_LONG).show();
             }
         }
     }

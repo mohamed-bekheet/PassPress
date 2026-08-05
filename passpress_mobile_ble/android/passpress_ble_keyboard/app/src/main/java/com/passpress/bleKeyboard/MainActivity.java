@@ -1764,7 +1764,10 @@ public class MainActivity extends AppCompatActivity {
             deviceRow.addView(connectIcon);
             
             deviceRow.setOnClickListener(v -> {
-                prefs.edit().putString(LAST_DEVICE_KEY, addr).apply();
+                prefs.edit()
+                    .putString(LAST_DEVICE_KEY, addr)
+                    .putString("last_connected_device_name", displayName)
+                    .apply();
                 connectionStatusText.setText("Connecting to: " + displayName + "...");
                 Toast.makeText(this, "Connecting...", Toast.LENGTH_SHORT).show();
                 HidKeyboardService svc = HidKeyboardService.getInstance();

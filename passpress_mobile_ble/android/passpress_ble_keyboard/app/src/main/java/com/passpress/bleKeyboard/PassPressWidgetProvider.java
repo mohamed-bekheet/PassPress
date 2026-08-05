@@ -85,7 +85,9 @@ public class PassPressWidgetProvider extends AppWidgetProvider {
                         android.widget.Toast.makeText(context, "Starting keyboard service... tap again later", android.widget.Toast.LENGTH_LONG).show();
                     } else {
                         svc.autoConnect();
-                        android.widget.Toast.makeText(context, "Connecting... tap again later", android.widget.Toast.LENGTH_LONG).show();
+                        android.content.SharedPreferences prefs = context.getSharedPreferences("passpress_prefs", android.content.Context.MODE_PRIVATE);
+                        String pcName = prefs.getString("last_connected_device_name", "PC");
+                        android.widget.Toast.makeText(context, "Connecting to " + pcName + "... tap again later", android.widget.Toast.LENGTH_LONG).show();
                     }
                 }
             }

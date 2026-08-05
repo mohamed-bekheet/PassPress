@@ -44,7 +44,12 @@ class PassPressRemoteViewsFactory implements RemoteViewsService.RemoteViewsFacto
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_slot_item);
         
         String label = prefs.getString("label_" + position, "Slot " + (position + 1));
-        views.setTextViewText(R.id.widget_item_text, label);
+        
+        HidKeyboardService svc = HidKeyboardService.getInstance();
+        boolean isConnected = (svc != null && svc.getConnectedDevice() != null);
+        String displayStatus = (isConnected ? "🟢 " : "🔴 ") + label;
+        
+        views.setTextViewText(R.id.widget_item_text, displayStatus);
         boolean isLight = prefs.getBoolean("is_light_theme", true);
         if (isLight) {
             views.setInt(R.id.widget_item_container, "setBackgroundResource", R.drawable.widget_item_bg_light);

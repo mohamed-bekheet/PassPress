@@ -664,7 +664,6 @@ public class HidKeyboardService extends Service {
             
             boolean isLight = prefs.getBoolean("is_light_theme", true);
             if (isLight) {
-                customView.setInt(R.id.notif_root, "setBackgroundColor", android.graphics.Color.parseColor("#F8FAFC"));
                 customView.setTextColor(R.id.notif_device_name, android.graphics.Color.parseColor("#0F172A"));
                 customView.setInt(R.id.btn_notif_connect, "setBackgroundResource", R.drawable.notif_btn_bg_accent_light);
             }

@@ -101,7 +101,9 @@ public class WidgetProxyActivity extends AppCompatActivity {
                 Toast.makeText(this, "Starting keyboard service... tap again later", Toast.LENGTH_LONG).show();
             } else {
                 svc.autoConnect();
-                Toast.makeText(this, "Connecting... tap again later", Toast.LENGTH_LONG).show();
+                android.content.SharedPreferences prefs = getSharedPreferences("passpress_prefs", Context.MODE_PRIVATE);
+                String pcName = prefs.getString("last_connected_device_name", "PC");
+                Toast.makeText(this, "Connecting to " + pcName + "... tap again later", Toast.LENGTH_LONG).show();
             }
         }
         
